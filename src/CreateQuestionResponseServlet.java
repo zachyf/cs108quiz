@@ -40,7 +40,9 @@ public class CreateQuestionResponseServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		
 		ServletContext context = request.getServletContext();
-		
+		int quizID = Integer.valueOf(request.getParameter("quizID"));
+		Quiz quiz  = ((QuizManager)context.getAttribute("QuizManager")).getQuizAt(quizID);
+
 		// DEBUG: This is just for debugging
 		ArrayList<Question> questions;
 		if (context.getAttribute("questions") == null) {
@@ -59,15 +61,14 @@ public class CreateQuestionResponseServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new QuestionResponse(question, answer, num);
-		
-		// TO DO: add q to Quiz
+		quiz.addQuestion(q);
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);
 		context.setAttribute("questions", questions);
 		
 		// Open createQuestions.jsp to create another question
-		String url = "createQuestions.jsp?num=" + String.valueOf(num + 1);
+		String url = "createQuestions.jsp?num=" + String.valueOf(num + 1) + "&quizID=" + quizID;
 		RequestDispatcher dispatch = request.getRequestDispatcher(url);
 		dispatch.forward(request, response);
 	}

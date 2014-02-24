@@ -30,7 +30,7 @@ request.setAttribute("quiz", quiz);
 
 <p>Summary of user performance</p>
 
-<p><a href="TakeQuiz"> Take this quiz </a></p>
+<p><a href="TakeQuiz.jsp?quizID=<%=quizID %>"> Take this quiz </a></p>
 
 <p>Take the quiz in practice mode</p>
 

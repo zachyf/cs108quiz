@@ -40,6 +40,8 @@ public class CreatePictureResponseServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		
 		ServletContext context = request.getServletContext();
+		int quizID = Integer.valueOf(request.getParameter("quizID"));
+		Quiz quiz  = ((QuizManager)context.getAttribute("QuizManager")).getQuizAt(quizID);
 		
 		// DEBUG: This is just for debugging
 		ArrayList<Question> questions;
@@ -59,6 +61,7 @@ public class CreatePictureResponseServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new PictureResponse(imageURL, answer, num);
+		quiz.addQuestion(q);
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);
@@ -67,7 +70,7 @@ public class CreatePictureResponseServlet extends HttpServlet {
 		// TO DO: add q to Quiz
 		
 		// Open createQuestions.jsp to create another question
-		String url = "createQuestions.jsp?num=" + String.valueOf(num + 1);
+		String url = "createQuestions.jsp?num=" + String.valueOf(num + 1) + "&quizID=" + quizID;
 		RequestDispatcher dispatch = request.getRequestDispatcher(url);
 		dispatch.forward(request, response);
 	}

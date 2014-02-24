@@ -18,6 +18,7 @@ Question: <input type="text" name="questionStart" /> __________ <input type="tex
 Answer: <input type="text" name="answer" /><br>
 
 <input name="num" type="hidden" value="<%= request.getParameter("num") %>"/>
+<input name="quizID" type="hidden" value="<%= request.getParameter("quizID") %>"/>
 <input type="submit" value="Create"/><br>
 </form>
 
