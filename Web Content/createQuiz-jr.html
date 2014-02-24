@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?><!-- <?xml version="1.0" encoding="ISO-8859-1" ?> -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><!-- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> -->
+<title>Create Account</title>
+</head>
+<body>
+<h1>Create New Quiz</h1>
+<p>Please enter quiz name and description.</p>
+<form action="CreateQuizServlet" method="post">
+<p>Quiz Name: <input type="text" name="name" /> 
+<br></br>
+Description: <input type="text" name="description" />
+<br></br>
+Random Order: <input type="checkbox" name="random" />
+<br></br>
+Single Page Quiz: <input type="checkbox" name="single" />
+<br></br>
+Grade Immediately: <input type="checkbox" name="immediate" />
+<br></br>
+Allow Practice Mode: <input type="checkbox" name="practice" />
+<br></br>
+<input type="submit" value="Create" /></p>
+</form>
+</body>
+</html>
