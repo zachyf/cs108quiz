@@ -40,6 +40,7 @@ public class CreatePictureResponseServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		
 		ServletContext context = request.getServletContext();
+		DBConnection db = (DBConnection)context.getAttribute("db");
 		int quizID = Integer.valueOf(request.getParameter("quizID"));
 		Quiz quiz  = ((QuizManager)context.getAttribute("QuizManager")).getQuizAt(quizID);
 		
@@ -61,7 +62,7 @@ public class CreatePictureResponseServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new PictureResponse(imageURL, answer, num);
-		quiz.addQuestion(q);
+		quiz.addQuestion(q, "Picture", db);
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);

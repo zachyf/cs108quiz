@@ -19,6 +19,7 @@ for (int i = 0; i < questions.size(); i++) {
 	out.println(questions.get(i).getQuestion());
 	out.println(questions.get(i).getAnswer());
 }
+out.println("<p><a href=\"index.jsp\"> Go to Homepage </a></p>");
 %>
 
 </body>

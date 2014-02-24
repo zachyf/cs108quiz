@@ -17,6 +17,12 @@ public class PictureResponse extends Question {
 		this.answer = answer;
 		this.num = num;
 	}
+	
+	@Override
+	public String rawQuestion(){
+		return this.question;
+	}
+	
 
 	/**
 	 * getQuestion returns a String of the HTML required to
@@ -53,5 +59,6 @@ public class PictureResponse extends Question {
 	public String getAnswer() {
 		return this.answer;
 	}
+	
 
 }

@@ -19,9 +19,11 @@ public class QuizManager {
 		try {
 			ResultSet rs = db.executeQuery("SELECT * FROM quizzes order by id;");
 			while(rs.next()) {
-				this.quizzes.add(new Quiz(rs.getInt("id"), rs.getString("name"), rs.getString("description"), 
+				Quiz quiz = new Quiz(rs.getInt("id"), rs.getString("name"), rs.getString("description"), 
 						Quiz.intToBoolean(rs.getInt("onePage")), Quiz.intToBoolean(rs.getInt("isRandomOrder")), 
-						Quiz.intToBoolean(rs.getInt("isImmediate")), Quiz.intToBoolean(rs.getInt("hasPracticeMode"))));
+						Quiz.intToBoolean(rs.getInt("isImmediate")), Quiz.intToBoolean(rs.getInt("hasPracticeMode")));
+				this.quizzes.add(quiz);
+				quiz.addQuestions(db);
 			}
 		} catch (SQLException e) {
 	         e.printStackTrace();
@@ -41,7 +43,6 @@ public class QuizManager {
 		for(int i = this.quizzes.size() - 1; i >= 0; i--){
 			sb.append("<li>" + this.quizzes.get(i).getNameAndDate() + "</li>");
 		}
-		System.out.println(sb.toString());
 		return sb.toString();
 	}
 	

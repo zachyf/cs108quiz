@@ -14,7 +14,7 @@ QuizManager qm = (QuizManager)application.getAttribute("QuizManager");
 Quiz quiz = qm.getQuizAt(quizID);
 ArrayList<Question> questions = quiz.getQuestionList(); 
 out.println("<h1>" + quiz.getName() + "</h1>");
-//TODO Write Grad Quiz Servlet
+//TODO Write Grade Quiz Servlet
 out.println("<form action=\"GradeQuiz\" method=\"post\">");
 for (int i = 0; i < questions.size(); i++) {
 	out.println(questions.get(i).getQuestion());

@@ -38,11 +38,6 @@ public class CreateQuizServlet extends HttpServlet {
 
 	private Quiz createQuiz(HttpServletRequest request){
 		QuizManager qm = (QuizManager)request.getServletContext().getAttribute("QuizManager");
-		/*if(qm == null) {
-			qm = new QuizManager();
-			ServletContext sc = request.getServletContext();
-	        sc.setAttribute("quizManager", qm);
-		}*/
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
 		boolean onePage = request.getParameter("single") != null;

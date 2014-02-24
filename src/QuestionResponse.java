@@ -18,6 +18,11 @@ public class QuestionResponse extends Question {
 		
 	}
 	
+	@Override
+	public String rawQuestion(){
+		return this.question;
+	}
+	
 	/**
 	 * getQuestion returns a String of the HTML required to
 	 * display the question. This includes the question and the text

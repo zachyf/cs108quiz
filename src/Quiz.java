@@ -1,5 +1,9 @@
 package quiz;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -51,8 +55,9 @@ public class Quiz {
 	
 	public String PrintAllQuestions(){
 		StringBuilder sb = new StringBuilder();
+		System.out.println(this.questions.size());
 		for(int i = 0; i < this.questions.size(); i++)
-			sb.append(this.questions.get(i).getQuestion() + "<br><br/>");
+			sb.append(this.questions.get(i).getQuestion());
 		return sb.toString();
 	}
 	
@@ -83,9 +88,30 @@ public class Quiz {
 	public int getNumQuestions(){
 		return this.questions.size();
 	}
-	
-	public void addQuestion(Question q){
+
+	public void addQuestion(Question q, String type, DBConnection db){
+		String insertion = "INSERT INTO questions VALUES (" + this.id + ",\""  + q.rawQuestion() + "\",\"" 
+		+ q.getAnswer() + "\"," + this.questions.size() + ",\"" + type + "\");";
 		this.questions.add(q);
+		db.updateDB(insertion);
+	}
+	
+	public void addQuestions(DBConnection db){
+		String query = "Select * from questions where quizID = " + this.id + " order by questionNum asc;";
+		try {
+			ResultSet rs = db.executeQuery(query);
+			while(rs.next()) {
+				String type = rs.getString("type");
+				if(type.equals("QuestionResponse"))
+	            	this.questions.add(new QuestionResponse(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+				else if (type.equals("Picture"))
+	            	this.questions.add(new PictureResponse(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+				else if (type.equals("FillInBlank"))
+	            	this.questions.add(new FillInTheBlank(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+			}
+		} catch (SQLException e) {
+         e.printStackTrace();
+		} 
 	}
 	
 	public ArrayList<Question> getQuestionList(){
@@ -98,7 +124,8 @@ public class Quiz {
 	}
 	
 	public String getNameAndDate(){
-		return ("<a href=quizPage.jsp?id=" + this.id + "> "+ name + " " + date.toString() + "</a>");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		return ("<a href=quizPage.jsp?id=" + this.id + "> "+ name + " " + df.format(date) + "</a>");
 	}
 	
 	
