@@ -61,7 +61,7 @@ public class Quiz {
 		return sb.toString();
 	}
 	
-	public String PrintQuestion(int index){
+	public String getQuestionAt(int index){
 		return this.questions.get(index).getQuestion();
 	}
 	
@@ -128,7 +128,23 @@ public class Quiz {
 		return ("<a href=quizPage.jsp?id=" + this.id + "> "+ name + " " + df.format(date) + "</a>");
 	}
 	
+	public Queue<Integer> getQuestionOrder(){
+		LinkedList<Integer> q_order = new LinkedList<Integer>();
+		for(int i = 0; i < this.questions.size(); i++){
+			q_order.addLast(i);
+		}
+		if(this.isRandomOrder)
+			Collections.shuffle(q_order);
+		return q_order;
+	}
 	
+	public boolean isSinglePage(){
+		return this.onePage;
+	}
+	
+	public boolean isImmediateCorrection(){
+		return this.isImmediateCorrection;
+	}
 
 
 }

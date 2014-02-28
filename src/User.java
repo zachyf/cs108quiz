@@ -1,5 +1,5 @@
 package quiz;
-//STUB
+//STUB Class for USER
 public class User {
 
 }

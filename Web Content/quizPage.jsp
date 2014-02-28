@@ -2,10 +2,11 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*, quiz.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--This is the page that displays all information about a quiz once it has been created. IT is a placeholder
+currently. It allows you to take the quiz. -->
 <html>
 <% String quizID = request.getParameter("id"); 
 QuizManager qm = (QuizManager)application.getAttribute("QuizManager"); 
-System.out.println(qm.getNextId());
 Quiz quiz = qm.getQuizAt(Integer.parseInt(quizID));
 request.setAttribute("quiz", quiz);
 %>
