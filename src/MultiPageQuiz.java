@@ -33,24 +33,22 @@ public class MultiPageQuiz extends HttpServlet {
 		// TODO Auto-generated method stub
 	}
 
-	private void printGrade(HttpServletResponse response, Quiz quiz, Queue<Integer> q_order) throws IOException{
-		//Set-up response for output
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
+	private void printHeader(PrintWriter out, boolean isCorrect) throws IOException{
+		
 		out.println("<!DOCTYPE html>");
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<meta charset=\"UTF-8\" />");
-		out.println("<title>Shopping Cart</title>");
+		if(isCorrect)
+			out.println("<title>Correct!</title>");
+		else
+			out.println("<title>Incorrect!</title>");
 		out.println("</head>");
 		out.println("<body>");
-		out.println("<h1>Shopping Cart</h1>");
-		
-		if(q_order.isEmpty())
-			out.println("Link to finish quiz");
-		else{
-			out.println("Link to next question");
-		}
+		if(isCorrect)
+			out.println("<h1>Correct</h1>");
+		else
+			out.println("<h1>Incorrect</h1>");
 	}
 	
 	/**
@@ -65,16 +63,34 @@ public class MultiPageQuiz extends HttpServlet {
 		Quiz quiz = qm.getQuizAt(quizID);
 		@SuppressWarnings("unchecked")
 		Queue<Integer> q_order = (Queue<Integer>)request.getSession().getAttribute("questionsLeft" + quizID);
+		Answer a = (Answer)request.getSession().getAttribute("answer");
+		String questionNum = request.getParameter("questionNum");
+		Question question = quiz.getQuestion(Integer.parseInt(questionNum));
+		String answer = request.getParameter(questionNum);		
+		a.setAnswer(question, answer);
 		
-		// TODO record answer here
 		
 		//If auto-grade 
 		if(quiz.isImmediateCorrection()){
+			boolean isCorrect = question.checkAnswer(answer);
 			//then display answer and grade for question, then link to next question
-			printGrade(response, quiz, q_order);
+			//Set-up response for output
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			printHeader(out, isCorrect);
+			//TODO add image for correct or incorrect
+			
+			out.println(question.displayQuestion());
+			out.println("<p>Your answer: " + answer + "</p>");
+			
+			if(q_order.isEmpty())
+				out.println("<a href=\"GradeQuiz.jsp\"> Finish Quiz and Show Score</a>");
+			else{
+				out.println("<a href=\"printNextQuestion.jsp?quizID=" + quizID + "\"> Next Question</a>");
+			}
 		} //Else if end of quiz, forward to grading
 		else if(q_order.isEmpty()){
-			RequestDispatcher dispatch = request.getRequestDispatcher("GradeQuiz");
+			RequestDispatcher dispatch = request.getRequestDispatcher("GradeQuiz.jsp");
 			dispatch.forward(request, response);
 		}
 		else { //Go to next question

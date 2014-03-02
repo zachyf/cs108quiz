@@ -35,8 +35,23 @@ public class QuestionResponse extends Question {
 		// Generate the HTML for the question
 		String numStr = String.valueOf(num);
 		buff.append("<p class=question>" + numStr + ". " + this.question + "</p>");		
-		buff.append("<input type=text name="+ numStr + "><br>");
+		buff.append("<input type=text name="+ numStr + "><br>");		
+		return buff.toString();
+	}
+	
+	/**
+	 * displayQuestion returns a String of the HTML required to
+	 * display the question and correct answer. This does NOT 
+	 * include an image and the text input for the answer.
+	 */
+	@Override
+	public String displayQuestion() {
+		StringBuilder buff = new StringBuilder();
 		
+		// Generate the HTML for the question
+		String numStr = String.valueOf(num);
+		buff.append("<p class=question>" + numStr + ". " + this.question + "</p>");	
+		buff.append("<p class=answer> Answer is: " + answer + "</p>");
 		return buff.toString();
 	}
 

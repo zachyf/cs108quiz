@@ -9,6 +9,9 @@ Otherwise, it tracks what questions are left in the quiz and passes to the subse
 int quizID = Integer.parseInt(request.getParameter("quizID"));
 QuizManager qm = (QuizManager)application.getAttribute("QuizManager");
 Quiz quiz = qm.getQuizAt(quizID);
+Answer answer = new Answer(new User(1), quiz);
+quiz.addAnswer(answer);
+session.setAttribute("answer", answer);
 %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -21,16 +24,18 @@ Queue<Integer> q_order = quiz.getQuestionOrder();
 out.println("<h1>" + quiz.getName() + "</h1>");
 
 if(quiz.isSinglePage()){
-	out.println("<form action=\"GradeQuiz\" method=\"post\">");
+	out.println("<form action=\"GradeQuiz.jsp\" method=\"post\">");
 	while(!q_order.isEmpty())
 		out.println(quiz.getQuestionAt(q_order.poll()));
 
 }
 else {
 	out.println("<form action=\"MultiPageQuiz\" method=\"post\">");
-	out.println(quiz.getQuestionAt(q_order.poll()));
+	int questionNum = q_order.poll();
+	out.println(quiz.getQuestionAt(questionNum));
 	session.setAttribute("questionsLeft" + quizID, q_order);
 	out.println("<br><input name=\"quizID\" type=\"hidden\" value=\"" + quizID + "\">");
+	out.println("<br><input name=\"questionNum\" type=\"hidden\" value=\"" + questionNum + "\">");
 }
 out.println("<input type=\"submit\" value=\"Submit\"/>");
 out.println("</form></p>");

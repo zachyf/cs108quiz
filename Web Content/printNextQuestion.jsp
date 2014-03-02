@@ -20,9 +20,11 @@ Queue<Integer> q_order = (Queue<Integer>)session.getAttribute("questionsLeft" + 
 <form action="MultiPageQuiz" method="post">
 
 <% 
-out.println(quiz.getQuestionAt(q_order.poll()));
+int questionNum = q_order.poll();
+out.println(quiz.getQuestionAt(questionNum));
 session.setAttribute("questionsLeft" + quizID, q_order);
 out.println("<input name=\"quizID\" type=\"hidden\" value=\"" + quizID + "\"/>");
+out.println("<br><input name=\"questionNum\" type=\"hidden\" value=\"" + questionNum + "\">");
 out.println("<input type=\"submit\" value=\"Submit\"/>");
 out.println("</form></p>");
 %>

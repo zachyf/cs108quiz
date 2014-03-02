@@ -17,6 +17,7 @@ public class Answer {
 		this.user = user;
 		this.quiz = quiz;
 		this.numCorrect = 0;
+		this.answers = new HashMap<Question, String>();
 	}		
 	
 	public double getScore() {
@@ -53,6 +54,10 @@ public class Answer {
 	
 	public Date getDateCompleted() {
 		return this.dateCompleted;
+	}
+	
+	public String getAnswerToQuestion(Question q){
+		return this.answers.get(q);
 	}
 	
 	public int compareTo(Answer answer) {

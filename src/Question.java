@@ -9,5 +9,7 @@ public abstract class Question {
 	public abstract String getAnswer();
 	
 	public abstract String rawQuestion();
+	
+	public abstract String displayQuestion();
 		
 }

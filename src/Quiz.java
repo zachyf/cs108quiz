@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -14,7 +15,7 @@ public class Quiz {
 	
 	private int id;
 	private String name;
-	private ArrayList<Answer> answers; //(History tracking)
+	private HashMap<User, Answer> answers; //(History tracking)
 	private Queue<User> recentTestTakers;
 	private ArrayList<Question> questions;
 	String description;
@@ -37,7 +38,7 @@ public class Quiz {
 		this.isImmediateCorrection = isImmediateCorrection;
 		this.isRandomOrder = isRandomOrder;
 		this.hasPracticeMode = hasPracticeMode;
-		this.answers = new ArrayList<Answer>();
+		this.answers = new HashMap<User, Answer>();
 		this.recentTestTakers = new LinkedList<User>();
 		this.questions = new ArrayList<Question>();
 		this.date = new Date();
@@ -63,6 +64,10 @@ public class Quiz {
 	
 	public String getQuestionAt(int index){
 		return this.questions.get(index).getQuestion();
+	}
+	
+	public Question getQuestion(int index){
+		return this.questions.get(index);
 	}
 	
 	public String getName(){
@@ -144,6 +149,16 @@ public class Quiz {
 	
 	public boolean isImmediateCorrection(){
 		return this.isImmediateCorrection;
+	}
+	
+	public void addAnswer(Answer a){
+		this.answers.put(a.getUser(), a);
+		this.recentTestTakers.add(a.getUser());
+		//TODO write DB integration
+	}
+	
+	public double getUserScore(User u){
+		return this.answers.get(u).getScore();
 	}
 
 
