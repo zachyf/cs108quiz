@@ -53,6 +53,7 @@ CREATE TABLE challenges (
     challenger CHAR(64),
     challenged CHAR(64),
     quizID SMALLINT(5),
-    pending TINYINT(1)
+    pending TINYINT(1),
+    sentTime TIMESTAMP
 );
 
