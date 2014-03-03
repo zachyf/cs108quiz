@@ -38,3 +38,21 @@ CREATE TABLE pending (
     user2 CHAR(64),
     pending TINYINT(1)
     );
+
+DROP TABLE IF EXISTS announcements;
+
+CREATE TABLE announcements (
+    admin CHAR(64),
+    announcement TEXT,
+    postTime TIMESTAMP
+);
+
+DROP TABLE IF EXISTS challenges;
+
+CREATE TABLE challenges (
+    challenger CHAR(64),
+    challenged CHAR(64),
+    quizID SMALLINT(5),
+    pending TINYINT(1)
+);
+

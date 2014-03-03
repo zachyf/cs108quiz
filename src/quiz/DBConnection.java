@@ -141,6 +141,90 @@ public class DBConnection {
 		 return numUnread;
 	 }
 	 
+	 public ArrayList<Announcement> getAnnouncements(){
+		 ArrayList<Announcement> a = new ArrayList<Announcement>();
+		 try{
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 ResultSet rs =  stmt.executeQuery("SELECT * FROM announcements ORDER BY postTime;");
+			 while(rs.next()){
+					 a.add(new Announcement(rs.getString("announcement"), rs.getString("admin"),  Timestamp.valueOf(rs.getString("postTime"))));
+			 }
+		 } catch (SQLException e) {
+	         e.printStackTrace();
+		 }
+		 return a;
+	 }
+	 
+	 public boolean addAnnouncement(Announcement a){
+		 String user = a.getUser();
+		 try {
+			if (!userExists(user) || !isAdmin(user)){
+				 return false;
+			 }
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 String q = "INSERT into announcements VALUES('" + a.getUser() +"','" + a.getAnnouncement() + "', CURRENT_TIMESTAMP);";
+			 stmt.executeUpdate(q);
+			 return true;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		 return false;
+	 }
+	 
+	 public ArrayList<Challenge> getChallenges(String challenged){
+		 ArrayList<Challenge> a = new ArrayList<Challenge>();
+		 try{
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + challenged + "' and pending=1 ORDER BY sentTime;");
+			 while(rs.next()){
+					 a.add(new Challenge(rs.getString("challenger"), rs.getString("challenged"),  Integer.parseInt(rs.getString("quizID")), true, Timestamp.valueOf(rs.getString("sentTime"))));
+			 }
+		 } catch (SQLException e) {
+	         e.printStackTrace();
+		 }
+		 return a;
+	 }
+	 
+	 public boolean challengePending(Challenge a){
+		 int count = 0;
+		 try{
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + a.getChallenged() + "' and challenger='" + a.getChallenger() + "' and quizID=" + a.getQuizID() + " and pending=1;");
+			 while(rs.next()){
+				 count++;
+			 }
+		 } catch (SQLException e) {
+	         e.printStackTrace();
+		 }
+		 if (count > 0) return true;
+		 return false;
+	 }
+	 
+	 public boolean addChallenge(Challenge a){
+		 String user = a.getChallenged();
+		 try {
+			if (!userExists(user) || !isAdmin(user) || challengePending(a)){
+				 return false;
+			 }
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 String q = "INSERT into challenges VALUES('" + a.getChallenger() +"','" + a.getChallenged() + "',"  + a.getQuizID() + "', 1, CURRENT_TIMESTAMP);";
+			 stmt.executeUpdate(q);
+			 return true;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		 return false;
+	 }
+	 
+	 
+	 
 	 public int removeUser(String username){
 		 try{
 		 Statement stmt = con.createStatement();
