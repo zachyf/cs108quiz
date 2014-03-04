@@ -38,7 +38,7 @@ public class PictureResponse extends Question {
 		buff.append("<p class=question>" + numStr + ".</p>");	
 		buff.append("<img src=" + question + 
 				" width=" + pixelSize + " height=" + pixelSize +"><br>");		
-		buff.append("<input type=text name="+ numStr + "><br>");
+		buff.append("<input type=\"text\" name=\""+ numStr + "\"><br>");
 		
 		return buff.toString();
 	}
@@ -51,7 +51,6 @@ public class PictureResponse extends Question {
 	@Override
 	public String displayQuestion() {
 		StringBuilder buff = new StringBuilder();
-		
 		// Generate the HTML for the question
 		String numStr = String.valueOf(num);
 		buff.append("<p class=question>" + numStr + ".</p>");	

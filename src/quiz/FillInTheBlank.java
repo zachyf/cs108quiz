@@ -36,7 +36,7 @@ public class FillInTheBlank extends Question {
 		// Generate the HTML for the question
 		String numStr = String.valueOf(num);
 		buff.append("<p class=question>" + numStr + ". " + this.question + "</p>");		
-		buff.append("<input type=text name="+ numStr + "><br>");
+		buff.append("<input type=\"text\" name=\""+ numStr + "\"><br>");
 		
 		return buff.toString();
 	}

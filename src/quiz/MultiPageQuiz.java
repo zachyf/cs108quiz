@@ -69,7 +69,6 @@ public class MultiPageQuiz extends HttpServlet {
 		String answer = request.getParameter(questionNum);		
 		a.setAnswer(question, answer);
 		
-		
 		//If auto-grade 
 		if(quiz.isImmediateCorrection()){
 			boolean isCorrect = question.checkAnswer(answer);

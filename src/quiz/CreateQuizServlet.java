@@ -37,17 +37,17 @@ public class CreateQuizServlet extends HttpServlet {
 		QuizManager qm = (QuizManager)request.getServletContext().getAttribute("QuizManager");
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
+		String creatorName = (String)request.getSession().getAttribute("name");
 		boolean onePage = request.getParameter("single") != null;
 		boolean isRandom = request.getParameter("random") != null;
 		boolean isImmediateCorrection = request.getParameter("immediate") != null;
 		boolean hasPracticeMode = request.getParameter("practice") != null;
 		int id = qm.getNextId();
-		Quiz q = new Quiz(id, name, description, onePage, isRandom, isImmediateCorrection, hasPracticeMode);
+		Quiz q = new Quiz(creatorName, id, name, description, onePage, isRandom, isImmediateCorrection, hasPracticeMode);
 		qm.addQuiz(q);
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
 		String insertion = "INSERT INTO quizzes VALUES (" + id + ",\""  + name + "\",\"" 
-			+ description + "\",\"JR\",\'" //TODO switch to some user value at some later time
-			+ df.format(new Date()) + "\'," 
+			+ description + "\",\"" + creatorName + "\",\'" + df.format(new Date()) + "\'," 
 			+ Quiz.boolToInt(onePage) + "," + Quiz.boolToInt(isRandom) + "," + 
 			Quiz.boolToInt(isImmediateCorrection) +  "," + Quiz.boolToInt(hasPracticeMode) + ");";
 		DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
@@ -60,7 +60,7 @@ public class CreateQuizServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Quiz q = createQuiz(request);
-		RequestDispatcher dispatch = request.getRequestDispatcher("createQuestions.jsp?num=1&quizID=" + q.getID());
+		RequestDispatcher dispatch = request.getRequestDispatcher("createQuestions.jsp?num=0&quizID=" + q.getID());
 		dispatch.forward(request, response);
 	}
 
