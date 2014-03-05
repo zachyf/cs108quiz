@@ -15,11 +15,11 @@ public class Quiz {
 	
 	private int id;
 	private String name;
-	private HashMap<User, Answer> answers; //(History tracking)
-	private Queue<User> recentTestTakers;
+	private HashMap<String, Answer> answers; //(History tracking)
+	private Queue<String> recentTestTakers;
 	private ArrayList<Question> questions;
 	String description;
-	private User creator;
+	private String creatorName;
 	private Date date;
 	/*
 	 * One Page vs. Multiple Pages - Multiple Pages = 1 question per page
@@ -30,7 +30,7 @@ public class Quiz {
 	private boolean isImmediateCorrection; // - for multiple page, immediately determines if correct answer Ignore if single question
 	private boolean hasPracticeMode; // - Whether the quiz can be taken in practice mode
 
-	public Quiz(int id, String name, String description, boolean onePage, boolean isRandomOrder, boolean isImmediateCorrection, boolean hasPracticeMode){
+	public Quiz(String creatorName, int id, String name, String description, boolean onePage, boolean isRandomOrder, boolean isImmediateCorrection, boolean hasPracticeMode){
 		this.name = name;
 		this.id = id;
 		this.description = description;
@@ -38,10 +38,11 @@ public class Quiz {
 		this.isImmediateCorrection = isImmediateCorrection;
 		this.isRandomOrder = isRandomOrder;
 		this.hasPracticeMode = hasPracticeMode;
-		this.answers = new HashMap<User, Answer>();
-		this.recentTestTakers = new LinkedList<User>();
+		this.answers = new HashMap<String, Answer>();
+		this.recentTestTakers = new LinkedList<String>();
 		this.questions = new ArrayList<Question>();
 		this.date = new Date();
+		this.creatorName = creatorName;
 	}
 	
 	public static int boolToInt(boolean b){
@@ -56,7 +57,6 @@ public class Quiz {
 	
 	public String PrintAllQuestions(){
 		StringBuilder sb = new StringBuilder();
-		System.out.println(this.questions.size());
 		for(int i = 0; i < this.questions.size(); i++)
 			sb.append(this.questions.get(i).getQuestion());
 		return sb.toString();
@@ -82,8 +82,8 @@ public class Quiz {
 		return this.description;
 	}
 	
-	public User getCreator(){
-		return this.creator;
+	public String getCreator(){
+		return this.creatorName;
 	}
 	
 	public int getNumUsersTaken(){
@@ -154,11 +154,30 @@ public class Quiz {
 	public void addAnswer(Answer a){
 		this.answers.put(a.getUser(), a);
 		this.recentTestTakers.add(a.getUser());
-		//TODO write DB integration
 	}
 	
-	public double getUserScore(User u){
+	public double getUserScore(String u){
 		return this.answers.get(u).getScore();
+	}
+	
+	public ArrayList<ArrayList<Object>> getHighScorers(DBConnection db){
+		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
+				" from answers where quizID = " + this.id + 
+				" order by numCorrect  desc, timeToComplete asc limit 10;";
+		ArrayList<ArrayList<Object>> leaderboard = new ArrayList<ArrayList<Object>>();
+		try {
+			ResultSet rs = db.executeQuery(query);
+			while(rs.next()) {
+				ArrayList<Object> row = new ArrayList<Object>();
+				row.add(rs.getString("userName"));
+				row.add((double)rs.getInt("numCorrect")/rs.getInt("numQuestions"));
+				row.add(rs.getInt("timeToComplete")/1000);
+				leaderboard.add(row);
+			}
+		} catch (SQLException e) {
+         e.printStackTrace();
+		} 
+		return leaderboard;
 	}
 
 

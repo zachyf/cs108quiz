@@ -9,6 +9,8 @@ currently. It allows you to take the quiz. -->
 QuizManager qm = (QuizManager)application.getAttribute("QuizManager"); 
 Quiz quiz = qm.getQuizAt(Integer.parseInt(quizID));
 request.setAttribute("quiz", quiz);
+DBConnection db = (DBConnection)application.getAttribute("db");
+if(db == null) System.out.println("HAHAHAHAHA");
 %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -19,11 +21,29 @@ request.setAttribute("quiz", quiz);
 
 <h4><%=quiz.getDescription() %></h4>
 
-<h5>Creator: Username</h5>
+<h5>Creator: <%=quiz.getCreator() %></h5>
 
 <p>User's Most Recent Performance</p>
 
 <p>Highest Performers</p>
+<table border="1" style="width:300px">
+<tr>
+  <th>Rank</th>
+  <th>User Name</th>
+  <th>Score</th>		
+  <th>Time</th>
+  </tr>
+<tr>
+<% ArrayList<ArrayList<Object>> leaderboard = quiz.getHighScorers(db);
+for(int i = 0; i < leaderboard.size(); i++){
+	out.println("<tr><td>" + (i+1) + "</td>");
+	out.println("<td>" + leaderboard.get(i).get(0) + "</td>");
+	out.println("<td>" + ((Double)(leaderboard.get(i).get(1))*100) + "%</td>");
+	out.println("<td>" + leaderboard.get(i).get(2) + "</td>");
+	out.println("</tr>");
+}
+%>
+</table>
 
 <p>Recent High Performers (Past Day)</p>
 
@@ -31,12 +51,16 @@ request.setAttribute("quiz", quiz);
 
 <p>Summary of user performance</p>
 
-<p><a href="TakeQuiz.jsp?quizID=<%=quizID %>"> Take this quiz </a></p>
-
-<p>Take the quiz in practice mode</p>
-
-<p>Edit Quiz (if user is owner)</p>
-
-
+<%
+if(session.getAttribute("name") == null){
+	out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
+}
+else{
+	out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"> Take this quiz </a></p>");
+	//<p>Take the quiz in practice mode</p>
+	if(quiz.getCreator().equals(session.getAttribute("name")))
+		out.println("<p>Edit Quiz - Since you are the owner</p>");
+}
+%>
 </body>
 </html>

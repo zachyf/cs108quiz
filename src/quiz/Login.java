@@ -51,7 +51,12 @@ public class Login extends HttpServlet {
 			}else{
 				HttpSession session = request.getSession();
 				session.setAttribute("name",userName);
-				RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
+				String id = request.getParameter("quizID");
+				RequestDispatcher dispatch;
+				if(id != null)
+					dispatch = request.getRequestDispatcher("TakeQuiz.jsp?quizID=" + id); 
+				else
+					dispatch = request.getRequestDispatcher("userWelcome"); 
 				dispatch.forward(request, response); 
 
 			}
