@@ -163,8 +163,35 @@ public class Quiz {
 	public ArrayList<ArrayList<Object>> getHighScorers(DBConnection db){
 		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
 				" from answers where quizID = " + this.id + 
-				" order by numCorrect  desc, timeToComplete asc limit 10;";
-		ArrayList<ArrayList<Object>> leaderboard = new ArrayList<ArrayList<Object>>();
+				" order by numCorrect  desc, timeToComplete asc limit 5;";
+		return getList(query, db);
+	}
+	
+	public ArrayList<ArrayList<Object>> getRecentScores(DBConnection db){
+		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
+				" from answers where quizID = " + this.id + 
+				" order by date  desc limit 5;";
+		return getList(query, db);
+	}
+	
+	public ArrayList<ArrayList<Object>> getRecentHighScores(DBConnection db){
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
+		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
+				" from answers where quizID = " + this.id + 
+				" and date > " + df.format(new Date(System.currentTimeMillis() - (24 * 60 * 60 * 1000))) +
+				" order by numCorrect  desc, timeToComplete asc limit 5;";
+		return getList(query, db);
+	}
+	
+	public ArrayList<ArrayList<Object>> getMyRecentPerformance(String username, DBConnection db){
+		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
+				" from answers where quizID = " + this.id + " and userName = \"" + username + "\"" +
+				" order by date desc limit 5;";
+		return getList(query, db);
+	}
+	
+	private ArrayList<ArrayList<Object>> getList(String query, DBConnection db){
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
 		try {
 			ResultSet rs = db.executeQuery(query);
 			while(rs.next()) {
@@ -172,12 +199,12 @@ public class Quiz {
 				row.add(rs.getString("userName"));
 				row.add((double)rs.getInt("numCorrect")/rs.getInt("numQuestions"));
 				row.add(rs.getInt("timeToComplete")/1000);
-				leaderboard.add(row);
+				list.add(row);
 			}
 		} catch (SQLException e) {
          e.printStackTrace();
 		} 
-		return leaderboard;
+		return list;
 	}
 
 
