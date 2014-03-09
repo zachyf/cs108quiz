@@ -16,6 +16,6 @@
 	<input name="userName" type="hidden" value="<%=request.getParameter("user")%>"/>
 	<input type="submit" value="Send">
 </form>
-
+<br><a href="userWelcome"><img src="home.jpg" title="Return Home "></img></a>
 </body>
 </html>

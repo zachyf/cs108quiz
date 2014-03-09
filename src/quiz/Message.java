@@ -3,27 +3,27 @@ package quiz;
 import java.sql.Timestamp;
 
 public class Message {
-	String to;
-	String from;
-	String subject;
-	String message;
-	boolean read;
-	Timestamp sent; 
+	private String to;
+	private String from;
+	private String subject;
+	private String message;
+	private boolean read;
+	private Timestamp sent; 
 	
 	public Message(String t, String f, String s, String m, Timestamp time, int r){
-		to = t;
-		from = f;
-		subject = s;
-		message = m;
-		sent = time;
+		this.to = t;
+		this.from = f;
+		this.subject = s;
+		this.message = m;
+		this.sent = time;
 		if (r == 0)
-			read = false;
+			this.read = false;
 		else
-			read = true;
+			this.read = true;
 	}
 	
 	public String getTo(){
-		return to;
+		return this.to;
 	}
 	
 	public String getFrom(){

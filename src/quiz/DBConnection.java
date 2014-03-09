@@ -146,6 +146,7 @@ public class DBConnection {
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
 			 String q = "INSERT into messages VALUES('" + m.getFrom() +"','" + m.getTo() + "','" + m.getSubject() + "','" + m.getMessage() + "',"  + "0, CURRENT_TIMESTAMP);";
+			 //String q = "INSERT into messages VALUES(\""+ m.getFrom() +"\",\"" + m.getTo() + "\",\"" + m.getSubject() + "\",\"" + m.getMessage() + "\",\""  + "0, CURRENT_TIMESTAMP);";
 			 stmt.executeUpdate(q);
 		 }catch (SQLException e) {
 	         e.printStackTrace();
@@ -156,7 +157,8 @@ public class DBConnection {
 		 try{
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 String q = "Update messages set hasRead=1 where toUser=\"" + m.getTo() +"\" and fromUser=\"" + m.getFrom() + "\" and sentTime=" + m.getSentTime().toString() + ";";
+
+			 String q = "Update messages set hasRead=1 where toUser=\"" + m.getTo() +"\" and fromUser=\"" + m.getFrom() + "\" and sentTime=\"" + m.getSentTime().toString() + "\";";
 			 stmt.executeUpdate(q);
 		 }catch (SQLException e) {
 	         e.printStackTrace();
@@ -334,7 +336,23 @@ public class DBConnection {
 		 stmt.executeUpdate("INSERT INTO pending VALUES(\""+user1+"\",\""+user2+"\",TRUE);");
 			
 	 }
-	 
+	 public Message findMessage(String Time, String To, String From) throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 ResultSet rs=null;
+		 try {
+				rs = stmt.executeQuery("SELECT * FROM messages where toUser=\""+To+"\" and fromUser=\""+From+"\" and sentTime=\""+Time+"\";");
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+		 	Message m = null;
+			if(rs.next()){ 
+				m = new Message(rs.getString("toUser"),rs.getString("fromUser"),rs.getString("subject"),rs.getString("note"),Timestamp.valueOf(rs.getString("sentTime")),rs.getInt("hasRead"));
+			}
+			return m;
+		 
+	 }
 	 public Boolean isAdmin(String user) throws SQLException{
 		 Statement stmt = con.createStatement();
 		 stmt.executeQuery("USE " + database);

@@ -37,10 +37,21 @@ public class Mailbox extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String ID =request.getParameter("ID");
-		String accept =request.getParameter("accept");
 		ServletContext context = request.getServletContext();
 		DB = (DBConnection) context.getAttribute("DBConnection");
+		HttpSession session = request.getSession();
+		if(request.getParameter("Time")!=null && request.getParameter("From")!=null){
+			try {
+				Message m =DB.findMessage(request.getParameter("Time"),session.getAttribute("name").toString(),request.getParameter("From"));
+				DB.readMessage(m);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		String ID =request.getParameter("ID");
+		String accept =request.getParameter("accept");
+		
 		PrintWriter out = response.getWriter();
 		HttpSession ses = request.getSession();
 		String username = (String) ses.getAttribute("name");
@@ -100,7 +111,7 @@ public class Mailbox extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		int numRequests=DB.getMessages(username).size();
+		int numRequests=DB.getNumUnread(username);
 		out.println("<br>");
 		if(numRequests==0){
 			out.println("<h3>No new messages :(</h3>");
@@ -108,13 +119,20 @@ public class Mailbox extends HttpServlet {
 			if(numRequests==1){
 				out.println("<h3>You have "+numRequests+" message:</h3>");
 			}else{
-				out.println("<h3>You have "+numRequests+" messagess:</h3>");
+				out.println("<h3>You have "+numRequests+" messages:</h3>");
 			}
 			out.println("<br>");
+			ArrayList<Message> unreadMessages = new ArrayList<Message>();
 			ArrayList<Message> ml = DB.getMessages(username);
-			out.println("<table style=\"width:300px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
-			for(int i=0;i<numRequests;i++){
-				out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
+			for (int i = 0; i < ml.size(); ++i){
+				if (!ml.get(i).getRead()){
+					unreadMessages.add(ml.get(i));
+				}
+			}
+			ml = unreadMessages;
+			out.println("<table style=\"width:300px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th><th>Mark As Read</th>\n</tr>");
+			for(int i=0;i<ml.size();i++){
+				out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td><td><a href=\"Mailbox?From="+ ml.get(i).getTo()+"&Time="+ ml.get(i).getSentTime()+"\"><img src=\"markAsRead.jpg\"title=\"Mark As Read \"></img></a></td></tr>");
 			}
 			out.println("</table>");
 		}
