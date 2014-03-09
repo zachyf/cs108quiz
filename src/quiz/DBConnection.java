@@ -105,6 +105,22 @@ public class DBConnection {
 			 e.printStackTrace();
 		 }
 	 }
+    
+    public boolean isHighScorer(String user){
+        try{
+            Statement stmt = con.createStatement();
+            stmt.executeQuery("USE " + database);
+            String query = "Select userName from quizRecords order by numCorrect  desc, timeToComplete asc limit 5;";
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next()){
+                return rs.getString("username").equals(user);
+            }
+            return false
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 	 
 	 public ArrayList<Message> getMessages(String user){
 		 ArrayList<Message> m = new ArrayList<Message>();
