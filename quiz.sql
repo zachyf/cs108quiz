@@ -1,4 +1,4 @@
-USE c_cs108_jfutrell;
+USE c_cs108_schottj;
 
 DROP TABLE IF EXISTS quizzes;
  -- remove table if it already exists and start from scratch
@@ -14,13 +14,3 @@ CREATE TABLE quizzes (
     isImmediate TINYINT(1),
     hasPracticeMode TINYINT(1)
     );
-
-DROP TABLE IF EXISTS quizRecord;
-
-CREATE TABLE quizRecord (
-	  quizID SMALLINT(5),
-	  user_name CHAR(64),
-      takenTime TIMESTAMP,
-      score INT,
-      completeTime INT --in miliseconds
-	);

@@ -22,10 +22,10 @@ public class QuizManager {
 	 * dumb of data from Quiz DB. 
 	 * @param db active connection for access to database. 
 	 */
-	public QuizManager(DBConnection db){
+	public QuizManager(){
 		this.quizzes = new ArrayList<Quiz>();
 		this.popularQuizzes = new PriorityQueue<Quiz>();
-		populateQuizzesList(db);
+		populateQuizzesList();
 	}
 	
 	/**
@@ -33,20 +33,11 @@ public class QuizManager {
 	 * quizzes into QuizManager class
 	 * @param db
 	 */
-	private void populateQuizzesList(DBConnection db){
-		try {
-			ResultSet rs = db.executeQuery("SELECT * FROM quizzes order by id;");
-			while(rs.next()) {
-
-						Quiz quiz = new Quiz(rs.getString("name"), rs.getInt("id"), rs.getString("creatorName"), rs.getString("description"), 
-						Quiz.intToBoolean(rs.getInt("onePage")), Quiz.intToBoolean(rs.getInt("isRandomOrder")), 
-						Quiz.intToBoolean(rs.getInt("isImmediate")), Quiz.intToBoolean(rs.getInt("hasPracticeMode")));
-				this.quizzes.add(quiz);
-				quiz.addQuestions(db);
-			}
-		} catch (SQLException e) {
-	         e.printStackTrace();
-		} 	
+	private void populateQuizzesList(){
+		//quizzes = DBConnection.getQuizzes();
+		//for (int i = 0; i < quizzes.size() ++i){
+		//	quizzes.get(i).addQuestions(db)
+		//}
 	}
 
 	/**
