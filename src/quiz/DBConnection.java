@@ -95,6 +95,17 @@ public class DBConnection {
 		 return friends;
 	 }
 	 
+	 public void setHighestScore(String user){
+		 try{
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 String q = "Update users set highScore=1 where user_name=\""+user+"\"";
+			 stmt.executeUpdate(q);
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+	 }
+	 
 	 public ArrayList<Message> getMessages(String user){
 		 ArrayList<Message> m = new ArrayList<Message>();
 		 try{
@@ -110,6 +121,26 @@ public class DBConnection {
 		 return m;
 	 }
 	 
+	 public void bumpNumQuizesTaken(String user){
+		 try{
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 String q = "Update users set numPlayed=numPlayed+1 where user_name=\""+user+"\"";
+			 stmt.executeUpdate(q);
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+	 }
+	 public void bumpNumQuizesCreated(String user){
+		try{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 String q = "Update users set numCreated=numCreated+1 where user_name=\""+user+"\"";
+		 stmt.executeUpdate(q);
+	 	}catch(SQLException e) {
+	 		e.printStackTrace();
+	 	} 
+	 }
 	 public void insertMessage(Message m){
 		 try{
 			 Statement stmt = con.createStatement();

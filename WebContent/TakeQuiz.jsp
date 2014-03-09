@@ -9,7 +9,9 @@ Otherwise, it tracks what questions are left in the quiz and passes to the subse
 int quizID = Integer.parseInt(request.getParameter("quizID"));
 QuizManager qm = (QuizManager)application.getAttribute("QuizManager");
 Quiz quiz = qm.getQuizAt(quizID);
-Answer answer = new Answer(new User("a"), quiz);
+HttpSession ses = request.getSession();
+String username = (String) ses.getAttribute("name");
+Answer answer = new Answer(username, quiz);
 quiz.addAnswer(answer);
 session.setAttribute("answer", answer);
 %>

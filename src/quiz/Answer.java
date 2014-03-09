@@ -8,12 +8,12 @@ public class Answer {
 	private int numCorrect;
 	private long startTime;
 	private long timeToComplete;
-	private User user;
+	private String user;
 	private Quiz quiz;
 	private HashMap<Question, String> answers;
 	private Date dateCompleted;
 	
-	public Answer(User user, Quiz quiz) {
+	public Answer(String user, Quiz quiz) {
 		this.user = user;
 		this.quiz = quiz;
 		this.numCorrect = 0;
@@ -44,7 +44,7 @@ public class Answer {
 		return this.timeToComplete;
 	}
 	
-	public User getUser() {
+	public String getUser() {
 		return this.user;
 	}
 	

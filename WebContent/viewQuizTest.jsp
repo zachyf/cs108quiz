@@ -13,7 +13,14 @@
 
 <h1>View Quiz Test</h1>
 <%
+
 ArrayList<Question> questions = (ArrayList<Question>)application.getAttribute("questions");
+ServletContext context = request.getServletContext();
+DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
+HttpSession ses = request.getSession();
+String username = (String) ses.getAttribute("name");
+
+DB.bumpNumQuizesCreated(username);
 
 for (int i = 0; i < questions.size(); i++) {
 	out.println(questions.get(i).getQuestion());
