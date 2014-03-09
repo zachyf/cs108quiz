@@ -1,6 +1,7 @@
 package quiz;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -43,15 +44,25 @@ public class Login extends HttpServlet {
 		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
 		String userName = (String) request.getParameter("userName");
 		String password = (String) request.getParameter("password");
-		if(DB.passwordCheck(password,userName)==true){
-			HttpSession session = request.getSession();
-			session.setAttribute("name",userName);
-			RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
-			dispatch.forward(request, response); 
+		try {
+			if (!DB.userExists(userName) || !DB.passwordCheck(password,userName)){
+				RequestDispatcher dispatch = request.getRequestDispatcher("tryAgain.jsp"); 
+				dispatch.forward(request, response); 
+			}else{
+				HttpSession session = request.getSession();
+				session.setAttribute("name",userName);
+				String id = request.getParameter("quizID");
+				RequestDispatcher dispatch;
+				if(id != null)
+					dispatch = request.getRequestDispatcher("TakeQuiz.jsp?quizID=" + id); 
+				else
+					dispatch = request.getRequestDispatcher("userWelcome"); 
+				dispatch.forward(request, response); 
 
-		}else{
-			RequestDispatcher dispatch = request.getRequestDispatcher("tryAgain.jsp"); 
-			dispatch.forward(request, response); 
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
 		}
 	
 	}

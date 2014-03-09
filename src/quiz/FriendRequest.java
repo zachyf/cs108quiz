@@ -46,17 +46,20 @@ public class FriendRequest extends HttpServlet {
 		String loggedInUser = (String) ses.getAttribute("name");
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
+		response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
 		try {
 			if(DB.userExists(userName)==false){
-				out.println("User "+userName+" does not exist.");
+				out.print("User "+userName+" does not exist.");
 			}else{
 				if(DB.alreadyFriends(userName,loggedInUser) || DB.alreadyFriends(loggedInUser,userName)){
 					out.println("You are already friends with "+userName+".");
 				}else if(DB.alreadyPending(userName,loggedInUser)){
-					out.println("User "+userName+" has already sent you a request. Check your mail.");
+					out.print("User "+userName+" has already sent you a request. Check your mail.");
 				}else{
 					DB.addRequest(loggedInUser,userName);
-					out.println("A friend request has just been sent to "+userName+".");
+					out.print("A friend request has just been sent to "+userName+".");
 				}
 			}
 		} catch (SQLException e) {

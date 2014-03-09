@@ -3,6 +3,7 @@ package quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -39,7 +40,7 @@ public class userWelcome extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		doPost(request,response);
 	}
 
 	/**
@@ -73,6 +74,15 @@ public class userWelcome extends HttpServlet {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		int numUnread = DB.getNumUnread(username);
+		if(numUnread > 0){
+			if(numUnread==1){
+				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread message.");
+			}else{
+				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread messages.");
+			}
+		}
+		out.println("<br>");
 		try {
 			if(DB.practiced(username)==true){
 				out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
@@ -103,7 +113,7 @@ public class userWelcome extends HttpServlet {
 				out.println();
 				out.println("<p>Remove user from database:<br>");
 				out.println("Enter A User Name:");
-				out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
+				out.println("<form action=\"RemoveUser\" METHOD=\"post\">");
 				out.println("<input type=\"text\" name=\"userName\">");
 				out.println("<input type=\"submit\" value=\"Remove User\"><br>"); 
 				out.println("</form></p>");
@@ -124,8 +134,32 @@ public class userWelcome extends HttpServlet {
 		out.println("<input type=\"text\" name=\"userName\">");
 		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
 		out.println("</form>");
+		out.println("<div id=\"message\"></div>");
+		out.println("<script type=\"text/javascript/\">");
+		out.println("var xmlhttp;");
+		    out.println("if (window.XMLHttpRequest){");
+		       out.println("xmlhttp = new XMLHttpRequest();"); //for IE7+, Firefox, Chrome, Opera, Safari
+		    out.println("} else {");
+		        out.println("xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");"); //for IE6, IE5
+		    out.println("}");
+		    out.println("xmlhttp.open(\"GET\", \"FriendRequest\", true);"); 
+		    out.println("xmlhttp.onreadystatechange = function() {");
+		        out.println("if (xmlhttp.readyState == 4) { ");
+		            out.println("if (xmlhttp.status == 200) {");
+		            out.println("document.getElementById(\"message\").innerHTML = xmlhttp.responseText;}else{");
+		            out.println("alert(\"sjf\");}}};");   
+		    out.println("xmlhttp.send(null);</script>");        
+		   
+		out.println("Send a friend a note: <a href=\"NewMessage.jsp?user=" + username + "\">Click Here</a><br>");
+		out.println("<table style=\"width:300px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
+		ArrayList<Message> ml = DB.getMessages(username);
+		for(int i = 0; i < ml.size(); ++i){
+			//make it limited size and scrolling 
+			out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
+		}
 		out.println("</body>");
 		out.println("</html>");
+		out.println("</table>");
 	}
 
 }

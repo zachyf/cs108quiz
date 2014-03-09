@@ -77,12 +77,12 @@ public class Mailbox extends HttpServlet {
 			int numRequests=DB.getNumRequests(username);
 			out.println("<br>");
 			if(numRequests==0){
-				out.println("No new friend requests :(");
+				out.println("<h3>No new friend requests :(</h3>");
 			}else{
 				if(numRequests==1){
-					out.println("You have "+DB.getNumRequests(username)+" friend request:");
+					out.println("<h3>You have "+DB.getNumRequests(username)+" friend request:</h3>");
 				}else{
-					out.println("You have "+DB.getNumRequests(username)+" friend requests:");
+					out.println("<h3>You have "+DB.getNumRequests(username)+" friend requests:</h3>");
 				}
 				out.println("<br>");
 				ArrayList<String> friends = DB.usersWhoSentRequests(username);
@@ -97,6 +97,26 @@ public class Mailbox extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		int numRequests=DB.getMessages(username).size();
+		out.println("<br>");
+		if(numRequests==0){
+			out.println("<h3>No new messages :(</h3>");
+		}else{
+			if(numRequests==1){
+				out.println("<h3>You have "+numRequests+" message:</h3>");
+			}else{
+				out.println("<h3>You have "+numRequests+" messagess:</h3>");
+			}
+			out.println("<br>");
+			ArrayList<Message> ml = DB.getMessages(username);
+			out.println("<table style=\"width:300px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
+			for(int i=0;i<numRequests;i++){
+				out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
+			}
+			out.println("</table>");
+		}
+		
+		out.println("<br><a href=\"userWelcome\"><img src=\"home.jpg\" title=\"Return Home \"></img></a>");
 		
 	}
 

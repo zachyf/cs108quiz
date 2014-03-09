@@ -32,15 +32,18 @@ public class listener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent arg0) {
-    	 try {
+    	try {
 			DB = new DBConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-         ServletContext context=arg0.getServletContext();
-         context.setAttribute("DBConnection",DB); 
-    	 
+        ServletContext context=arg0.getServletContext();
+        context.setAttribute("DBConnection",DB); 
+        context.setAttribute("db", DB);
+	    QuizManager qm = new QuizManager(DB);
+	    context.setAttribute("QuizManager", qm);
+    	
     }
 
 	/**

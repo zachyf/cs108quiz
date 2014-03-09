@@ -11,7 +11,11 @@
 <p>Please log in to begin the fun!</p>
 <form action="Login" method="post">
 	User Name: <input type="text" name="userName"><br>
-	Password: <input type="text" name="password">
+	Password: <input type="password" name="password">
+	<% String id = request.getParameter("quizID");
+	if(id != null)
+		out.println("<input name=\"quizID\" type=\"hidden\" value=\"" + id + "\">");
+	%>
 	<input type="submit" value="Submit"><br>
 </form>
 <p><a href="CreateAccount.jsp">Create New Account</a></p>

@@ -42,12 +42,17 @@ public class accountCheck extends HttpServlet {
 		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
 		String userName = (String) request.getParameter("userName");
 		String password = (String) request.getParameter("password");
+		String reenter = (String) request.getParameter("reenterpassword");
 		HttpSession session = request.getSession();
 		session.setAttribute("name",userName);
-		if(DB.accountExists(userName)==true){
+		if(DB.accountExists(userName)){
 			RequestDispatcher dispatch = request.getRequestDispatcher("nameInUse.jsp"); 
 			dispatch.forward(request, response); 
+		}else if(!password.equals(reenter)){
+			RequestDispatcher dispatch = request.getRequestDispatcher("passwordsDontMatch.jsp"); 
+			dispatch.forward(request, response); 
 		}else{
+		
 			try {
 				DB.createAccount(userName, password);
 			} catch (SQLException e) {
