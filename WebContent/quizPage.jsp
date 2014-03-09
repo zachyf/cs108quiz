@@ -6,11 +6,9 @@
 currently. It allows you to take the quiz. -->
 <html>
 <% String quizID = request.getParameter("id"); 
-QuizManager qm = (QuizManager)application.getAttribute("QuizManager"); 
-Quiz quiz = qm.getQuizAt(Integer.parseInt(quizID));
-request.setAttribute("quiz", quiz);
 DBConnection db = (DBConnection)application.getAttribute("db");
-if(db == null) System.out.println("HAHAHAHAHA");
+Quiz quiz = db.getQuizAt(Integer.parseInt(quizID));
+request.setAttribute("quiz", quiz);
 %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -23,8 +21,23 @@ if(db == null) System.out.println("HAHAHAHAHA");
 
 <h5>Creator: <%=quiz.getCreator() %></h5>
 
-<p>User's Most Recent Performance</p>
-
+<% if(session.getAttribute("name") != null){
+	out.println("<p>My Most Recent Performance</p>");
+	out.println("<table border=\"1\" style=\"width:300px\">");
+	out.println("<tr><th>Rank</th><th>User Name</th><th>Score</th><th>Time</th>");
+	out.println("</tr><tr>");
+	ArrayList<ArrayList<Object>> myRecentPerformance = quiz.getMyRecentPerformance((String)session.getAttribute("name"), db);
+	if(myRecentPerformance == null) System.out.println("TEST");
+	for(int i = 0; i < myRecentPerformance.size(); i++){
+		out.println("<tr><td>" + (i+1) + "</td>");
+		out.println("<td>" + myRecentPerformance.get(i).get(0) + "</td>");
+		out.println("<td>" + ((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
+		out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
+		out.println("</tr>");
+		out.println("</table>");
+	}
+}
+%>
 <p>Highest Performers</p>
 <table border="1" style="width:300px">
 <tr>
@@ -46,8 +59,44 @@ for(int i = 0; i < leaderboard.size(); i++){
 </table>
 
 <p>Recent High Performers (Past Day)</p>
+<table border="1" style="width:300px">
+<tr>
+  <th>Rank</th>
+  <th>User Name</th>
+  <th>Score</th>		
+  <th>Time</th>
+  </tr>
+<tr>
+<% ArrayList<ArrayList<Object>> recentHighScores = quiz.getRecentHighScores(db);
+for(int i = 0; i < leaderboard.size(); i++){
+	out.println("<tr><td>" + (i+1) + "</td>");
+	out.println("<td>" + recentHighScores.get(i).get(0) + "</td>");
+	out.println("<td>" + ((Double)(recentHighScores.get(i).get(1))*100) + "%</td>");
+	out.println("<td>" + recentHighScores.get(i).get(2) + "</td>");
+	out.println("</tr>");
+}
+%>
+</table>
 
 <p>Recent Test Takers</p>
+<table border="1" style="width:300px">
+<tr>
+  <th>Rank</th>
+  <th>User Name</th>
+  <th>Score</th>		
+  <th>Time</th>
+  </tr>
+<tr>
+<% ArrayList<ArrayList<Object>> recentTestTakers = quiz.getRecentScores(db);
+for(int i = 0; i < leaderboard.size(); i++){
+	out.println("<tr><td>" + (i+1) + "</td>");
+	out.println("<td>" + recentTestTakers.get(i).get(0) + "</td>");
+	out.println("<td>" + ((Double)(recentTestTakers.get(i).get(1))*100) + "%</td>");
+	out.println("<td>" + recentTestTakers.get(i).get(2) + "</td>");
+	out.println("</tr>");
+}
+%>
+</table>
 
 <p>Summary of user performance</p>
 

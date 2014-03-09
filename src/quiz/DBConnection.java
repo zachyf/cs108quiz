@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Random;
 
 
@@ -581,4 +583,63 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 	 }
+	
+	public int getNextQuizID() {
+		try{
+			Statement stmt = con.createStatement();
+			stmt.executeQuery("USE " + database);
+			ResultSet rs = stmt.executeQuery("SELECT count(*) as max FROM quizzes;");
+			while(rs.next()){
+				return (int)rs.getLong("max");
+			}
+				
+			return -1;
+		}
+		catch(SQLException e){
+			return -1;
+		}
+		catch (NumberFormatException e){
+			return -1;
+		}
+	}
+	
+	public Quiz getQuizAt(int id){
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeQuery("USE " + database);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM quizzes where id=" + id + ";");
+			if(rs.next()){
+				Quiz quiz = new Quiz(rs.getString("name"), rs.getInt("id"), rs.getString("creatorName"), rs.getString("description"), 
+						Quiz.intToBoolean(rs.getInt("onePage")), Quiz.intToBoolean(rs.getInt("isRandomOrder")), 
+						Quiz.intToBoolean(rs.getInt("isImmediate")), Quiz.intToBoolean(rs.getInt("hasPracticeMode")));
+			return quiz;
+			}
+		}
+		catch(SQLException e){
+			return null;
+		}
+		return null;
+	}
+	
+	/**
+	 * Gets 5 most recent quizzes, sorted by date descending,
+	 * and returns in ordered list htmL.
+	 * @return
+	 */
+	public String getRecentQuizzers(){
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeQuery("USE " + database);
+			ResultSet rs = stmt.executeQuery("SELECT id, quizName, createtime FROM quizzes ORDER BY createtime desc LIMIT 5;");
+			StringBuilder sb = new StringBuilder();
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			while(rs.next()){
+				sb.append("<ol>" + "<a href=quizPage.jsp?id=" + rs.getInt("id") + ">" + rs.getString("quizName") + " " + df.format(rs.getTimestamp("createtime")) + "</a></ol>");
+			}	
+			return sb.toString();
+		}
+		catch(SQLException e){
+			return "";
+		}
+	}
 }

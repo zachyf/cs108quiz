@@ -59,8 +59,8 @@ public class MultiPageQuiz extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Get the information and record the answer
 		int quizID = Integer.parseInt(request.getParameter("quizID"));
-		QuizManager qm = (QuizManager)request.getServletContext().getAttribute("QuizManager");
-		Quiz quiz = qm.getQuizAt(quizID);
+		DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
+		Quiz quiz = db.getQuizAt(quizID);
 		@SuppressWarnings("unchecked")
 		Queue<Integer> q_order = (Queue<Integer>)request.getSession().getAttribute("questionsLeft" + quizID);
 		Answer a = (Answer)request.getSession().getAttribute("answer");

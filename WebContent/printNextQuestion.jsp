@@ -7,8 +7,8 @@
 //This page is a placeholder for the homepage. 
 //It currently allows you to browse recently created quizzes or create a new quiz.
 int quizID = Integer.parseInt(request.getParameter("quizID"));
-QuizManager qm = (QuizManager)application.getAttribute("QuizManager");
-Quiz quiz = qm.getQuizAt(quizID);
+DBConnection db = (DBConnection)application.getAttribute("db");
+Quiz quiz = db .getQuizAt(quizID);
 Queue<Integer> q_order = (Queue<Integer>)session.getAttribute("questionsLeft" + quizID);
 %>
 <head>

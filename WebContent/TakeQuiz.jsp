@@ -7,8 +7,8 @@ Otherwise, it tracks what questions are left in the quiz and passes to the subse
 <html>
 <% 
 int quizID = Integer.parseInt(request.getParameter("quizID"));
-QuizManager qm = (QuizManager)application.getAttribute("QuizManager");
-Quiz quiz = qm.getQuizAt(quizID);
+DBConnection db = (DBConnection)application.getAttribute("db");
+Quiz quiz = db.getQuizAt(quizID);
 HttpSession ses = request.getSession();
 String username = (String) ses.getAttribute("name");
 Answer answer = new Answer(username, quiz);
