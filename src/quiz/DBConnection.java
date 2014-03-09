@@ -115,8 +115,8 @@ public class DBConnection {
             if (rs.next()){
                 return rs.getString("username").equals(user);
             }
-            return false
-        catch (SQLException e) {
+            return false;
+        }catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
@@ -465,6 +465,24 @@ public class DBConnection {
 			return rs.getInt("numCreated");
 		}
 		return -1;
+	}
+	
+	public ArrayList<Quiz> getQuizzes(){
+		ArrayList<Quiz> quizList = new ArrayList<Quiz>();
+		try {
+			ResultSet rs = executeQuery("SELECT * FROM quizzes order by id;");
+			while(rs.next()) {
+	
+						Quiz quiz = new Quiz(rs.getString("name"), rs.getInt("id"), rs.getString("creatorName"), rs.getString("description"), 
+						Quiz.intToBoolean(rs.getInt("onePage")), Quiz.intToBoolean(rs.getInt("isRandomOrder")), 
+						Quiz.intToBoolean(rs.getInt("isImmediate")), Quiz.intToBoolean(rs.getInt("hasPracticeMode")));
+				quizList.add(quiz);
+				//quiz.addQuestions();
+			}
+		} catch (SQLException e) {
+	         e.printStackTrace();
+		} 
+		return quizList;
 	}
 	
 	public Boolean gottenHighScore(String account) throws SQLException{

@@ -41,7 +41,7 @@ public class listener implements ServletContextListener {
         ServletContext context=arg0.getServletContext();
         context.setAttribute("DBConnection",DB); 
         context.setAttribute("db", DB);
-	    QuizManager qm = new QuizManager(DB);
+	    QuizManager qm = new QuizManager();
 	    context.setAttribute("QuizManager", qm);
     	
     }
