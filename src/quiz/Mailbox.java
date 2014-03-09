@@ -77,21 +77,14 @@ public class Mailbox extends HttpServlet {
 			int numRequests=DB.getNumRequests(username);
 			out.println("<br>");
 			if(numRequests==0){
-<<<<<<< HEAD
+
 				out.println("<h3>No new friend requests :(</h3>");
 			}else{
 				if(numRequests==1){
 					out.println("<h3>You have "+DB.getNumRequests(username)+" friend request:</h3>");
 				}else{
 					out.println("<h3>You have "+DB.getNumRequests(username)+" friend requests:</h3>");
-=======
-				out.println("No new friend requests :(");
-			}else{
-				if(numRequests==1){
-					out.println("You have "+DB.getNumRequests(username)+" friend request:");
-				}else{
-					out.println("You have "+DB.getNumRequests(username)+" friend requests:");
->>>>>>> cd79dc2dfb35504aa7393a033bb334d51846d192
+
 				}
 				out.println("<br>");
 				ArrayList<String> friends = DB.usersWhoSentRequests(username);
@@ -106,7 +99,7 @@ public class Mailbox extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
+
 		int numRequests=DB.getMessages(username).size();
 		out.println("<br>");
 		if(numRequests==0){
@@ -128,34 +121,7 @@ public class Mailbox extends HttpServlet {
 		
 		out.println("<br><a href=\"userWelcome\"><img src=\"home.jpg\" title=\"Return Home \"></img></a>");
 		
-=======
-		//same as requests but for messages
-		try {
-			int numRequests=DB.getNumRequests(username);
-			out.println("<br>");
-			if(numRequests==0){
-				out.println("No new messages :(");
-			}else{
-				if(numRequests==1){
-					out.println("You have "+DB.getNumRequests(username)+" friend request:");
-				}else{
-					out.println("You have "+DB.getNumRequests(username)+" friend requests:");
-				}
-				out.println("<br>");
-				ArrayList<String> friends = DB.usersWhoSentRequests(username);
-				for(int i=0;i<numRequests;i++){
-					out.println(friends.get(i)+" would like to be your friend on Quiz Mania.");
-					out.println("<a href=\"Mailbox?ID="+friends.get(i)+"&accept=true\"><img src=\"acceptButton.jpg\" title=\"Accept Friend Request\"></img></a>");
-					out.println("<a href=\"Mailbox?ID="+friends.get(i)+"&accept=false\"><img src=\"rejectButton.jpg\" title=\"Reject Friend Request\"></img></a>");
-					out.println("<br>");
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
->>>>>>> cd79dc2dfb35504aa7393a033bb334d51846d192
+
 	}
 
 	/**

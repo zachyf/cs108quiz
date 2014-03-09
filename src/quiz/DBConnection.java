@@ -232,9 +232,11 @@ public class DBConnection {
 		 String q = "DELETE FROM users WHERE user_name=\""+username + "\";";
 		 String r = "DELETE FROM friends WHERE user1=\""+username + "\" or user2=\"" + username + "\";";
 		 String s = "DELETE FROM pending WHERE user1=\""+username + "\" or user2=\"" + username + "\";";
+		 String t = "DELETE FROM messages WHERE fromUser=\""+username + "\" or toUser=\"" + username + "\";";
 	     stmt.executeUpdate(q);
 	     stmt.executeUpdate(r);
 	     stmt.executeUpdate(s);
+	     stmt.executeUpdate(t);
 		 }catch(SQLException e) { 
 	         e.printStackTrace();
 		} 

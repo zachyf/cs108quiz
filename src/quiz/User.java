@@ -2,10 +2,13 @@ package quiz;
 //STUB Class for USER
 public class User {
 	
-	private int userID;
+	private String userName;
 	
-	public User(int id){
-		this.userID = id;
+	public User(String name){
+		this.userName = name;
 	}
 
+	public String getUserName(){
+		return userName;
+	}
 }

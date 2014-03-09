@@ -40,11 +40,9 @@ public class userWelcome extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-<<<<<<< HEAD
+
 		doPost(request,response);
-=======
-		
->>>>>>> cd79dc2dfb35504aa7393a033bb334d51846d192
+
 	}
 
 	/**
@@ -86,10 +84,9 @@ public class userWelcome extends HttpServlet {
 				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread messages.");
 			}
 		}
-<<<<<<< HEAD
+
 		out.println("<br>");
-=======
->>>>>>> cd79dc2dfb35504aa7393a033bb334d51846d192
+
 		try {
 			if(DB.practiced(username)==true){
 				out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
@@ -141,7 +138,7 @@ public class userWelcome extends HttpServlet {
 		out.println("<input type=\"text\" name=\"userName\">");
 		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
 		out.println("</form>");
-<<<<<<< HEAD
+
 		out.println("<div id=\"message\"></div>");
 		out.println("<script type=\"text/javascript/\">");
 		out.println("var xmlhttp;");
@@ -168,17 +165,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</body>");
 		out.println("</html>");
 		out.println("</table>");
-=======
-		out.println("Send a friend a note: <a href=\"NewMessage.jsp?user=" + username + "\">Click Here</a><br>");
-		out.println("<table style=\"width:300px\">\n<tr>\n\t<th>From<th>\n\t<Subject>\n\t<th>Time</th>\n\t<th>Note<th>\n<\tr>");
-		ArrayList<Message> ml = DB.getMessages(username);
-		for(int i = 0; i < ml.size(); ++i){
-			//make it limited size and scrolling 
-			out.println("<tr>\n\t<td>" + ml.get(i).getFrom() + "</td>\n\t<td>" + ml.get(i).getSubject() + "<\td>\n\t<td>" + ml.get(i).getSentTime() + "</td>\n\t<td>" + ml.get(i).getMessage() + "</td>\n</tr>");
-		}
-		out.println("</body>");
-		out.println("</html>");
->>>>>>> cd79dc2dfb35504aa7393a033bb334d51846d192
+
 	}
 
 }

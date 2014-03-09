@@ -37,11 +37,8 @@ public class QuizManager {
 		try {
 			ResultSet rs = db.executeQuery("SELECT * FROM quizzes order by id;");
 			while(rs.next()) {
-<<<<<<< HEAD
-				Quiz quiz = new Quiz(rs.getString("name"), rs.getInt("id"), rs.getString("creatorName"), rs.getString("description"), 
-=======
-				Quiz quiz = new Quiz(rs.getInt("id"), rs.getString("name"), rs.getString("description"), 
->>>>>>> cd79dc2dfb35504aa7393a033bb334d51846d192
+
+						Quiz quiz = new Quiz(rs.getString("name"), rs.getInt("id"), rs.getString("creatorName"), rs.getString("description"), 
 						Quiz.intToBoolean(rs.getInt("onePage")), Quiz.intToBoolean(rs.getInt("isRandomOrder")), 
 						Quiz.intToBoolean(rs.getInt("isImmediate")), Quiz.intToBoolean(rs.getInt("hasPracticeMode")));
 				this.quizzes.add(quiz);

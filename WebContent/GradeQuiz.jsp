@@ -14,7 +14,7 @@ DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
 if(db == null){
 	db = new DBConnection();
 }
-a.addToDB(db);
+//a.addToDB(db);
 session.removeAttribute("answer");
 %>
 <html>

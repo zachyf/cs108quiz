@@ -152,8 +152,8 @@ public class Quiz {
 	}
 	
 	public void addAnswer(Answer a){
-		this.answers.put(a.getUser(), a);
-		this.recentTestTakers.add(a.getUser());
+		this.answers.put(a.getUser().getUserName(), a);
+		this.recentTestTakers.add(a.getUser().getUserName());
 	}
 	
 	public double getUserScore(String u){
