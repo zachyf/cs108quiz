@@ -23,7 +23,16 @@ public class FillInTheBlank extends Question {
 		return this.question;
 	}
 	
+	@Override
+	public String getType(){
+		return "FillInBlank";
+	}
 	
+	@Override
+	public int getNum(){
+		return this.num;
+	}
+
 	/**
 	 * getQuestion returns a String of the HTML required to
 	 * display the question. This includes the question and the text

@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -293,27 +295,7 @@ public class DBConnection {
 		} 
 		 return 0;
 	 }
-	 
-	public ResultSet executeQuery(String query){
-			try {
-				Statement stmt = this.con.createStatement();
-				stmt.executeQuery("USE " + MyDBInfo.MYSQL_DATABASE_NAME);
-				return stmt.executeQuery(query);
-			} catch (SQLException e) {
-		         e.printStackTrace();
-			} 
-			return null;
-		}
-	 
-	public void updateDB(String insertion){
-			try {
-				Statement stmt = this.con.createStatement();
-				stmt.executeQuery("USE " + MyDBInfo.MYSQL_DATABASE_NAME);
-				stmt.executeUpdate(insertion);
-			} catch (SQLException e) {
-		         e.printStackTrace();
-			} 
-		}
+	
 	 
 	 public int getTotalUsers() throws SQLException{
 		 Statement stmt = con.createStatement();
@@ -487,24 +469,6 @@ public class DBConnection {
 		return -1;
 	}
 	
-	public ArrayList<Quiz> getQuizzes(){
-		ArrayList<Quiz> quizList = new ArrayList<Quiz>();
-		try {
-			ResultSet rs = executeQuery("SELECT * FROM quizzes order by id;");
-			while(rs.next()) {
-	
-						Quiz quiz = new Quiz(rs.getString("name"), rs.getInt("id"), rs.getString("creatorName"), rs.getString("description"), 
-						Quiz.intToBoolean(rs.getInt("onePage")), Quiz.intToBoolean(rs.getInt("isRandomOrder")), 
-						Quiz.intToBoolean(rs.getInt("isImmediate")), Quiz.intToBoolean(rs.getInt("hasPracticeMode")));
-				quizList.add(quiz);
-				//quiz.addQuestions();
-			}
-		} catch (SQLException e) {
-	         e.printStackTrace();
-		} 
-		return quizList;
-	}
-	
 	public Boolean gottenHighScore(String account) throws SQLException{
 		Statement stmt = con.createStatement();
 		stmt.executeQuery("USE " + database);
@@ -586,9 +550,7 @@ public class DBConnection {
 	
 	public int getNextQuizID() {
 		try{
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("USE " + database);
-			ResultSet rs = stmt.executeQuery("SELECT count(*) as max FROM quizzes;");
+			ResultSet rs = executeQuery("SELECT count(*) as max FROM quizzes;");
 			while(rs.next()){
 				return (int)rs.getLong("max");
 			}
@@ -605,14 +567,14 @@ public class DBConnection {
 	
 	public Quiz getQuizAt(int id){
 		try {
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("USE " + database);
-			ResultSet rs = stmt.executeQuery("SELECT * FROM quizzes where id=" + id + ";");
+			ResultSet rs = executeQuery("SELECT * FROM quizzes where id=" + id + ";");
+			ResultSet numQuestionsResult = executeQuery("Select count(*) as numQuestions FROM questions where quizID = " + id);
+			numQuestionsResult.next();
 			if(rs.next()){
-				Quiz quiz = new Quiz(rs.getString("name"), rs.getInt("id"), rs.getString("creatorName"), rs.getString("description"), 
+				Quiz quiz = new Quiz(rs.getString("creatorName"), rs.getInt("id"), rs.getString("quizName"), rs.getString("description"), 
 						Quiz.intToBoolean(rs.getInt("onePage")), Quiz.intToBoolean(rs.getInt("isRandomOrder")), 
 						Quiz.intToBoolean(rs.getInt("isImmediate")), Quiz.intToBoolean(rs.getInt("hasPracticeMode")));
-			return quiz;
+				return quiz;
 			}
 		}
 		catch(SQLException e){
@@ -626,11 +588,9 @@ public class DBConnection {
 	 * and returns in ordered list htmL.
 	 * @return
 	 */
-	public String getRecentQuizzers(){
+	public String getRecentQuizzes(){
 		try {
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("USE " + database);
-			ResultSet rs = stmt.executeQuery("SELECT id, quizName, createtime FROM quizzes ORDER BY createtime desc LIMIT 5;");
+			ResultSet rs = executeQuery("SELECT id, quizName, createtime FROM quizzes ORDER BY createtime desc LIMIT 5;");
 			StringBuilder sb = new StringBuilder();
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			while(rs.next()){
@@ -642,4 +602,117 @@ public class DBConnection {
 			return "";
 		}
 	}
+	
+	public ArrayList<ArrayList<Object>> getHighScorers(int quizID){
+		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
+				" from quizRecords where quizID = " + quizID + 
+				" order by numCorrect  desc, timeToComplete asc limit 5;";
+		return getList(query);
+	}
+	
+	public ArrayList<ArrayList<Object>> getRecentScores(int quizID){
+		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
+				" from quizRecords where quizID = " + quizID + 
+				" order by timeSubmitted  desc limit 5;";
+		return getList(query);
+	}
+	
+	public ArrayList<ArrayList<Object>> getRecentHighScores(int quizID){
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
+		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
+				" from quizRecords where quizID = " + quizID + 
+				" and timeSubmitted > " + df.format(new Timestamp(System.currentTimeMillis() - (24 * 60 * 60 * 1000))) +
+				" order by numCorrect  desc, timeToComplete asc limit 5;";
+		return getList(query);
+	}
+	
+	public ArrayList<ArrayList<Object>> getMyRecentPerformance(String username, int quizID){
+		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
+				" from quizRecords where quizID = " + quizID + " and userName = \"" + username + "\"" +
+				" order by timeSubmitted desc limit 5;";
+		return getList(query);
+	}
+	
+	public void getQuestions(Quiz quiz){
+	String query = "SELECT * from questions where quizID = " + quiz.getID() + " order by questionNum asc;";
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()){
+				String type = rs.getString("type");
+				if(type.equals("QuestionResponse"))
+	            	quiz.addQuestion(new QuestionResponse(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+				else if (type.equals("Picture"))
+					quiz.addQuestion(new PictureResponse(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+				else if (type.equals("FillInBlank"))
+					quiz.addQuestion(new FillInTheBlank(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+			}
+		}
+		catch (SQLException e){
+			
+		}
+	}
+	
+	private ArrayList<ArrayList<Object>> getList(String query){
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()) {
+				ArrayList<Object> row = new ArrayList<Object>();
+				row.add(rs.getString("userName"));
+				row.add((double)rs.getInt("numCorrect")/rs.getInt("numQuestions"));
+				row.add(rs.getInt("timeToComplete")/1000);
+				list.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
+	
+	public void addQuizToDB(Quiz quiz, int isOnePage, int isRandom, int isImmediateCorrection, int hasPracticeMode){
+		Calendar calendar = Calendar.getInstance();
+		String insertion = "INSERT INTO quizzes VALUES (" + quiz.getID() + ",\""  + quiz.getName() + "\",\"" 
+				+ quiz.getDescription() + "\",\"" + quiz.getCreator() + "\",\'" + 
+				new java.sql.Timestamp(calendar.getTime().getTime()) + "\'," 
+			+ isOnePage + "," + isRandom + "," + 
+			isImmediateCorrection +  "," + hasPracticeMode + ");";
+		updateDB(insertion);
+	}
+	
+	public void addAnswerToDB(Answer answer){
+		String insertion = "INSERT INTO quizRecords VALUES (" + answer.getNumCorrect() + ","  + answer.getQuiz().getNumQuestions() + "," 
+			+ answer.getTimeToComplete() + ",\"" + answer.getUser() + "\"," + answer.getQuiz().getID() + ",\'" + answer.getDateCompleted() + "\');";
+		this.updateDB(insertion);
+	}
+	
+	public void addQuestion(Question question, Quiz quiz){
+		String insertion = "INSERT INTO questions VALUES (" + quiz.getID() + ",\""  + question.rawQuestion() + "\",\"" 
+		+ question.getAnswer() + "\"," + question.getNum() + ",\"" + question.getType() + "\");";
+		updateDB(insertion);
+		quiz.addQuestion(question);
+	}
+	
+	public ResultSet executeQuery(String query){
+		try {
+			Statement stmt = this.con.createStatement();
+			stmt.executeQuery("USE " + MyDBInfo.MYSQL_DATABASE_NAME);
+			return stmt.executeQuery(query);
+		} catch (SQLException e) {
+	         e.printStackTrace();
+		} 
+		return null;
+	}
+	
+	 
+	public void updateDB(String insertion){
+			try {
+				Statement stmt = this.con.createStatement();
+				stmt.executeQuery("USE " + MyDBInfo.MYSQL_DATABASE_NAME);
+				stmt.executeUpdate(insertion);
+			} catch (SQLException e) {
+		         e.printStackTrace();
+			} 
+		}
+	
+	
 }

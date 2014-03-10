@@ -26,7 +26,7 @@ request.setAttribute("quiz", quiz);
 	out.println("<table border=\"1\" style=\"width:300px\">");
 	out.println("<tr><th>Rank</th><th>User Name</th><th>Score</th><th>Time</th>");
 	out.println("</tr><tr>");
-	ArrayList<ArrayList<Object>> myRecentPerformance = quiz.getMyRecentPerformance((String)session.getAttribute("name"), db);
+	ArrayList<ArrayList<Object>> myRecentPerformance = db.getMyRecentPerformance((String)session.getAttribute("name"), quiz.getID());
 	if(myRecentPerformance == null) System.out.println("TEST");
 	for(int i = 0; i < myRecentPerformance.size(); i++){
 		out.println("<tr><td>" + (i+1) + "</td>");
@@ -47,7 +47,7 @@ request.setAttribute("quiz", quiz);
   <th>Time</th>
   </tr>
 <tr>
-<% ArrayList<ArrayList<Object>> leaderboard = quiz.getHighScorers(db);
+<% ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 for(int i = 0; i < leaderboard.size(); i++){
 	out.println("<tr><td>" + (i+1) + "</td>");
 	out.println("<td>" + leaderboard.get(i).get(0) + "</td>");
@@ -67,8 +67,8 @@ for(int i = 0; i < leaderboard.size(); i++){
   <th>Time</th>
   </tr>
 <tr>
-<% ArrayList<ArrayList<Object>> recentHighScores = quiz.getRecentHighScores(db);
-for(int i = 0; i < leaderboard.size(); i++){
+<% ArrayList<ArrayList<Object>> recentHighScores = db.getRecentHighScores(quiz.getID());
+for(int i = 0; i < recentHighScores.size(); i++){
 	out.println("<tr><td>" + (i+1) + "</td>");
 	out.println("<td>" + recentHighScores.get(i).get(0) + "</td>");
 	out.println("<td>" + ((Double)(recentHighScores.get(i).get(1))*100) + "%</td>");
@@ -87,7 +87,7 @@ for(int i = 0; i < leaderboard.size(); i++){
   <th>Time</th>
   </tr>
 <tr>
-<% ArrayList<ArrayList<Object>> recentTestTakers = quiz.getRecentScores(db);
+<% ArrayList<ArrayList<Object>> recentTestTakers = db.getRecentScores(quiz.getID());
 for(int i = 0; i < leaderboard.size(); i++){
 	out.println("<tr><td>" + (i+1) + "</td>");
 	out.println("<td>" + recentTestTakers.get(i).get(0) + "</td>");

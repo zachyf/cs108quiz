@@ -33,6 +33,16 @@ public class MultipleChoice extends Question {
 		return this.question;
 	}
 	
+	@Override
+	public String getType(){
+		return "MultipleChoice";
+	}
+	
+	@Override
+	public int getNum(){
+		return this.num;
+	}
+	
 	/**
 	 * getQuestion returns a String of the HTML required to display the question.
 	 * This includes the question and the radio buttons for the answer choices.

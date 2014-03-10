@@ -11,5 +11,9 @@ public abstract class Question {
 	public abstract String rawQuestion();
 	
 	public abstract String displayQuestion();
+	
+	public abstract String getType();
+	
+	public abstract int getNum();
 		
 }

@@ -1,36 +1,38 @@
 package quiz;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 
 public class Answer {
 
 	private int numCorrect;
-	private long startTime;
+	private Timestamp startTime;
 	private long timeToComplete;
 	private String user;
 	private Quiz quiz;
 	private HashMap<Question, String> answers;
-	private Date dateCompleted;
+	private Timestamp timeSubmitted;
 	
 	public Answer(String user, Quiz quiz) {
 		this.user = user;
 		this.quiz = quiz;
 		this.numCorrect = 0;
 		this.answers = new HashMap<Question, String>();
-	}		
+		this.startTime = new Timestamp(System.currentTimeMillis());
+	}
+	
+	public int getNumCorrect(){
+		return this.numCorrect;
+	}
 	
 	public double getScore() {
 		return (double)this.numCorrect/this.answers.size();
 	}
 	
-	public void startTimer() {
-		this.startTime = System.currentTimeMillis();
-	}
-	
 	public void endTimer() {
-		this.timeToComplete = System.currentTimeMillis() - this.startTime;
-		this.dateCompleted = new Date();
+		this.timeSubmitted = new Timestamp(System.currentTimeMillis());
+		this.timeToComplete = this.timeSubmitted.getTime() - this.startTime.getTime();
 	}
 	
 	public void setAnswer(Question question, String answer) {
@@ -52,8 +54,8 @@ public class Answer {
 		return this.quiz;
 	}
 	
-	public Date getDateCompleted() {
-		return this.dateCompleted;
+	public Timestamp getDateCompleted() {
+		return this.timeSubmitted;
 	}
 	
 	public String getAnswerToQuestion(Question q){

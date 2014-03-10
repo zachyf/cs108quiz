@@ -60,7 +60,8 @@ public class MultiPageQuiz extends HttpServlet {
 		//Get the information and record the answer
 		int quizID = Integer.parseInt(request.getParameter("quizID"));
 		DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
-		Quiz quiz = db.getQuizAt(quizID);
+		//Quiz quiz = db.getQuizAt(quizID);
+		Quiz quiz = (Quiz)request.getSession().getAttribute("quiz");
 		@SuppressWarnings("unchecked")
 		Queue<Integer> q_order = (Queue<Integer>)request.getSession().getAttribute("questionsLeft" + quizID);
 		Answer a = (Answer)request.getSession().getAttribute("answer");

@@ -16,7 +16,7 @@ out.print("HERE IS WHERE ANNOUNCEMENTS WOULD GO");%><br></br>
 
 <p>Recent Quizzes</p>
 <% // PrintRecent Quizzes
-out.print(db.getRecentQuizzers());
+out.print(db.getRecentQuizzes());
 %>
 <br></br>
 <a href="createQuiz.html" > Click Here to Create New Quiz</a>

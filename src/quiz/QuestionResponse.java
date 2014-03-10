@@ -15,12 +15,21 @@ public class QuestionResponse extends Question {
 		this.question = question;
 		this.answer = answer;
 		this.num = num;
-		
+	}
+	
+	@Override
+	public String getType(){
+		return "QuestionResponse";
 	}
 	
 	@Override
 	public String rawQuestion(){
 		return this.question;
+	}
+	
+	@Override
+	public int getNum(){
+		return this.num;
 	}
 	
 	/**

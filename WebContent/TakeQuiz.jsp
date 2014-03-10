@@ -14,6 +14,7 @@ String username = (String) ses.getAttribute("name");
 Answer answer = new Answer(username, quiz);
 quiz.addAnswer(answer);
 session.setAttribute("answer", answer);
+session.setAttribute("quiz", quiz);
 %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -21,7 +22,7 @@ session.setAttribute("answer", answer);
 </head>
 <body>
 <% 
-
+db.getQuestions(quiz);
 Queue<Integer> q_order = quiz.getQuestionOrder();
 out.println("<h1>" + quiz.getName() + "</h1>");
 

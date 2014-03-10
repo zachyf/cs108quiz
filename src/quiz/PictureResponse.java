@@ -19,10 +19,19 @@ public class PictureResponse extends Question {
 	}
 	
 	@Override
+	public String getType(){
+		return "Picture";
+	}
+	
+	@Override
 	public String rawQuestion(){
 		return this.question;
 	}
 	
+	@Override
+	public int getNum(){
+		return this.num;
+	}
 
 	/**
 	 * getQuestion returns a String of the HTML required to
