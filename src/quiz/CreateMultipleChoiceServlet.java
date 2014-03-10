@@ -43,7 +43,7 @@ response.setContentType("text/html; charset=UTF-8");
 		ServletContext context = request.getServletContext();
 		DBConnection db = (DBConnection)context.getAttribute("db");
 		int quizID = Integer.valueOf(request.getParameter("quizID"));
-		Quiz quiz  = ((QuizManager)context.getAttribute("QuizManager")).getQuizAt(quizID);
+		Quiz quiz  = db.getQuizAt(quizID);
 
 		// DEBUG: This is just for debugging
 		ArrayList<Question> questions;

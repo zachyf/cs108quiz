@@ -21,6 +21,7 @@ public class Quiz {
 	String description;
 	private String creatorName;
 	private Date date;
+	
 	/*
 	 * One Page vs. Multiple Pages - Multiple Pages = 1 question per page
 	 * Servlet prints all questions or goes into multiple question flow if false 
@@ -94,29 +95,8 @@ public class Quiz {
 		return this.questions.size();
 	}
 
-	public void addQuestion(Question q, String type, DBConnection db){
-		String insertion = "INSERT INTO questions VALUES (" + this.id + ",\""  + q.rawQuestion() + "\",\"" 
-		+ q.getAnswer() + "\"," + this.questions.size() + ",\"" + type + "\");";
+	public void addQuestion(Question q){
 		this.questions.add(q);
-		db.updateDB(insertion);
-	}
-	
-	public void addQuestions(DBConnection db){
-		String query = "Select * from questions where quizID = " + this.id + " order by questionNum asc;";
-		try {
-			ResultSet rs = db.executeQuery(query);
-			while(rs.next()) {
-				String type = rs.getString("type");
-				if(type.equals("QuestionResponse"))
-	            	this.questions.add(new QuestionResponse(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
-				else if (type.equals("Picture"))
-	            	this.questions.add(new PictureResponse(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
-				else if (type.equals("FillInBlank"))
-	            	this.questions.add(new FillInTheBlank(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
-			}
-		} catch (SQLException e) {
-         e.printStackTrace();
-		} 
 	}
 	
 	public ArrayList<Question> getQuestionList(){
@@ -159,53 +139,5 @@ public class Quiz {
 	public double getUserScore(String u){
 		return this.answers.get(u).getScore();
 	}
-	
-	public ArrayList<ArrayList<Object>> getHighScorers(DBConnection db){
-		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
-				" from answers where quizID = " + this.id + 
-				" order by numCorrect  desc, timeToComplete asc limit 5;";
-		return getList(query, db);
-	}
-	
-	public ArrayList<ArrayList<Object>> getRecentScores(DBConnection db){
-		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
-				" from answers where quizID = " + this.id + 
-				" order by date  desc limit 5;";
-		return getList(query, db);
-	}
-	
-	public ArrayList<ArrayList<Object>> getRecentHighScores(DBConnection db){
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
-		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
-				" from answers where quizID = " + this.id + 
-				" and date > " + df.format(new Date(System.currentTimeMillis() - (24 * 60 * 60 * 1000))) +
-				" order by numCorrect  desc, timeToComplete asc limit 5;";
-		return getList(query, db);
-	}
-	
-	public ArrayList<ArrayList<Object>> getMyRecentPerformance(String username, DBConnection db){
-		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
-				" from answers where quizID = " + this.id + " and userName = \"" + username + "\"" +
-				" order by date desc limit 5;";
-		return getList(query, db);
-	}
-	
-	private ArrayList<ArrayList<Object>> getList(String query, DBConnection db){
-		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
-		try {
-			ResultSet rs = db.executeQuery(query);
-			while(rs.next()) {
-				ArrayList<Object> row = new ArrayList<Object>();
-				row.add(rs.getString("userName"));
-				row.add((double)rs.getInt("numCorrect")/rs.getInt("numQuestions"));
-				row.add(rs.getInt("timeToComplete")/1000);
-				list.add(row);
-			}
-		} catch (SQLException e) {
-         e.printStackTrace();
-		} 
-		return list;
-	}
-
 
 }

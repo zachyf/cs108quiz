@@ -36,17 +36,11 @@ public class listener implements ServletContextListener {
     	try {
 			DB = new DBConnection();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         ServletContext context=arg0.getServletContext();
         context.setAttribute("DBConnection",DB); 
         context.setAttribute("db", DB);
-	    QuizManager qm = new QuizManager();
-	    context.setAttribute("QuizManager", qm);
-	    AnimalManager am = new AnimalManager();
-
-    	context.setAttribute("am",am);
     }
 
 	/**

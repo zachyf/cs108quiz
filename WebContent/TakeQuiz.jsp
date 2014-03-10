@@ -7,13 +7,14 @@ Otherwise, it tracks what questions are left in the quiz and passes to the subse
 <html>
 <% 
 int quizID = Integer.parseInt(request.getParameter("quizID"));
-QuizManager qm = (QuizManager)application.getAttribute("QuizManager");
-Quiz quiz = qm.getQuizAt(quizID);
+DBConnection db = (DBConnection)application.getAttribute("db");
+Quiz quiz = db.getQuizAt(quizID);
 HttpSession ses = request.getSession();
 String username = (String) ses.getAttribute("name");
 Answer answer = new Answer(username, quiz);
 quiz.addAnswer(answer);
 session.setAttribute("answer", answer);
+session.setAttribute("quiz", quiz);
 %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -21,7 +22,7 @@ session.setAttribute("answer", answer);
 </head>
 <body>
 <% 
-
+db.getQuestions(quiz);
 Queue<Integer> q_order = quiz.getQuestionOrder();
 out.println("<h1>" + quiz.getName() + "</h1>");
 

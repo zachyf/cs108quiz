@@ -1,4 +1,4 @@
-USE c_cs108_jfutrell;
+USE c_cs108_schottj;
 
 DROP TABLE IF EXISTS questions;
  -- remove table if it already exists and start from scratch

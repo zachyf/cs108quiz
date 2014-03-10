@@ -13,10 +13,10 @@
 <form action="SendMessage" method="post">
 	To:<input type="text" name="to"><br>
 	Subject:<input type="text" name="subject"><br>	
-	Note: <textarea rows="4" cols="50" name="note"></textarea><br>
+	Note: <input type="text" name="note"size="50"><br>
 	<input name="userName" type="hidden" value="<%=request.getParameter("user")%>"/>
 	<input type="submit" value="Send">
 </form>
-<br><a href="userWelcome"><img src="home.jpg" title="Return Home "></img></a>
+
 </body>
 </html>
