@@ -39,6 +39,8 @@ public class listener implements ServletContextListener {
 			e.printStackTrace();
 		}
         ServletContext context=arg0.getServletContext();
+        AnimalManager am = new AnimalManager();
+        context.setAttribute("am",am); 
         context.setAttribute("DBConnection",DB); 
         context.setAttribute("db", DB);
     }
