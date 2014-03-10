@@ -531,6 +531,36 @@ public class DBConnection {
 		return "";
 	}
 	
+	public String winningTeam() throws SQLException{
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT animal, sum(numPlayed) FROM users group by animal;");
+		if(rs.next()){
+			return rs.getString("animal");
+		}
+		return "";
+	}
+	
+	public ArrayList<Integer> getMostPopularQuizzes() throws SQLException{
+		ArrayList<Integer> result= new ArrayList<Integer>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT count(*) as c, quizID  FROM quizRecords group by quizID order by c desc limit 5;");
+		while(rs.next()){
+			result.add(rs.getInt("quizID"));
+		}
+		return result;
+	}
+	public int totalTeamQuizesTaken(String animal) throws SQLException{
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT sum(numPlayed) FROM users where animal=\""+animal+"\";");
+		if(rs.next()){
+			return rs.getInt("sum(numPlayed)");
+		}
+		return -1;
+	}
+	
 	public void createAccount(String account, String password, String animal) throws SQLException{
 		Random randomGenerator = new Random();
 		int salt = randomGenerator.nextInt(1000);
