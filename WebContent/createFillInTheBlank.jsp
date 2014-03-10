@@ -58,15 +58,15 @@
 		<span class="input-group-addon">__________ </span>
 		<input type="text" name="questionEnd" class="form-control">	
 	</div><br>
-	
+
 	<div class="input-group input-group-lg">
 		<span class="input-group-addon">Answer: </span>
 		<input type="text" name="answer" class="form-control">
 	</div><br>
-	
+
 	<input name="num" type="hidden" value="<%= request.getParameter("num") %>"/>
 	<input name="quizID" type="hidden" value="<%= request.getParameter("quizID") %>"/>
-	
+
 	<button type="submit" class="btn btn-default">Create</button>
 
 </form>
