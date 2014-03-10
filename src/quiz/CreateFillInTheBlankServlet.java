@@ -63,7 +63,7 @@ public class CreateFillInTheBlankServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new QuestionResponse(question, answer, num);
-		quiz.addQuestion(q, "FillInBlank", db);
+		db.addQuestion(q, quiz);
 		
 		// TO DO: add q to Quiz
 		
@@ -74,8 +74,8 @@ public class CreateFillInTheBlankServlet extends HttpServlet {
 		// Open createQuestions.jsp to create another question
 		String url = "createQuestions.jsp?num=" + String.valueOf(num + 1) + "&quizID=" + quizID;
 		RequestDispatcher dispatch = request.getRequestDispatcher(url);
-		dispatch.forward(request, response);
-		
+		dispatch.forward(request, response);	
 	}
+	
 
 }

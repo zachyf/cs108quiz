@@ -62,7 +62,7 @@ public class CreateQuestionResponseServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new QuestionResponse(question, answer, num);
-		quiz.addQuestion(q, "QuestionResponse", db);
+		db.addQuestion(q, quiz);
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);

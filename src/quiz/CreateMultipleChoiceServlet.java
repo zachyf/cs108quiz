@@ -71,7 +71,7 @@ response.setContentType("text/html; charset=UTF-8");
 		
 		// Create the question
 		Question q = new MultipleChoice(question, choices, answer, num);
-		quiz.addQuestion(q, "QuestionResponse", db);
+		db.addQuestion(q, quiz);
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);

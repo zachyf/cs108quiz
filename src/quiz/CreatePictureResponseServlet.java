@@ -62,7 +62,7 @@ public class CreatePictureResponseServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new PictureResponse(imageURL, answer, num);
-		quiz.addQuestion(q, "Picture", db);
+		db.addQuestion(q, quiz);
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);
