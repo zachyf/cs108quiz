@@ -261,7 +261,7 @@ public class DBConnection {
 	 
 	 public int addChallenge(String challenger, String challenged, String quizName){
 		 try {
-<<<<<<< HEAD
+
 			 if (!userExists(challenger)){
 				 	return 1;
 				 }
@@ -271,17 +271,7 @@ public class DBConnection {
 			if (challengePending(challenger, challenger, quizName)){
 					return 3;
 				}
-=======
-			if (!userExists(challenger)){
-				return 1;
-			}
-			if (!userExists(challenged)){
-				return 2;
-			}
-			if (challengePending(challenger, challenger, quizName)){
-				 return 3;
-			 }
->>>>>>> FETCH_HEAD
+
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
 			 String q = "INSERT into challenges VALUES('" + challenger +"','" + challenged + "','"  + quizName+ "',1,CURRENT_TIMESTAMP);";
@@ -582,6 +572,28 @@ public class DBConnection {
 		Statement stmt = con.createStatement();
 		stmt.executeQuery("USE " + database);
 		ResultSet rs = stmt.executeQuery("SELECT count(*) as c, quizID  FROM quizRecords group by quizID order by c desc limit 5;");
+		while(rs.next()){
+			result.add(rs.getInt("quizID"));
+		}
+		return result;
+	}
+	
+	public ArrayList<Integer>  getRecentQuizzes1() throws SQLException{
+		ArrayList<Integer> result= new ArrayList<Integer>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM quizzes order by createtime desc limit 5;");
+		while(rs.next()){
+			result.add(rs.getInt("id"));
+		}
+		return result;
+	}
+	
+	public ArrayList<Integer> getTakenQuizzes(String username) throws SQLException{
+		ArrayList<Integer> result= new ArrayList<Integer>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM quizRecords where userName=\""+username+"\" order by timeSubmitted desc limit 5;");
 		while(rs.next()){
 			result.add(rs.getInt("quizID"));
 		}
