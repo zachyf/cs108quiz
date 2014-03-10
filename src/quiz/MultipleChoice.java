@@ -28,6 +28,22 @@ public class MultipleChoice extends Question {
 		this.num = num;
 	}
 	
+	public MultipleChoice(String question, String answer, int num) {
+		this.question = question;
+		this.answer = answer;
+		this.choices = new ArrayList<String>();
+		this.choices.add(answer);
+		this.num = num;
+	}
+	
+	public List<String> getChoices(){
+		return this.choices;
+	}
+	
+	public void addChoices(String choice){
+		this.choices.add(choice);
+	}
+	
 	@Override
 	public String rawQuestion(){
 		return this.question;
@@ -58,7 +74,7 @@ public class MultipleChoice extends Question {
 		for (int i = 0; i < choices.size(); i++) {
 			String choice = choices.get(i);
 			buff.append("<input type=radio name=" + numStr + 
-					" value=" + choice + ">" + choice + "<br>");
+					" value=\"" + choice + "\">" + choice + "<br>");
 		}
 		buff.append("</ul>");
 		
