@@ -1,29 +1,86 @@
-<?xml version="1.0" encoding="UTF-8" ?><!-- <?xml version="1.0" encoding="ISO-8859-1" ?> -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!--  This is the first page of the create a quiz flow. The user specifies the name and description of the quiz
-as well as a few details about how to display the questions -->
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><!-- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> -->
-<title>Create Account</title>
-</head>
-<body>
-<h1>Create New Quiz</h1>
-<p>Please enter quiz name and description.</p>
-<form action="CreateQuizServlet" method="post">
-<p>Quiz Name: <input type="text" name="name" /> 
-<br></br>
-Description: <input type="text" name="description" />
-<br></br>
-Random Order: <input type="checkbox" name="random" />
-<br></br>
-Single Page Quiz: <input type="checkbox" name="single" />
-<br></br>
-Grade Immediately: <input type="checkbox" name="immediate" />
-<br></br>
-Allow Practice Mode: <input type="checkbox" name="practice" />
-<br></br>
-<input type="submit" value="Create" /></p>
-</form>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Create Account</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+  
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="HomepageBootstrap.jsp">Quiz Mania!</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <form class="navbar-form navbar-right" role="form">
+        <div class="form-group">
+          <input type="text" placeholder="Search Quizzes..." class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Search</button>
+      </form>
+    </div><!--/.navbar-collapse -->
+  </div>
+</div>
+
+  <div class="container">
+
+    <form class="form-signin" action="CreateQuizServlet" method="post" role="form">
+    	<h1 class="form-signin-heading">Create New Quiz!</h1>
+    	
+    	<div class="input-group input-group-lg">
+			<span class="input-group-addon">Quiz Name: </span>
+			<input type="text" name="name" class="form-control">
+		</div><br>
+
+		<div class="input-group input-group-lg">
+			<span class="input-group-addon">Description: </span>
+			<input type="text" name="description" class="form-control">
+		</div>
+
+		<label class="checkbox">
+		  <input type="checkbox" name="random"> Random Order:
+		</label>
+		
+		<label class="checkbox">
+		  <input type="checkbox" name="single"> Single Page Quiz:
+		</label>
+		
+		<label class="checkbox">
+		  <input type="checkbox" name="immediate"> Grade Immediately:
+		</label>
+		
+		<label class="checkbox">
+		  <input type="checkbox" name="practice"> Allow Practice Mode:
+		</label>
+      
+      	<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form><br>
+
+  </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
 </html>

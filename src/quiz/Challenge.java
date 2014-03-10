@@ -1,3 +1,4 @@
+
 package quiz;
 
 import java.sql.Timestamp;
@@ -5,14 +6,14 @@ import java.sql.Timestamp;
 public class Challenge {
 	private String challenger;
 	private String challenged;
-	private int quizID;
+	private String quizName;
 	private boolean pending;
 	private Timestamp sentTime;
 	
-	public Challenge(String cer, String ced, int id, boolean p, Timestamp st){
+	public Challenge(String cer, String ced, String name, boolean p, Timestamp st){
 		challenger = cer;
 		challenged = ced;
-		quizID = id;
+		quizName = name;
 		pending = p;
 		sentTime = st; 
 	}
@@ -25,8 +26,8 @@ public class Challenge {
 		return challenged;
 	}
 	
-	public int getQuizID(){
-		return quizID;
+	public String getQuizName(){
+		return quizName;
 	}
 	
 	public boolean getPending(){

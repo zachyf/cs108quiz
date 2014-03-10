@@ -8,5 +8,6 @@ CREATE TABLE questions (
     question VARCHAR(128),
     answer TEXT,
     questionNum TINYINT(3),
-    type VARCHAR(128)
+    type VARCHAR(128),
+    choice TEXT
     );
