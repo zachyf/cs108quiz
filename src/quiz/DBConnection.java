@@ -235,7 +235,7 @@ public class DBConnection {
 			 stmt.executeQuery("USE " + database);
 			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + challenged + "' and pending=1 ORDER BY sentTime;");
 			 while(rs.next()){
-					 a.add(new Challenge(rs.getString("challenger"), rs.getString("challenged"),  Integer.parseInt(rs.getString("quizID")), true, Timestamp.valueOf(rs.getString("sentTime"))));
+					 a.add(new Challenge(rs.getString("challenger"), rs.getString("challenged"),  rs.getString("quizName"), true, Timestamp.valueOf(rs.getString("sentTime"))));
 			 }
 		 } catch (SQLException e) {
 	         e.printStackTrace();
@@ -261,6 +261,7 @@ public class DBConnection {
 	 
 	 public int addChallenge(String challenger, String challenged, String quizName){
 		 try {
+<<<<<<< HEAD
 			 if (!userExists(challenger)){
 				 	return 1;
 				 }
@@ -270,6 +271,17 @@ public class DBConnection {
 			if (challengePending(challenger, challenger, quizName)){
 					return 3;
 				}
+=======
+			if (!userExists(challenger)){
+				return 1;
+			}
+			if (!userExists(challenged)){
+				return 2;
+			}
+			if (challengePending(challenger, challenger, quizName)){
+				 return 3;
+			 }
+>>>>>>> FETCH_HEAD
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
 			 String q = "INSERT into challenges VALUES('" + challenger +"','" + challenged + "','"  + quizName+ "',1,CURRENT_TIMESTAMP);";
@@ -553,6 +565,36 @@ public class DBConnection {
 			return rs.getString("animal");
 		}
 		return "";
+	}
+	
+	public String winningTeam() throws SQLException{
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT animal, sum(numPlayed) FROM users group by animal;");
+		if(rs.next()){
+			return rs.getString("animal");
+		}
+		return "";
+	}
+	
+	public ArrayList<Integer> getMostPopularQuizzes() throws SQLException{
+		ArrayList<Integer> result= new ArrayList<Integer>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT count(*) as c, quizID  FROM quizRecords group by quizID order by c desc limit 5;");
+		while(rs.next()){
+			result.add(rs.getInt("quizID"));
+		}
+		return result;
+	}
+	public int totalTeamQuizesTaken(String animal) throws SQLException{
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT sum(numPlayed) FROM users where animal=\""+animal+"\";");
+		if(rs.next()){
+			return rs.getInt("sum(numPlayed)");
+		}
+		return -1;
 	}
 	
 	public void createAccount(String account, String password, String animal) throws SQLException{
