@@ -7,6 +7,7 @@
 <title>New Message</title>
 </head>
 <body>
+<a href="logout" align="right"><img src="logout.jpg" title="Click to Logout" align="right"></img></a>
 <h3>Send a new note:</h3>
 
 <form action="SendMessage" method="post">

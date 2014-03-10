@@ -28,6 +28,7 @@ public class listener implements ServletContextListener {
         // TODO Auto-generated constructor stub
     }
 
+   
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
@@ -43,7 +44,9 @@ public class listener implements ServletContextListener {
         context.setAttribute("db", DB);
 	    QuizManager qm = new QuizManager();
 	    context.setAttribute("QuizManager", qm);
-    	
+	    AnimalManager am = new AnimalManager();
+
+    	context.setAttribute("am",am);
     }
 
 	/**

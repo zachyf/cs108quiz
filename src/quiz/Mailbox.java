@@ -64,6 +64,7 @@ public class Mailbox extends HttpServlet {
 		out.println("<title> Welcome "+username+"</title>");
 		out.println("</head>");
 		out.println("<body>");
+		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
 		if(ID!=null && accept!=null){
 			if(accept.equals("true")){
 				try {

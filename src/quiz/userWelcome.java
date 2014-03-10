@@ -55,6 +55,25 @@ public class userWelcome extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		HttpSession ses = request.getSession();
 		String username = (String) ses.getAttribute("name");
+		String animal = (String) ses.getAttribute("animal");
+		String animalPic="";
+		String teamWelcome="";
+		if(animal.equals("Cow")){
+			animalPic="Cow.png";
+			teamWelcome = "Make team Cow proud.";
+		}
+		if(animal.equals("Owl")){
+			animalPic="Owl.png";
+			teamWelcome = "Make team Owl proud.";
+		}
+		if(animal.equals("Elephant")){
+			animalPic="Elephant.png";
+			teamWelcome = "Make team Elephant proud.";
+		}
+		if(animal.equals("Sheep")){
+			animalPic="Sheep.png";
+			teamWelcome = "Make team Sheep proud.";
+		}
 		out.println("<!DOCTYPE html>");
 		out.println("<html>");
 		out.println("<head>");
@@ -62,7 +81,10 @@ public class userWelcome extends HttpServlet {
 		out.println("<title> Welcome "+username+"</title>");
 		out.println("</head>");
 		out.println("<body>");
+		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
 		out.println("<h1>Welcome "+username+"</h1>");
+		out.println("<img src=\""+animalPic+"\"><img>");
+		out.println("<h1>"+teamWelcome+"</h1>");
 		try {
 			int requests = DB.getNumRequests(username);
 			if(requests > 0){
@@ -155,12 +177,14 @@ public class userWelcome extends HttpServlet {
 		            out.println("alert(\"sjf\");}}};");   
 		    out.println("xmlhttp.send(null);</script>");        
 		   
-		out.println("Send a friend a note: <a href=\"NewMessage.jsp?user=" + username + "\">Click Here</a><br>");
+		out.println("Send a friend a note: <a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a><br>");
 		out.println("<table style=\"width:300px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
 		ArrayList<Message> ml = DB.getMessages(username);
 		for(int i = 0; i < ml.size(); ++i){
 			//make it limited size and scrolling 
-			out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
+			if(i<5){
+				out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
+			}
 		}
 		out.println("</body>");
 		out.println("</html>");

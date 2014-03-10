@@ -51,6 +51,8 @@ public class Login extends HttpServlet {
 			}else{
 				HttpSession session = request.getSession();
 				session.setAttribute("name",userName);
+				String animal=DB.getAnimal(userName);
+				session.setAttribute("animal",animal);
 				String id = request.getParameter("quizID");
 				RequestDispatcher dispatch;
 				if(id != null)

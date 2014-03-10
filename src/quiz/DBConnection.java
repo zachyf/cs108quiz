@@ -127,7 +127,7 @@ public class DBConnection {
 		 try{
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 ResultSet rs =  stmt.executeQuery("SELECT * FROM messages where toUser=\""+user+"\" ORDER BY sentTime;");
+			 ResultSet rs =  stmt.executeQuery("SELECT * FROM messages where toUser=\""+user+"\" ORDER BY sentTime desc;");
 			 while(rs.next()){
 					 m.add(new Message(rs.getString("fromUser"), rs.getString("toUser"), rs.getString("subject"), rs.getString("note"), Timestamp.valueOf(rs.getString("sentTime")), Integer.parseInt(rs.getString("hasRead"))));
 			 }
@@ -555,7 +555,17 @@ public class DBConnection {
 			return false;
 	}
 		
-	public void createAccount(String account, String password) throws SQLException{
+	public String getAnimal(String username) throws SQLException{
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT animal FROM users where user_name=\""+username+"\";");
+		if(rs.next()){
+			return rs.getString("animal");
+		}
+		return "";
+	}
+	
+	public void createAccount(String account, String password, String animal) throws SQLException{
 		Random randomGenerator = new Random();
 		int salt = randomGenerator.nextInt(1000);
 		String passSalt= password + Integer.toString(salt);
@@ -569,7 +579,7 @@ public class DBConnection {
 				 e.printStackTrace();
 			}
 		Statement stmt = con.createStatement();
-		stmt.executeUpdate("INSERT INTO users VALUES(\""+account+"\",\""+hash+"\","+Integer.toString(salt)+",0,0,FALSE,FALSE,FALSE);");
+		stmt.executeUpdate("INSERT INTO users VALUES(\""+account+"\",\""+hash+"\","+Integer.toString(salt)+",0,0,FALSE,FALSE,FALSE,\""+animal+"\");");
 		
 	}
 	 
