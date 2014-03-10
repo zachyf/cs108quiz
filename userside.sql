@@ -52,7 +52,7 @@ DROP TABLE IF EXISTS challenges;
 CREATE TABLE challenges (
     challenger CHAR(64),
     challenged CHAR(64),
-    quizID SMALLINT(5),
+    quizName VARCHAR(128),
     pending TINYINT(1),
     sentTime TIMESTAMP
 );
