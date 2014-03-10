@@ -55,9 +55,9 @@ public class accountCheck extends HttpServlet {
 		
 			try {
 				AnimalManager AM = (AnimalManager) context.getAttribute("am");
+				AM.nextAnimal();
 				String animal=AM.getAnimal();
 				DB.createAccount(userName, password,animal);
-				AM.nextAnimal();
 				session.setAttribute("animal",animal);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
