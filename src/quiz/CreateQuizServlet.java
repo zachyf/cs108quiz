@@ -1,8 +1,10 @@
 package quiz;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,7 +36,6 @@ public class CreateQuizServlet extends HttpServlet {
 	}
 
 	private Quiz createQuiz(HttpServletRequest request){
-		QuizManager qm = (QuizManager)request.getServletContext().getAttribute("QuizManager");
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
 		String creatorName = (String)request.getSession().getAttribute("name");
@@ -42,17 +43,11 @@ public class CreateQuizServlet extends HttpServlet {
 		boolean isRandom = request.getParameter("random") != null;
 		boolean isImmediateCorrection = request.getParameter("immediate") != null;
 		boolean hasPracticeMode = request.getParameter("practice") != null;
-		int id = qm.getNextId();
-		Quiz q = new Quiz(creatorName, id, name, description, onePage, isRandom, isImmediateCorrection, hasPracticeMode);
-		qm.addQuiz(q);
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
-		String insertion = "INSERT INTO quizzes VALUES (" + id + ",\""  + name + "\",\"" 
-			+ description + "\",\"" + creatorName + "\",\'" + df.format(new Date()) + "\'," 
-			+ Quiz.boolToInt(onePage) + "," + Quiz.boolToInt(isRandom) + "," + 
-			Quiz.boolToInt(isImmediateCorrection) +  "," + Quiz.boolToInt(hasPracticeMode) + ");";
 		DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
-		db.updateDB(insertion);
-		return q;
+		int id = db.getNextQuizID();
+		Quiz quiz = new Quiz(creatorName, id, name, description, onePage, isRandom, isImmediateCorrection, hasPracticeMode);
+		db.addQuizToDB(quiz, Quiz.boolToInt(onePage), Quiz.boolToInt(isRandom), Quiz.boolToInt(isImmediateCorrection), Quiz.boolToInt(hasPracticeMode));
+		return quiz;
 	}
 	
 	/**
