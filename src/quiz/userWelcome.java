@@ -160,6 +160,18 @@ public class userWelcome extends HttpServlet {
 		out.println("<input type=\"text\" name=\"userName\">");
 		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
 		out.println("</form>");
+		
+		out.println("<br>");
+		out.println("Send a Challenge:");
+		out.println("<br>");
+		out.println("Enter a User Name:");
+		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
+		out.println("<input type=\"text\" name=\"userName\"><br>");
+		out.println("Enter a Quiz Name:");
+		out.println("<br>");
+		out.println("<input type=\"text\" name=\"quizName\">");
+		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>"); 
+		out.println("</form>");
 
 		out.println("<div id=\"message\"></div>");
 		out.println("<script type=\"text/javascript/\">");

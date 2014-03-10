@@ -234,7 +234,7 @@ public class DBConnection {
 			 stmt.executeQuery("USE " + database);
 			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + challenged + "' and pending=1 ORDER BY sentTime;");
 			 while(rs.next()){
-					 a.add(new Challenge(rs.getString("challenger"), rs.getString("challenged"),  Integer.parseInt(rs.getString("quizID")), true, Timestamp.valueOf(rs.getString("sentTime"))));
+					 a.add(new Challenge(rs.getString("challenger"), rs.getString("challenged"),  rs.getString("quizName"), true, Timestamp.valueOf(rs.getString("sentTime"))));
 			 }
 		 } catch (SQLException e) {
 	         e.printStackTrace();
@@ -242,12 +242,12 @@ public class DBConnection {
 		 return a;
 	 }
 	 
-	 public boolean challengePending(Challenge a){
+	 public boolean challengePending(String challenger, String challenged, String quizName){
 		 int count = 0;
 		 try{
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + a.getChallenged() + "' and challenger='" + a.getChallenger() + "' and quizID=" + a.getQuizID() + " and pending=1;");
+			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + challenged + "' and challenger='" + challenger + "' and quizName='" + quizName + "' and pending=1;");
 			 while(rs.next()){
 				 count++;
 			 }
@@ -258,22 +258,27 @@ public class DBConnection {
 		 return false;
 	 }
 	 
-	 public boolean addChallenge(Challenge a){
-		 String user = a.getChallenged();
+	 public int addChallenge(String challenger, String challenged, String quizName){
 		 try {
-			if (!userExists(user) || !isAdmin(user) || challengePending(a)){
-				 return false;
+			if (!userExists(challenger)){
+				return 1;
+			}
+			if (!userExists(challenged)){
+				return 2;
+			}
+			if (challengePending(challenger, challenger, quizName)){
+				 return 3;
 			 }
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 String q = "INSERT into challenges VALUES('" + a.getChallenger() +"','" + a.getChallenged() + "',"  + a.getQuizID() + "', 1, CURRENT_TIMESTAMP);";
+			 String q = "INSERT into challenges VALUES('" + challenger +"','" + challenged + "','"  + quizName+ "',1,CURRENT_TIMESTAMP);";
 			 stmt.executeUpdate(q);
-			 return true;
+			 return 0;
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		 return false;
+		 return 4;
 	 }
 	 
 	 
@@ -457,6 +462,24 @@ public class DBConnection {
 			return rs.getInt("numPlayed");
 		}
 		return -1;
+	}
+	
+	public boolean quizExists(String quizName){
+		try{
+			Statement stmt = con.createStatement();
+			stmt.executeQuery("USE " + database);
+			String q = "SELECT * FROM quizzes where quizName='" + quizName + "';";
+			ResultSet rs = stmt.executeQuery(q);
+			if(rs.next()){
+				return true;
+			}else{
+				return false;
+			}
+		}catch (SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		return false;
 	}
 	
 	public Integer numQuizesCreated(String account) throws SQLException{
