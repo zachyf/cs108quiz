@@ -39,7 +39,7 @@ public class PictureResponse extends Question {
 	 * input for the answer.
 	 */
 	@Override
-	public String getQuestion() {
+	public String getQuestion(int num) {
 		StringBuilder buff = new StringBuilder();
 		
 		// Generate the HTML for the question
@@ -47,7 +47,7 @@ public class PictureResponse extends Question {
 		buff.append("<p class=question>" + numStr + ".</p>");	
 		buff.append("<img src=" + question + 
 				" width=" + pixelSize + " height=" + pixelSize +"><br>");		
-		buff.append("<input type=\"text\" name=\""+ numStr + "\"><br>");
+		buff.append("<input type=\"text\" name=\""+ this.num + "\"><br>");
 		
 		return buff.toString();
 	}
@@ -58,7 +58,7 @@ public class PictureResponse extends Question {
 	 * include an image and the text input for the answer.
 	 */
 	@Override
-	public String displayQuestion() {
+	public String displayQuestion(int num) {
 		StringBuilder buff = new StringBuilder();
 		// Generate the HTML for the question
 		String numStr = String.valueOf(num);

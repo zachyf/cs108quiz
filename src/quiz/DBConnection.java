@@ -261,7 +261,6 @@ public class DBConnection {
 	 
 	 public int addChallenge(String challenger, String challenged, String quizName){
 		 try {
-
 			 if (!userExists(challenger)){
 				 	return 1;
 				 }
