@@ -101,7 +101,7 @@ public class Mailbox extends HttpServlet {
 				out.println("<br>");
 				ArrayList<String> friends = DB.usersWhoSentRequests(username);
 				for(int i=0;i<numRequests;i++){
-					out.println(friends.get(i)+" would like to be your friend on Quiz Mania.");
+					out.println("<a href=\"userPage?ID="+friends.get(i)+"\">"+friends.get(i)+"</a> would like to be your friend on Quiz Mania.");
 					out.println("<a href=\"Mailbox?ID="+friends.get(i)+"&accept=true\"><img src=\"acceptButton.jpg\" title=\"Accept Friend Request\"></img></a>");
 					out.println("<a href=\"Mailbox?ID="+friends.get(i)+"&accept=false\"><img src=\"rejectButton.jpg\" title=\"Reject Friend Request\"></img></a>");
 					out.println("<br>");
@@ -133,7 +133,7 @@ public class Mailbox extends HttpServlet {
 			ml = unreadMessages;
 			out.println("<table style=\"width:300px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th><th>Mark As Read</th>\n</tr>");
 			for(int i=0;i<ml.size();i++){
-				out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td><td><a href=\"Mailbox?From="+ ml.get(i).getTo()+"&Time="+ ml.get(i).getSentTime()+"\"><img src=\"markAsRead.jpg\"title=\"Mark As Read \"></img></a></td></tr>");
+				out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td><td><a href=\"Mailbox?From="+ ml.get(i).getTo()+"&Time="+ ml.get(i).getSentTime()+"\"><img src=\"markAsRead.jpg\"title=\"Mark As Read \"></img></a></td></tr>");
 			}
 			out.println("</table>");
 		}

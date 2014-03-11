@@ -60,7 +60,7 @@ request.setAttribute("quiz", quiz);
 
 	<h4><%=quiz.getDescription() %></h4>
 
-	<h5>Creator: <%=quiz.getCreator()%></h5>
+	<h5>Creator:<a href="userPage?ID=<%=quiz.getCreator()%>"><%=quiz.getCreator()%></a></h5>
 	
 	<div class="row">
 		<div class="col-md-6">
@@ -80,7 +80,7 @@ request.setAttribute("quiz", quiz);
 						out.println("<tr>");
 						for(int i = 0; i < myRecentPerformance.size(); i++){
 							out.println("<tr><td>" + (i+1) + "</td>");
-							out.println("<td>" + myRecentPerformance.get(i).get(0) + "</td>");
+							out.println("<td><a href=\"userPage?ID=" + myRecentPerformance.get(i).get(0) + "\">"+ myRecentPerformance.get(i).get(0) + "</a></td>");
 							out.println("<td>" + ((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
 							out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
 							out.println("</tr>");
@@ -109,7 +109,7 @@ request.setAttribute("quiz", quiz);
 					out.println("<tr>");
 					for(int i = 0; i < leaderboard.size(); i++){
 						out.println("<tr><td>" + (i+1) + "</td>");
-						out.println("<td>" + leaderboard.get(i).get(0) + "</td>");
+						out.println("<td><a href=\"userPage?ID=" + leaderboard.get(i).get(0) + "\">"+ leaderboard.get(i).get(0) + "</a></td>");
 						out.println("<td>" + ((Double)(leaderboard.get(i).get(1))*100) + "%</td>");
 						out.println("<td>" + leaderboard.get(i).get(2) + "</td>");
 						out.println("</tr>");
@@ -144,7 +144,7 @@ request.setAttribute("quiz", quiz);
 					out.println("<tr>");
 					for(int i = 0; i < recentHighScores.size(); i++){
 						out.println("<tr><td>" + (i+1) + "</td>");
-						out.println("<td>" + recentHighScores.get(i).get(0) + "</td>");
+						out.println("<td><a href=\"userPage?ID=" + recentHighScores.get(i).get(0) + "\">"+ recentHighScores.get(i).get(0) + "</a></td>");
 						out.println("<td>" + ((Double)(recentHighScores.get(i).get(1))*100) + "%</td>");
 						out.println("<td>" + recentHighScores.get(i).get(2) + "</td>");
 						out.println("</tr>");
@@ -171,7 +171,7 @@ request.setAttribute("quiz", quiz);
 					out.println("<tr>");
 					for(int i = 0; i < recentTestTakers.size(); i++){
 						out.println("<tr><td>" + (i+1) + "</td>");
-						out.println("<td>" + recentTestTakers.get(i).get(0) + "</td>");
+						out.println("<td><a href=\"userPage?ID=" + recentTestTakers.get(i).get(0) + "\">"+ recentTestTakers.get(i).get(0) + "</a></td>");
 						out.println("<td>" + ((Double)(recentTestTakers.get(i).get(1))*100) + "%</td>");
 						out.println("<td>" + recentTestTakers.get(i).get(2) + "</td>");
 						out.println("</tr>");

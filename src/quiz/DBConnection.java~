@@ -261,6 +261,10 @@ public class DBConnection {
 	 
 	 public int addChallenge(String challenger, String challenged, String quizName){
 		 try {
+<<<<<<< HEAD
+
+=======
+>>>>>>> 69405bf8f32563a1ccb1b2537ff432a95d509f3d
 			 if (!userExists(challenger)){
 				 	return 1;
 				 }
@@ -727,13 +731,6 @@ public class DBConnection {
 		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
 				" from quizRecords where quizID = " + quizID + " and userName = \"" + username + "\"" +
 				" order by timeSubmitted desc limit 5;";
-		return getList(query);
-	}
-	
-	public ArrayList<ArrayList<Object>> getMyRecentPerformanceAll(String username){
-		String query = "Select quizID, numCorrect, numQuestions, timeToComplete" +
-				" from quizRecords where userName = \"" + username + "\"" +
-				" order by timeSubmitted desc;";
 		return getList(query);
 	}
 	
