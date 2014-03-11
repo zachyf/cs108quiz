@@ -680,6 +680,20 @@ public class DBConnection {
 		return null;
 	}
 	
+	public int quizNameToID(String quizName){
+		String q = "Select id from quizzes where quizName='" + quizName + "';";
+		ResultSet rs = executeQuery(q);
+		try{
+			if (rs.next()){
+				int id = rs.getInt("id");
+				return id;
+			}
+			return -1;
+		}catch(SQLException e){
+			return -1;
+		}
+	}
+	
 	/**
 	 * Gets 5 most recent quizzes, sorted by date descending,
 	 * and returns in ordered list htmL.
