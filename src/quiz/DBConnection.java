@@ -847,6 +847,25 @@ public class DBConnection {
 		quiz.addQuestion(question);
 	}
 	
+	public String getQuizStats(Quiz quiz){
+		StringBuilder sb = new StringBuilder();
+		try{
+			ResultSet rs = executeQuery("SELECT count(*) as c, avg(numCorrect) as av, count(distinct userName) as numUsers,  " + 
+					"avg(numQuestions) as numQuestions, avg(timeToComplete)/1000 as avgTime from quizRecords where quizID = " + quiz.getID() + ";");
+			rs.next();
+			sb.append(quiz.getName() + " has been taken " + rs.getInt("c") + " times by " + rs.getInt("numUsers"));
+			if(rs.getInt("numUsers") > 1)
+				sb.append(" different users with an average score of ");
+			else sb.append(" user with an average score of ");
+			Double averageNumCorrect = rs.getDouble("av");
+			Double numQuestions = rs.getDouble("numQuestions");
+			int average = Math.round((int)(averageNumCorrect*100/numQuestions));
+			sb.append(average + "% and average time of " + rs.getInt("avgTime") + " seconds.");
+		}
+		catch (SQLException e) {}
+		return sb.toString();
+	}
+	
 	public ResultSet executeQuery(String query){
 		try {
 			Statement stmt = this.con.createStatement();

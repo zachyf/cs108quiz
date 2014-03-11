@@ -9,6 +9,8 @@ DBConnection db = (DBConnection)application.getAttribute("db");
 Quiz quiz = db.getQuizAt(Integer.parseInt(quizID));
 request.setAttribute("quiz", quiz);
 String username = (String)session.getAttribute("name");
+ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
+
 %>
 <head>
     <meta charset="utf-8">
@@ -64,6 +66,10 @@ String username = (String)session.getAttribute("name");
 
 	<h5>Creator:<a href="userPage?ID=<%=quiz.getCreator()%>"><%=quiz.getCreator()%></a></h5>
 	
+	<h5><%if(leaderboard.size() > 0)
+			out.println("Performance Summary: " + db.getQuizStats(quiz)); 
+			%></h5>
+	
 	<div class="row">
 		<div class="col-md-6">
 			<div class="panel panel-default">
@@ -99,7 +105,7 @@ String username = (String)session.getAttribute("name");
 		<div class="col-md-6">
 			<!-- Highest performers table -->
 			<div class="panel panel-default">
-			<% ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
+			<% 
 				if(leaderboard.size() > 0){
 					out.println("<div class=\"panel-heading\">Highest Scores</div>");
 					out.println("<table class=\"table\">");
@@ -199,7 +205,6 @@ String username = (String)session.getAttribute("name");
 
 		<%
 		if(leaderboard.size() > 0){
-			out.println("<p>Summary of user performance</p>");
 			if(session.getAttribute("name") == null){
 				out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
 			}
