@@ -63,7 +63,7 @@ public class quizPerformanceSummary extends HttpServlet {
 				out.println("<td><a href=\"quizPage.jsp?id="+(Integer)myRecentPerformance.get(i).get(0)+"\">"+quiz+"</a></td");
 				out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
 				out.println("<td>" + ((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
-				out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
+				out.println("<td>" + myRecentPerformance.get(i).get(2) + " seconds </td>");
 				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format( myRecentPerformance.get(i).get(3));
 				out.println("<td>" + date + "</td>");
 				out.println("</tr>");

@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,6 +47,10 @@ public class userPage extends HttpServlet {
 		HttpSession ses = request.getSession();
 		String loggedInUser = (String) ses.getAttribute("name");
 		String username = (String) request.getParameter("ID");
+		if(loggedInUser.equals(username)){
+			RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
+			dispatch.forward(request, response);
+		}
 		String animal="";
 		try {
 			animal = DB.getAnimal(username);

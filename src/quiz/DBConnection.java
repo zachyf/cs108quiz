@@ -283,7 +283,11 @@ public class DBConnection {
 		 return 4;
 	 }
 	 
-	 
+	 public void makeAdmin(String username) throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 stmt.executeUpdate("UPDATE users SET adminStatus=TRUE where user_name=\""+username+"\";");
+	 }
 	 
 	 public int removeUser(String username){
 		 try{
@@ -293,10 +297,16 @@ public class DBConnection {
 		 String r = "DELETE FROM friends WHERE user1=\""+username + "\" or user2=\"" + username + "\";";
 		 String s = "DELETE FROM pending WHERE user1=\""+username + "\" or user2=\"" + username + "\";";
 		 String t = "DELETE FROM messages WHERE fromUser=\""+username + "\" or toUser=\"" + username + "\";";
-	     stmt.executeUpdate(q);
+		 String u = "DELETE FROM challenges WHERE challenger=\""+username + "\" or challenged=\"" + username + "\";";
+		 String v = "DELETE FROM quizzes WHERE creatorName=\""+username + "\";";
+		 String w = "DELETE FROM quizRecords WHERE username=\""+username + "\";";
+		 stmt.executeUpdate(q);
 	     stmt.executeUpdate(r);
 	     stmt.executeUpdate(s);
 	     stmt.executeUpdate(t);
+	     stmt.executeUpdate(u);
+	     stmt.executeUpdate(v);
+	     stmt.executeUpdate(w);
 		 }catch(SQLException e) { 
 	         e.printStackTrace();
 		} 
