@@ -55,22 +55,11 @@ Queue<Integer> q_order = (Queue<Integer>)session.getAttribute("questionsLeft" + 
   </div>
 </div><br>
 
-<<<<<<< HEAD
-<% 
-int questionNum = q_order.poll();
-out.println(quiz.getQuestionAt(questionNum, quiz.getNumQuestions() - q_order.size()));
-session.setAttribute("questionsLeft" + quizID, q_order);
-out.println("<input name=\"quizID\" type=\"hidden\" value=\"" + quizID + "\"/>");
-out.println("<br><input name=\"questionNum\" type=\"hidden\" value=\"" + questionNum + "\">");
-out.println("<input type=\"submit\" value=\"Submit\"/>");
-out.println("</form></p>");
-%>
-=======
 <div class="container">
 	<form action="MultiPageQuiz" method="post">
 	<% 
 	int questionNum = q_order.poll();
-	out.println(quiz.getQuestionAt(questionNum));
+    out.println(quiz.getQuestionAt(questionNum, quiz.getNumQuestions() - q_order.size()));
 	session.setAttribute("questionsLeft" + quizID, q_order);
 	out.println("<input name=\"quizID\" type=\"hidden\" value=\"" + quizID + "\"/>");
 	out.println("<br><input name=\"questionNum\" type=\"hidden\" value=\"" + questionNum + "\">");
@@ -78,7 +67,6 @@ out.println("</form></p>");
 	out.println("</form></p>");
 	%>
 </div>
->>>>>>> FETCH_HEAD
 </form>
 </body>
 </html>

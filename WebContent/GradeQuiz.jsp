@@ -40,17 +40,6 @@ session.removeAttribute("answer");
     <![endif]-->
 </head>
 <body>
-<<<<<<< HEAD
-<h3>Your Score is: <%=(a.getScore() * 100)%>%</h3>
-<h4>You took <%=(a.getTimeToComplete()/1000) %> seconds to complete.</h4>
-<%
-for(int i = 0; i < quiz.getNumQuestions(); i++){
-	Question question = quiz.getQuestion(i);
-	out.println(question.displayQuestion(i + 1));
-	out.println("Your answer: " + a.getAnswerToQuestion(question));
-}
-%>
-=======
 
 <!-- Navigation Bar -->
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -80,13 +69,12 @@ for(int i = 0; i < quiz.getNumQuestions(); i++){
 	<h4>You took <%=(a.getTimeToComplete()/1000) %> seconds to complete.</h4>
 	<%
 	for(int i = 0; i < quiz.getNumQuestions(); i++){
-		Question question = quiz.getQuestion(i);
-		out.println(question.displayQuestion());
-		out.println("Your answer: " + a.getAnswerToQuestion(question));
-	}
+        Question question = quiz.getQuestion(i);
+        out.println(question.displayQuestion(i + 1));
+        out.println("Your answer: " + a.getAnswerToQuestion(question));
+    }
 	%>
 </div>
->>>>>>> FETCH_HEAD
 
 </body>
 </html>
