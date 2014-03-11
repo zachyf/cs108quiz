@@ -293,7 +293,7 @@ public class userWelcome extends HttpServlet {
 			out.println("</td>");
 		}
 		out.println("</tr></table>");
-	
+		out.println("<h4> View your entire past quiz performance here: <a href=\"quizPerformanceSummary\"><img src=\"quizPerformance.jpg\" title=\"Click to view history\"></img></a></h4>");
 
 		out.println("<br>");
 
@@ -345,7 +345,7 @@ public class userWelcome extends HttpServlet {
 		for(int i = 0; i < ml.size(); ++i){
 			//make it limited size and scrolling 
 			if(i<5){
-				out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
+				out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
 			}
 		}
 		out.println("</table>");

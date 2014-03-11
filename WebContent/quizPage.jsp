@@ -9,6 +9,8 @@ DBConnection db = (DBConnection)application.getAttribute("db");
 Quiz quiz = db.getQuizAt(Integer.parseInt(quizID));
 request.setAttribute("quiz", quiz);
 String username = (String)session.getAttribute("name");
+ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
+
 %>
 <head>
     <meta charset="utf-8">
@@ -61,7 +63,12 @@ String username = (String)session.getAttribute("name");
 
 	<h4><%=quiz.getDescription() %></h4>
 
-	<h5>Created by <a href=userPage?ID=<%=quiz.getCreator()%>><%=quiz.getCreator()%> </a></h5>
+
+	<h5>Creator:<a href="userPage?ID=<%=quiz.getCreator()%>"><%=quiz.getCreator()%></a></h5>
+	
+	<h5><%if(leaderboard.size() > 0)
+			out.println("Performance Summary: " + db.getQuizStats(quiz)); 
+			%></h5>
 	
 	<div class="row">
 		<div class="col-md-6">
@@ -81,6 +88,7 @@ String username = (String)session.getAttribute("name");
 						out.println("<tr>");
 						for(int i = 0; i < myRecentPerformance.size(); i++){
 							out.println("<tr><td>" + (i+1) + "</td>");
+
 							out.println("<td><a href=userWelcome>" + myRecentPerformance.get(i).get(0) + "</a></td>");
 							out.println("<td>" + Math.round((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
 							out.println("<td>" + myRecentPerformance.get(i).get(2) + " seconds</td>");
@@ -97,7 +105,7 @@ String username = (String)session.getAttribute("name");
 		<div class="col-md-6">
 			<!-- Highest performers table -->
 			<div class="panel panel-default">
-			<% ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
+			<% 
 				if(leaderboard.size() > 0){
 					out.println("<div class=\"panel-heading\">Highest Scores</div>");
 					out.println("<table class=\"table\">");
@@ -115,6 +123,7 @@ String username = (String)session.getAttribute("name");
 						else out.println("<td><a href=userPage?ID=" + leaderboard.get(i).get(0) + ">" + leaderboard.get(i).get(0) + "</a></td>");
 						out.println("<td>" + Math.round((Double)(leaderboard.get(i).get(1))*100) + "%</td>");
 						out.println("<td>" + leaderboard.get(i).get(2) + " seconds</td>");
+
 						out.println("</tr>");
 					}
 					out.println("</table>");
@@ -147,11 +156,13 @@ String username = (String)session.getAttribute("name");
 					out.println("<tr>");
 					for(int i = 0; i < recentHighScores.size(); i++){
 						out.println("<tr><td>" + (i+1) + "</td>");
+
 						if(username != null && username.equals(leaderboard.get(i).get(0)))
 							out.println("<td><a href=userWelcome>" + recentHighScores.get(i).get(0) + "</a></td>");
 						else out.println("<td><a href=userPage?ID=" + recentHighScores.get(i).get(0) + ">" + recentHighScores.get(i).get(0)  + "</a></td>");
 						out.println("<td>" + Math.round((Double)(recentHighScores.get(i).get(1))*100) + "%</td>");
 						out.println("<td>" + recentHighScores.get(i).get(2) + " seconds</td>");
+
 						out.println("</tr>");
 					}
 					out.println("</table>");
@@ -194,7 +205,6 @@ String username = (String)session.getAttribute("name");
 
 		<%
 		if(leaderboard.size() > 0){
-			out.println("<p>Summary of user performance</p>");
 			if(session.getAttribute("name") == null){
 				out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
 			}

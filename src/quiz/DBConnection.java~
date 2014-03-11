@@ -200,9 +200,9 @@ public class DBConnection {
 		 try{
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 ResultSet rs =  stmt.executeQuery("SELECT * FROM announcements ORDER BY postTime desc;");
+			 ResultSet rs =  stmt.executeQuery("SELECT * FROM announcements ORDER BY postTime;");
 			 while(rs.next()){
-					 a.add(new Announcement(rs.getString("announcement"), rs.getString("userName"),  Timestamp.valueOf(rs.getString("postTime"))));
+					 a.add(new Announcement(rs.getString("announcement"), rs.getString("admin"),  Timestamp.valueOf(rs.getString("postTime"))));
 			 }
 		 } catch (SQLException e) {
 	         e.printStackTrace();
@@ -261,6 +261,10 @@ public class DBConnection {
 	 
 	 public int addChallenge(String challenger, String challenged, String quizName){
 		 try {
+<<<<<<< HEAD
+
+=======
+>>>>>>> 69405bf8f32563a1ccb1b2537ff432a95d509f3d
 			 if (!userExists(challenger)){
 				 	return 1;
 				 }
@@ -680,20 +684,6 @@ public class DBConnection {
 		return null;
 	}
 	
-	public int quizNameToID(String quizName){
-		String q = "Select id from quizzes where quizName='" + quizName + "';";
-		ResultSet rs = executeQuery(q);
-		try{
-			if (rs.next()){
-				int id = rs.getInt("id");
-				return id;
-			}
-			return -1;
-		}catch(SQLException e){
-			return -1;
-		}
-	}
-	
 	/**
 	 * Gets 5 most recent quizzes, sorted by date descending,
 	 * and returns in ordered list htmL.
@@ -741,13 +731,6 @@ public class DBConnection {
 		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
 				" from quizRecords where quizID = " + quizID + " and userName = \"" + username + "\"" +
 				" order by timeSubmitted desc limit 5;";
-		return getList(query);
-	}
-	
-	public ArrayList<ArrayList<Object>> getMyRecentPerformanceAll(String username){
-		String query = "Select quizID, numCorrect, numQuestions, timeToComplete" +
-				" from quizRecords where userName = \"" + username + "\"" +
-				" order by timeSubmitted desc;";
 		return getList(query);
 	}
 	
@@ -845,25 +828,6 @@ public class DBConnection {
 				+ question.getAnswer() + "\"," + question.getNum() + ",\"" + question.getType() + "\",\"\");";
 		updateDB(insertion);
 		quiz.addQuestion(question);
-	}
-	
-	public String getQuizStats(Quiz quiz){
-		StringBuilder sb = new StringBuilder();
-		try{
-			ResultSet rs = executeQuery("SELECT count(*) as c, avg(numCorrect) as av, count(distinct userName) as numUsers,  " + 
-					"avg(numQuestions) as numQuestions, avg(timeToComplete)/1000 as avgTime from quizRecords where quizID = " + quiz.getID() + ";");
-			rs.next();
-			sb.append(quiz.getName() + " has been taken " + rs.getInt("c") + " times by " + rs.getInt("numUsers"));
-			if(rs.getInt("numUsers") > 1)
-				sb.append(" different users with an average score of ");
-			else sb.append(" user with an average score of ");
-			Double averageNumCorrect = rs.getDouble("av");
-			Double numQuestions = rs.getDouble("numQuestions");
-			int average = Math.round((int)(averageNumCorrect*100/numQuestions));
-			sb.append(average + "% and average time of " + rs.getInt("avgTime") + " seconds.");
-		}
-		catch (SQLException e) {}
-		return sb.toString();
 	}
 	
 	public ResultSet executeQuery(String query){

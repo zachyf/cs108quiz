@@ -13,16 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class MailboxFull
+ * Servlet implementation class quizPerformanceSummary
  */
-@WebServlet("/MailboxFull")
-public class MailboxFull extends HttpServlet {
+@WebServlet("/quizPerformanceSummary")
+public class quizPerformanceSummary extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MailboxFull() {
+    public quizPerformanceSummary() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,22 +41,31 @@ public class MailboxFull extends HttpServlet {
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<meta charset=\"UTF-8\" />");
-		out.println("<title>"+username+"'s Mailbox</title>");
+		out.println("<title>"+username+"'s Quiz Performance</title>");
 		out.println("</head>");
 		out.println("<body>");
-		out.println("<h2>"+username+"'s Mailbox</h2>");
-		ArrayList<Message> ml = DB.getMessages(username);
-		if(ml.size()!=0){
-		out.println("<table style=\"width:500px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
+		out.println("<h2>"+username+"'s Quiz Performance</h2>");
+		ArrayList<ArrayList<Object>> myRecentPerformance = DB.getMyRecentPerformanceAll((String)ses.getAttribute("name"));
 		
-		for(int i = 0; i < ml.size(); ++i){
-			//make it limited size and scrolling 
-			out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
-			
-		}
-		out.println("</table>");
+		if(myRecentPerformance.size()!=0){
+			out.println("<table class=\"table\">");
+			out.println("<tr>");
+			out.println("<th>Quiz</th>");
+			out.println("<th>Score</th>");		
+			out.println("<th>Time</th>");
+			out.println("</tr>");
+			out.println("<tr>");
+			for(int i = 0; i < myRecentPerformance.size(); i++){
+				String quiz=DB.getQuizAt((Integer)myRecentPerformance.get(i).get(0)).getName();
+				out.println("<td><a href=\"quizPage.jsp?id="+(Integer)myRecentPerformance.get(i).get(0)+"\"></a></td");
+				out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
+				out.println("<td>" + ((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
+				out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
+				out.println("</tr>");
+			}
+			out.println("</table>");
 		}else{
-			out.println("<h4>You have no recent messages. </h4>");
+			out.println("<h4>You no have quiz history. </h4>");
 		}
 		out.println("<br><a href=\"userWelcome\"><img src=\"home.jpg\" title=\"Return Home \"></img></a>");
 		out.println("</body>");
