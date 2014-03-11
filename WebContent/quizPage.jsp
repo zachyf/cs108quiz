@@ -65,118 +65,138 @@ request.setAttribute("quiz", quiz);
 	<div class="row">
 		<div class="col-md-6">
 			<div class="panel panel-default">
-				<div class="panel-heading">My Recent Scores</div>
-				<table class="table">
-				<tr>
-				  <th>Rank</th>
-				  <th>User Name</th>
-				  <th>Score</th>		
-				  <th>Time</th>
-				  </tr>
-				<tr>
-				<% if(session.getAttribute("name") != null){
+				<%
+				if(session.getAttribute("name") != null){
 					ArrayList<ArrayList<Object>> myRecentPerformance = db.getMyRecentPerformance((String)session.getAttribute("name"), quiz.getID());
-					if(myRecentPerformance == null) System.out.println("TEST");
-					for(int i = 0; i < myRecentPerformance.size(); i++){
-						out.println("<tr><td>" + (i+1) + "</td>");
-						out.println("<td>" + myRecentPerformance.get(i).get(0) + "</td>");
-						out.println("<td>" + ((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
-						out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
+					if(myRecentPerformance.size() > 0){
+						out.println("<div class=\"panel-heading\">My Recent Scores</div>");
+						out.println("<table class=\"table\">");
+						out.println("<tr>");
+						out.println("<th>Rank</th>");
+						out.println("<th>User Name</th>");
+						out.println("<th>Score</th>");		
+						out.println("<th>Time</th>");
 						out.println("</tr>");
+						out.println("<tr>");
+						for(int i = 0; i < myRecentPerformance.size(); i++){
+							out.println("<tr><td>" + (i+1) + "</td>");
+							out.println("<td>" + myRecentPerformance.get(i).get(0) + "</td>");
+							out.println("<td>" + ((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
+							out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
+							out.println("</tr>");
+						}
+						out.println("</table>");
 					}
 				}
 				%>
-				</table>
+				
 			</div>
 		</div>
 		
 		<div class="col-md-6">
 			<!-- Highest performers table -->
 			<div class="panel panel-default">
-				<div class="panel-heading">Highest Scores</div>
-				<table class="table">
-				<tr>
-				  <th>Rank</th>
-				  <th>User Name</th>
-				  <th>Score</th>		
-				  <th>Time</th>
-				  </tr>
-				<tr>
-				<% ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
-				for(int i = 0; i < leaderboard.size(); i++){
-					out.println("<tr><td>" + (i+1) + "</td>");
-					out.println("<td>" + leaderboard.get(i).get(0) + "</td>");
-					out.println("<td>" + ((Double)(leaderboard.get(i).get(1))*100) + "%</td>");
-					out.println("<td>" + leaderboard.get(i).get(2) + "</td>");
+			<% ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
+				if(leaderboard.size() > 0){
+					out.println("<div class=\"panel-heading\">Highest Scores</div>");
+					out.println("<table class=\"table\">");
+					out.println("<tr>");
+					out.println("<th>Rank</th>");
+					out.println("<th>User Name</th>");
+					out.println("<th>Score</th>");		
+					out.println("<th>Time</th>");
 					out.println("</tr>");
+					out.println("<tr>");
+					for(int i = 0; i < leaderboard.size(); i++){
+						out.println("<tr><td>" + (i+1) + "</td>");
+						out.println("<td>" + leaderboard.get(i).get(0) + "</td>");
+						out.println("<td>" + ((Double)(leaderboard.get(i).get(1))*100) + "%</td>");
+						out.println("<td>" + leaderboard.get(i).get(2) + "</td>");
+						out.println("</tr>");
+					}
+					out.println("</table>");
+				}
+				else {
+					if(session.getAttribute("name") == null){
+						out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> No one has taken this quiz - login and be the first</a></p>");	
+					}
+					else{
+						out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"> No one has taken this quiz - Be the First! </a></p>");
+					}
 				}
 				%>
-				</table>
 			</div>		
 		</div>
 		
 		<div class="col-md-6">
 			<!-- Recent high scores table -->
 			<div class="panel panel-default">
-				<div class="panel-heading">Today's Top Scores</div>
-				<table class="table">
-				<tr>
-				  <th>Rank</th>
-				  <th>User Name</th>
-				  <th>Score</th>		
-				  <th>Time</th>
-				  </tr>
-				<tr>
 				<% ArrayList<ArrayList<Object>> recentHighScores = db.getRecentHighScores(quiz.getID());
-				for(int i = 0; i < recentHighScores.size(); i++){
-					out.println("<tr><td>" + (i+1) + "</td>");
-					out.println("<td>" + recentHighScores.get(i).get(0) + "</td>");
-					out.println("<td>" + ((Double)(recentHighScores.get(i).get(1))*100) + "%</td>");
-					out.println("<td>" + recentHighScores.get(i).get(2) + "</td>");
+				if(recentHighScores.size() > 0){
+					out.println("<div class=\"panel-heading\">Today's Top Scores</div>");
+					out.println("<table class=\"table\">");
+					out.println("<tr>");
+					out.println("<th>Rank</th>");
+					out.println("<th>User Name</th>");
+					out.println("<th>Score</th>");		
+					out.println("<th>Time</th>");
 					out.println("</tr>");
+					out.println("<tr>");
+					for(int i = 0; i < recentHighScores.size(); i++){
+						out.println("<tr><td>" + (i+1) + "</td>");
+						out.println("<td>" + recentHighScores.get(i).get(0) + "</td>");
+						out.println("<td>" + ((Double)(recentHighScores.get(i).get(1))*100) + "%</td>");
+						out.println("<td>" + recentHighScores.get(i).get(2) + "</td>");
+						out.println("</tr>");
+					}
+					out.println("</table>");
 				}
 				%>
-				</table>
 			</div>
 		</div>
 		
 		<div class="col-md-6">
 			<!-- Recent test takers table -->
 			<div class="panel panel-default">
-				<div class="panel-heading">Recent Scores</div>
-				<table class="table">
-				<tr>
-				  <th>Rank</th>
-				  <th>User Name</th>
-				  <th>Score</th>		
-				  <th>Time</th>
-				  </tr>
-				<tr>
 				<% ArrayList<ArrayList<Object>> recentTestTakers = db.getRecentScores(quiz.getID());
-				for(int i = 0; i < leaderboard.size(); i++){
-					out.println("<tr><td>" + (i+1) + "</td>");
-					out.println("<td>" + recentTestTakers.get(i).get(0) + "</td>");
-					out.println("<td>" + ((Double)(recentTestTakers.get(i).get(1))*100) + "%</td>");
-					out.println("<td>" + recentTestTakers.get(i).get(2) + "</td>");
+				if(recentTestTakers.size() > 0){
+					out.println("<div class=\"panel-heading\">Recent Scores</div>");
+					out.println("<table class=\"table\">");
+					out.println("<tr>");
+					out.println("<th>Rank</th>");
+					out.println("<th>User Name</th>");
+					out.println("<th>Score</th>");		
+					out.println("<th>Time</th>");
 					out.println("</tr>");
+					out.println("<tr>");
+					for(int i = 0; i < recentTestTakers.size(); i++){
+						out.println("<tr><td>" + (i+1) + "</td>");
+						out.println("<td>" + recentTestTakers.get(i).get(0) + "</td>");
+						out.println("<td>" + ((Double)(recentTestTakers.get(i).get(1))*100) + "%</td>");
+						out.println("<td>" + recentTestTakers.get(i).get(2) + "</td>");
+						out.println("</tr>");
+					}
+					out.println("</table>");
 				}
 				%>
-				</table>
 			</div>
 		</div>			
 	</div>
 	<div class="row">
-		<p>Summary of user performance</p>
+		
 
 		<%
-		if(session.getAttribute("name") == null){
-			out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
-		}
-		else{
-			out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"> Take this quiz </a></p>");
-			//<p>Take the quiz in practice mode</p>
-			if(quiz.getCreator().equals(session.getAttribute("name")))
-				out.println("<p>Edit Quiz - Since you are the owner</p>");
+		if(leaderboard.size() > 0){
+			out.println("<p>Summary of user performance</p>");
+			if(session.getAttribute("name") == null){
+				out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
+			}
+			else{
+				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"> Take this quiz </a></p>");
+				//<p>Take the quiz in practice mode</p>
+				if(quiz.getCreator().equals(session.getAttribute("name")))
+					out.println("<p>Edit Quiz - Since you are the owner</p>");
+				}
 		}
 		%>	
 	</div>
