@@ -8,6 +8,7 @@
 DBConnection db = (DBConnection)application.getAttribute("db");
 Quiz quiz = db.getQuizAt(Integer.parseInt(quizID));
 request.setAttribute("quiz", quiz);
+String username = (String)session.getAttribute("name");
 %>
 <head>
     <meta charset="utf-8">
@@ -60,14 +61,14 @@ request.setAttribute("quiz", quiz);
 
 	<h4><%=quiz.getDescription() %></h4>
 
-	<h5>Creator: <%=quiz.getCreator()%></h5>
+	<h5>Created by <a href=userPage?ID=<%=quiz.getCreator()%>><%=quiz.getCreator()%> </a></h5>
 	
 	<div class="row">
 		<div class="col-md-6">
 			<div class="panel panel-default">
 				<%
 				if(session.getAttribute("name") != null){
-					ArrayList<ArrayList<Object>> myRecentPerformance = db.getMyRecentPerformance((String)session.getAttribute("name"), quiz.getID());
+					ArrayList<ArrayList<Object>> myRecentPerformance = db.getMyRecentPerformance(username, quiz.getID());
 					if(myRecentPerformance.size() > 0){
 						out.println("<div class=\"panel-heading\">My Recent Scores</div>");
 						out.println("<table class=\"table\">");
@@ -80,9 +81,9 @@ request.setAttribute("quiz", quiz);
 						out.println("<tr>");
 						for(int i = 0; i < myRecentPerformance.size(); i++){
 							out.println("<tr><td>" + (i+1) + "</td>");
-							out.println("<td>" + myRecentPerformance.get(i).get(0) + "</td>");
-							out.println("<td>" + ((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
-							out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
+							out.println("<td><a href=userWelcome>" + myRecentPerformance.get(i).get(0) + "</a></td>");
+							out.println("<td>" + Math.round((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
+							out.println("<td>" + myRecentPerformance.get(i).get(2) + " seconds</td>");
 							out.println("</tr>");
 						}
 						out.println("</table>");
@@ -109,9 +110,11 @@ request.setAttribute("quiz", quiz);
 					out.println("<tr>");
 					for(int i = 0; i < leaderboard.size(); i++){
 						out.println("<tr><td>" + (i+1) + "</td>");
-						out.println("<td>" + leaderboard.get(i).get(0) + "</td>");
-						out.println("<td>" + ((Double)(leaderboard.get(i).get(1))*100) + "%</td>");
-						out.println("<td>" + leaderboard.get(i).get(2) + "</td>");
+						if(username != null && username.equals(leaderboard.get(i).get(0)))
+							out.println("<td><a href=userWelcome>" + leaderboard.get(i).get(0) + "</a></td>");
+						else out.println("<td><a href=userPage?ID=" + leaderboard.get(i).get(0) + ">" + leaderboard.get(i).get(0) + "</a></td>");
+						out.println("<td>" + Math.round((Double)(leaderboard.get(i).get(1))*100) + "%</td>");
+						out.println("<td>" + leaderboard.get(i).get(2) + " seconds</td>");
 						out.println("</tr>");
 					}
 					out.println("</table>");
@@ -144,9 +147,11 @@ request.setAttribute("quiz", quiz);
 					out.println("<tr>");
 					for(int i = 0; i < recentHighScores.size(); i++){
 						out.println("<tr><td>" + (i+1) + "</td>");
-						out.println("<td>" + recentHighScores.get(i).get(0) + "</td>");
-						out.println("<td>" + ((Double)(recentHighScores.get(i).get(1))*100) + "%</td>");
-						out.println("<td>" + recentHighScores.get(i).get(2) + "</td>");
+						if(username != null && username.equals(leaderboard.get(i).get(0)))
+							out.println("<td><a href=userWelcome>" + recentHighScores.get(i).get(0) + "</a></td>");
+						else out.println("<td><a href=userPage?ID=" + recentHighScores.get(i).get(0) + ">" + recentHighScores.get(i).get(0)  + "</a></td>");
+						out.println("<td>" + Math.round((Double)(recentHighScores.get(i).get(1))*100) + "%</td>");
+						out.println("<td>" + recentHighScores.get(i).get(2) + " seconds</td>");
 						out.println("</tr>");
 					}
 					out.println("</table>");
@@ -171,9 +176,11 @@ request.setAttribute("quiz", quiz);
 					out.println("<tr>");
 					for(int i = 0; i < recentTestTakers.size(); i++){
 						out.println("<tr><td>" + (i+1) + "</td>");
-						out.println("<td>" + recentTestTakers.get(i).get(0) + "</td>");
-						out.println("<td>" + ((Double)(recentTestTakers.get(i).get(1))*100) + "%</td>");
-						out.println("<td>" + recentTestTakers.get(i).get(2) + "</td>");
+						if(username != null && username.equals(leaderboard.get(i).get(0)))
+							out.println("<td><a href=userWelcome>" + recentTestTakers.get(i).get(0) + "</a></td>");
+						else out.println("<td><a href=userPage?ID=" + recentTestTakers.get(i).get(0) + ">" + recentTestTakers.get(i).get(0)  + "</a></td>");
+						out.println("<td>" + Math.round((Double)(recentTestTakers.get(i).get(1))*100) + "%</td>");
+						out.println("<td>" + recentTestTakers.get(i).get(2) + " seconds</td>");
 						out.println("</tr>");
 					}
 					out.println("</table>");
