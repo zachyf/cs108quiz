@@ -59,8 +59,6 @@ public class MultiPageQuiz extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Get the information and record the answer
 		int quizID = Integer.parseInt(request.getParameter("quizID"));
-		DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
-		//Quiz quiz = db.getQuizAt(quizID);
 		Quiz quiz = (Quiz)request.getSession().getAttribute("quiz");
 		@SuppressWarnings("unchecked")
 		Queue<Integer> q_order = (Queue<Integer>)request.getSession().getAttribute("questionsLeft" + quizID);
@@ -80,7 +78,7 @@ public class MultiPageQuiz extends HttpServlet {
 			printHeader(out, isCorrect);
 			//TODO add image for correct or incorrect
 			
-			out.println(question.displayQuestion());
+			out.println(question.displayQuestion(quiz.getNumQuestions() - q_order.size()));
 			out.println("<p>Your answer: " + answer + "</p>");
 			
 			if(q_order.isEmpty())

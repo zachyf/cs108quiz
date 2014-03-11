@@ -29,7 +29,7 @@ session.removeAttribute("answer");
 <%
 for(int i = 0; i < quiz.getNumQuestions(); i++){
 	Question question = quiz.getQuestion(i);
-	out.println(question.displayQuestion());
+	out.println(question.displayQuestion(i + 1));
 	out.println("Your answer: " + a.getAnswerToQuestion(question));
 }
 %>

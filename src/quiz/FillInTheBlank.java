@@ -39,13 +39,13 @@ public class FillInTheBlank extends Question {
 	 * input for the answer.
 	 */
 	@Override
-	public String getQuestion() {
+	public String getQuestion(int num) {
 		StringBuilder buff = new StringBuilder();
 		
 		// Generate the HTML for the question
 		String numStr = String.valueOf(num);
 		buff.append("<p class=question>" + numStr + ". " + this.question + "</p>");		
-		buff.append("<input type=\"text\" name=\""+ numStr + "\"><br>");
+		buff.append("<input type=\"text\" name=\""+ this.num + "\"><br>");
 		
 		return buff.toString();
 	}
@@ -56,7 +56,7 @@ public class FillInTheBlank extends Question {
 	 * input for the answer.
 	 */
 	@Override
-	public String displayQuestion() {
+	public String displayQuestion(int num) {
 		StringBuilder buff = new StringBuilder();
 		
 		// Generate the HTML for the question

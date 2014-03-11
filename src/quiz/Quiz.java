@@ -56,15 +56,8 @@ public class Quiz {
 		return i > 0;
 	}
 	
-	public String PrintAllQuestions(){
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < this.questions.size(); i++)
-			sb.append(this.questions.get(i).getQuestion());
-		return sb.toString();
-	}
-	
-	public String getQuestionAt(int index){
-		return this.questions.get(index).getQuestion();
+	public String getQuestionAt(int index, int printNum){
+		return this.questions.get(index).getQuestion(printNum);
 	}
 	
 	public Question getQuestion(int index){
