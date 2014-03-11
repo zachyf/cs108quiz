@@ -261,7 +261,6 @@ public class DBConnection {
 	 
 	 public int addChallenge(String challenger, String challenged, String quizName){
 		 try {
-<<<<<<< HEAD
 			 if (!userExists(challenger)){
 				 	return 1;
 				 }
@@ -271,17 +270,7 @@ public class DBConnection {
 			if (challengePending(challenger, challenger, quizName)){
 					return 3;
 				}
-=======
-			if (!userExists(challenger)){
-				return 1;
-			}
-			if (!userExists(challenged)){
-				return 2;
-			}
-			if (challengePending(challenger, challenger, quizName)){
-				 return 3;
-			 }
->>>>>>> FETCH_HEAD
+
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
 			 String q = "INSERT into challenges VALUES('" + challenger +"','" + challenged + "','"  + quizName+ "',1,CURRENT_TIMESTAMP);";
