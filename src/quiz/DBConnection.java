@@ -200,9 +200,9 @@ public class DBConnection {
 		 try{
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 ResultSet rs =  stmt.executeQuery("SELECT * FROM announcements ORDER BY postTime;");
+			 ResultSet rs =  stmt.executeQuery("SELECT * FROM announcements ORDER BY postTime desc;");
 			 while(rs.next()){
-					 a.add(new Announcement(rs.getString("announcement"), rs.getString("admin"),  Timestamp.valueOf(rs.getString("postTime"))));
+					 a.add(new Announcement(rs.getString("announcement"), rs.getString("userName"),  Timestamp.valueOf(rs.getString("postTime"))));
 			 }
 		 } catch (SQLException e) {
 	         e.printStackTrace();
