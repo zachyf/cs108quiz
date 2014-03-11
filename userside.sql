@@ -42,7 +42,7 @@ CREATE TABLE pending (
 DROP TABLE IF EXISTS announcements;
 
 CREATE TABLE announcements (
-    admin CHAR(64),
+    userName CHAR(64),
     announcement TEXT,
     postTime TIMESTAMP
 );

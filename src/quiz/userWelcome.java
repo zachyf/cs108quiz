@@ -3,6 +3,7 @@ package quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -170,6 +171,16 @@ public class userWelcome extends HttpServlet {
 				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread messages.");
 			}
 		}
+		ArrayList<Challenge> pendingChallenges = DB.getChallenges(username);
+		int numChallenges = pendingChallenges.size();
+		if (numChallenges > 0){
+			check2 += 1;
+			if(numChallenges==1){
+				out.println("You have <a href=\"#challenges\">"+ numChallenges + "</a> pending challenge.");
+			}else{
+				out.println("You have <a href=\"#challenges\">"+ numChallenges + "</a> pending challenges.");
+			}
+		}
 		if(check2==0){
 			out.println("<h4>No new notifications at the moment.</h4>");
 		}
@@ -329,7 +340,23 @@ public class userWelcome extends HttpServlet {
 		}else{
 			out.println("<h4>You have no recent messages. </h4>");
 		}
-		
+		out.println("<div id=\"challenges\">");
+		out.println("<h2>Pending Challenges:</h2>");
+		if (numChallenges == 0){
+			out.println("<h4>You have no pending challenges. </h4>");
+		}else{
+			out.println("<table style=\"width:500px\"><tr><th>Challenger</th><th>Quiz</th><th>Date</th><th>Take Quiz</th></tr>");
+			for (int i = 0; i < pendingChallenges.size(); ++i){
+				Challenge c = pendingChallenges.get(i);
+				String challenger = c.getChallenger();
+				String quizName = c.getQuizName();
+				String date = new SimpleDateFormat("MM/dd/yyyy").format(c.getTime());
+				int index = DB.quizNameToID(quizName);
+				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
+
+			}
+		}
+		out.println("</div>");
 		out.println("</body>");
 		out.println("</html>");
 		

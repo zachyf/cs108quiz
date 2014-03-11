@@ -65,7 +65,7 @@ session.removeAttribute("answer");
 </div><br>
 
 <div class="container">
-	<h3>Your Score is: <%=(a.getScore() * 100)%>%</h3>
+	<h3>Your Score is: <%=Math.round((a.getScore() * 100))%>%</h3>
 	<h4>You took <%=(a.getTimeToComplete()/1000) %> seconds to complete.</h4>
 	<%
 	for(int i = 0; i < quiz.getNumQuestions(); i++){
