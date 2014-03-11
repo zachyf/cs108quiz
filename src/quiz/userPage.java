@@ -5,10 +5,6 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,21 +13,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.sun.xml.internal.ws.api.server.Container;
-
-
-
 /**
- * Servlet implementation class userWelcome
+ * Servlet implementation class userPage
  */
-@WebServlet("/userWelcome")
-public class userWelcome extends HttpServlet {
+@WebServlet("/userPage")
+public class userPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public userWelcome() {
+    public userPage() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,9 +32,7 @@ public class userWelcome extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		doPost(request,response);
-
 	}
 
 	/**
@@ -54,8 +44,15 @@ public class userWelcome extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		HttpSession ses = request.getSession();
-		String username = (String) ses.getAttribute("name");
-		String animal = (String) ses.getAttribute("animal");
+		String loggedInUser = (String) ses.getAttribute("name");
+		String username = (String) request.getParameter("ID");
+		String animal="";
+		try {
+			animal = DB.getAnimal(username);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String animalPic="";
 		String teamWelcome="";
 		String info ="";
@@ -69,39 +66,39 @@ public class userWelcome extends HttpServlet {
 		
 		if(animal.equals("Cow")){
 			animalPic="Cow.png";
-			info="You are a member of Team Cow.";
+			info=username+" is a member of Team Cow.";
 			teamWelcome = "Make Team Cow proud!";
 			
 		}
 		if(animal.equals("Owl")){
 			animalPic="Owl.png";
-			info="You are a member of Team Owl.";
+			info=username+" is a member of Team Owl.";
 			teamWelcome = "Make Team Owl proud!";
 		}
 		if(animal.equals("Elephant")){
 			animalPic="Elephant.png";
-			info="You are a member of Team Elephant.";
+			info=username+" is a member of Team Elephant.";
 			teamWelcome = "Make Team Elephant proud!";
 		}
 		if(animal.equals("Sheep")){
 			animalPic="Sheep.png";
-			info="You are a member of Team Sheep.";
+			info=username+" is a member of Team Sheep.";
 			teamWelcome = "Make Team Sheep proud!";
 		}
 		out.println("<!DOCTYPE html>");
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<meta charset=\"UTF-8\" />");
-		out.println("<title> Welcome "+username+"</title>");
+		out.println("<title> Welcome to "+username+"'s Profile</title>");
 		out.println("</head>");
 		out.println("<body>");
 		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
-		out.println("<h1>Welcome "+username+"</h1>");
+		out.println("<h1>Welcome to "+username+"'s Profile</h1>");
 		out.println("<h2>Awards:</h2>");
 		int check=0;
 		try {
 			if(DB.winningTeam().equals(animal)){
-				out.print("<img src=\"LionAward.png\" title=\"Your Team is in 1st Place. \"><img>");
+				out.print("<img src=\"LionAward.png\" title=\""+username+"'s Team is in 1st Place. \"><img>");
 				check+=1;
 			}
 		} catch (SQLException e2) {
@@ -136,63 +133,37 @@ public class userWelcome extends HttpServlet {
 			e.printStackTrace();
 		}
 		if(check==0){
-			out.println("<h4> No awards yet.  To win awards, start taking quizzes, making quizzes, or practicing in quiz practice mode.</h4>");
+			out.println("<h4>"+username+" has not won any awards yet.</h4>");
 		}
 		out.println("<h2>Team Info:</h2>");
 		out.println("<table><tr><td>");
 		if(totalTaken==1){
-			out.println("<img src=\""+animalPic+"\" title=\"Team Crest\"></img></td><td><h3>"+info+"<br> Team "+animal+" has taken a total of "+totalTaken+" quiz. <br> Continue to take quizzes to help your team take the lead.</h3></td></tr></table>");
+			out.println("<img src=\""+animalPic+"\" title=\"Team Crest\"></img></td><td><h3>"+info+"<br> Team "+animal+" has taken a total of "+totalTaken+" quiz. <br> </h3></td></tr></table>");
 		}else{
-			out.println("<img src=\""+animalPic+"\" title=\"Team Crest\"></img></td><td><h3>"+info+"<br> Team "+animal+" has taken a total of "+totalTaken+" quizzes. <br> Continue to take quizzes to help your team take the lead.</h3></td></tr></table>");
+			out.println("<img src=\""+animalPic+"\" title=\"Team Crest\"></img></td><td><h3>"+info+"<br> Team "+animal+" has taken a total of "+totalTaken+" quizzes. <br> </h3></td></tr></table>");
 		}
-		out.println("<h2>Notifications:</h2>");
-		int check2=0;
+		out.println("<h2>Interact with "+username+":</h2>");
+		out.println("<table><tr><td>");
 		try {
-			int requests = DB.getNumRequests(username);
-			if(requests > 0){
-				check2+=1;
-				if(requests==1){
-					out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend request pending.");
-				}else{
-					out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend requests pending.");
-				}
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		int numUnread = DB.getNumUnread(username);
-		if(numUnread > 0){
-			check2+=1;
-			if(numUnread==1){
-				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread message.");
+			if(DB.alreadyFriends(username, loggedInUser)){
+				out.println("<h4> You are already friends with "+username+".</h4>");
 			}else{
-				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread messages.");
-			}
-		}
-		if(check2==0){
-			out.println("<h4>No new notifications at the moment.</h4>");
-		}
-		try {
-			if(DB.isAdmin(username)){
-				
-				out.println("<h2>Admin Priviledges:</h2>");
-				out.println();
-				out.println("<p><h4>Remove A User from the Database</h4>");
-				out.println("Enter the User You Wish to Remove:");
-				out.println("<form action=\"RemoveUser\" METHOD=\"post\">");
-				out.println("<input type=\"text\" name=\"userName\">");
-				out.println("<input type=\"submit\" value=\"Remove User\"><br>"); 
-				out.println("</form></p>");
-				
-				int totalUsers=DB.getTotalUsers();
-				out.println("<p><h4>There are "+totalUsers+" users in the database.</h4></p>");
-			
+				out.println("<h4> Add "+username+" as a friend <a href=\"FriendRequest?userName="+username+"\"><img src=\"acceptButton.jpg\" title=\"Add Friend\"></img></a>");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		out.println("</td><td><h4>Challenge "+username+":</h4>");
+		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
+		out.println("<input type=\"hidden\" name=\"userName\" value=\""+username+"\"><br>");
+		out.println("Enter a Quiz Name:");
+		out.println("<br>");
+		out.println("<input type=\"text\" name=\"quizName\"><br>");
+		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>");
+		out.println("</td><td><h4>Message "+username+":</h4>");
+		out.println("<a href=\"NewMessage.jsp?user=" + loggedInUser + "&to="+username+"\"><img src=\"Message.png\" title=\"Click to Message "+username+"\"></img></a></td></tr></table>");
+	
 		out.println("<h2>Leader Boards and Recent Activity:</h2>");
 		out.println("<table>");
 		out.println("<tr><th><h4>Most Popular Quizzes:</h4></th><th><h4>Recently Created Quizzes:</h4></th>");
@@ -208,10 +179,10 @@ public class userWelcome extends HttpServlet {
 		}
 		
 		if(takenQuizzes.size()!=0){
-			out.println("<th><h4>Your Recently Taken Quizzes:</h4></th>");
+			out.println("<th><h4>"+username+"'s Recently Taken Quizzes:</h4></th>");
 		}
 		if(yourCreatedQuizzes.size()!=0){
-			out.println("<th><h4>Your Recently Created Quizzes:</h4></th>");
+			out.println("<th><h4>"+username+"'s Recently Created Quizzes:</h4></th>");
 		}
 		out.println("</tr><tr><td>");
 		
@@ -262,7 +233,8 @@ public class userWelcome extends HttpServlet {
 			for(int i=0; i<yourCreatedQuizzes.size();i++){
 				int index = yourCreatedQuizzes.get(i);
 				int ip=i+1;
-				out.println(ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a><br>");
+				out.println(ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a>");
+				out.println("<a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a><br>");
 			}
 			out.println("</td>");
 		}
@@ -270,69 +242,9 @@ public class userWelcome extends HttpServlet {
 	
 
 		out.println("<br>");
-
-	
-		
-		out.println("<h2>Explore:</h2>");
-	
-		out.println("<table><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
-		out.println("<tr><td>");
-		out.println("Enter A User Name:");
-		out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<input type=\"text\" name=\"userName\"><br>");
-		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
-		out.println("</form>");
-		
-		out.println("</td><td>");
-		out.println("Enter a User Name:");
-		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
-		out.println("<input type=\"text\" name=\"userName\"><br>");
-		out.println("Enter a Quiz Name:");
-		out.println("<br>");
-		out.println("<input type=\"text\" name=\"quizName\"><br>");
-		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>"); 
-		out.println("</form>");
-		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
-		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");
-		
-		out.println("<div id=\"message\"></div>");
-		out.println("<script type=\"text/javascript/\">");
-		out.println("var xmlhttp;");
-		    out.println("if (window.XMLHttpRequest){");
-		       out.println("xmlhttp = new XMLHttpRequest();"); //for IE7+, Firefox, Chrome, Opera, Safari
-		    out.println("} else {");
-		        out.println("xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");"); //for IE6, IE5
-		    out.println("}");
-		    out.println("xmlhttp.open(\"GET\", \"FriendRequest\", true);"); 
-		    out.println("xmlhttp.onreadystatechange = function() {");
-		        out.println("if (xmlhttp.readyState == 4) { ");
-		            out.println("if (xmlhttp.status == 200) {");
-		            out.println("document.getElementById(\"message\").innerHTML = xmlhttp.responseText;}else{");
-		            out.println("alert(\"problem\");}}};");   
-		    out.println("xmlhttp.send(null);</script>");        
-		   
-		out.println("<h2>Your Recent Messages:</h2>");
-		ArrayList<Message> ml = DB.getMessages(username);
-		if(ml.size()!=0){
-		out.println("<table style=\"width:500px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
-		
-		for(int i = 0; i < ml.size(); ++i){
-			//make it limited size and scrolling 
-			if(i<5){
-				out.println("<tr><td>" + ml.get(i).getTo() + "</td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
-			}
-		}
-		out.println("</table>");
-		out.println("<table><tr><td>");
-		out.println("<h4> View all messages here:</h4></td>");
-		out.println("<td><a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a></td></tr></table>");
-		}else{
-			out.println("<h4>You have no recent messages. </h4>");
-		}
-		
+		out.println("<br><a href=\"userWelcome\"><img src=\"home.jpg\" title=\"Return Home \"></img></a>");
 		out.println("</body>");
 		out.println("</html>");
-		
 
 	}
 

@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Question-Response</title>
+    <title>New Message</title>
 
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +53,9 @@
 <form action="SendMessage" method="post">	
 	<div class="input-group input-group-lg">
 		<span class="input-group-addon">To: </span>
-		<input type="text" name="to" class="form-control">
+		<%String s=request.getParameter("to"); %>
+		<%if(s==null) s=""; %>
+		<input type="text" name="to"  value="<%=s %>" class="form-control">
 	</div><br>
 	
 	<div class="input-group input-group-lg">
@@ -70,6 +72,11 @@
 	
 	<button type="submit" class="btn btn-default">Send</button>	
 </form>
-<br><a href="userWelcome"><img src="home.jpg" title="Return Home "></img></a>
+<%String id=request.getParameter("to"); String url=""; %>
+<%if(id!=null) url="userPage?ID="+id; %>
+<%if(id!=null){%>
+<a href="<%=url %>"><img src="userProfile.png" title="Return to <%=s%>'s Profile"></img></a>
+<%}%>
+<a href="userWelcome"><img src="home.jpg" title="Return Home "></img></a>
 </body>
 </html>

@@ -589,6 +589,16 @@ public class DBConnection {
 		return result;
 	}
 	
+	public ArrayList<Integer>  getYourCreatedQuizzes(String username) throws SQLException{
+		ArrayList<Integer> result= new ArrayList<Integer>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM quizzes where creatorName=\""+username+"\" order by createtime desc limit 5;");
+		while(rs.next()){
+			result.add(rs.getInt("id"));
+		}
+		return result;
+	}
 	public ArrayList<Integer> getTakenQuizzes(String username) throws SQLException{
 		ArrayList<Integer> result= new ArrayList<Integer>();
 		Statement stmt = con.createStatement();
