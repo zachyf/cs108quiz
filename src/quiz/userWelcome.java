@@ -204,6 +204,21 @@ public class userWelcome extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		out.println("<h2>Most Recent Announcements:</h2>");
+		ArrayList<Announcement> announcements = DB.getAnnouncements();
+		if (announcements.size() == 0){
+			out.println("<h4>No announcements.</h4>");
+		}else{
+			for (int i = 0; i < announcements.size(); ++i){
+				if (i >= 4) break; //only show first 5 announcements
+				Announcement a = announcements.get(i);
+				String admin = a.getUser();
+				String note = a.getAnnouncement();
+				out.println("<h4>No announcements.</h4>");
+				out.println("<h4><a href=\"userPage?ID="+ admin+ "\">" + admin + "<a>: " + note + "</h4>");
+			}
+		}
+		
 		out.println("<h2>Leader Boards and Recent Activity:</h2>");
 		out.println("<table>");
 		out.println("<tr><th><h4>Most Popular Quizzes:</h4></th><th><h4>Recently Created Quizzes:</h4></th>");
@@ -362,5 +377,4 @@ public class userWelcome extends HttpServlet {
 		
 
 	}
-
 }
