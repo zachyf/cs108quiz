@@ -2,6 +2,7 @@ package quiz;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
@@ -36,7 +37,10 @@ public class quizPerformanceSummary extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		HttpSession ses = request.getSession();
+	
 		String username = (String) ses.getAttribute("name");
+		ArrayList<ArrayList<Object>> myRecentPerformance = DB.getMyRecentPerformanceAll(username);
+		Integer size= myRecentPerformance.size();
 		out.println("<!DOCTYPE html>");
 		out.println("<html>");
 		out.println("<head>");
@@ -45,22 +49,23 @@ public class quizPerformanceSummary extends HttpServlet {
 		out.println("</head>");
 		out.println("<body>");
 		out.println("<h2>"+username+"'s Quiz Performance</h2>");
-		ArrayList<ArrayList<Object>> myRecentPerformance = DB.getMyRecentPerformanceAll((String)ses.getAttribute("name"));
-		
-		if(myRecentPerformance.size()!=0){
-			out.println("<table class=\"table\">");
+		if(size>0){
+			out.println("<table>");
 			out.println("<tr>");
 			out.println("<th>Quiz</th>");
 			out.println("<th>Score</th>");		
-			out.println("<th>Time</th>");
+			out.println("<th>Time Taken</th>");
+			out.println("<th>Time of Submission</th>");
 			out.println("</tr>");
 			out.println("<tr>");
 			for(int i = 0; i < myRecentPerformance.size(); i++){
 				String quiz=DB.getQuizAt((Integer)myRecentPerformance.get(i).get(0)).getName();
-				out.println("<td><a href=\"quizPage.jsp?id="+(Integer)myRecentPerformance.get(i).get(0)+"\"></a></td");
+				out.println("<td><a href=\"quizPage.jsp?id="+(Integer)myRecentPerformance.get(i).get(0)+"\">"+quiz+"</a></td");
 				out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
 				out.println("<td>" + ((Double)(myRecentPerformance.get(i).get(1))*100) + "%</td>");
 				out.println("<td>" + myRecentPerformance.get(i).get(2) + "</td>");
+				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format( myRecentPerformance.get(i).get(3));
+				out.println("<td>" + date + "</td>");
 				out.println("</tr>");
 			}
 			out.println("</table>");

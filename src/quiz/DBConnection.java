@@ -315,6 +315,17 @@ public class DBConnection {
 		 }
 	 }
 	 
+	 public int getQuizzesTotal() throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 ResultSet rs =  stmt.executeQuery("SELECT count(numCorrect) FROM quizRecords;");
+		 if(rs.next()){ 
+			 return rs.getInt("count(numCorrect)");
+		 }else{
+			 return -1;
+		 }
+	 }
+	 
 	 public int getNumRequests(String user) throws SQLException{
 		 Statement stmt = con.createStatement();
 		 stmt.executeQuery("USE " + database);
@@ -745,11 +756,12 @@ public class DBConnection {
 	}
 	
 	public ArrayList<ArrayList<Object>> getMyRecentPerformanceAll(String username){
-		String query = "Select quizID, numCorrect, numQuestions, timeToComplete" +
-				" from quizRecords where userName = \"" + username + "\"" +
-				" order by timeSubmitted desc;";
-		return getList(query);
+		String query = "Select quizID, numCorrect, numQuestions, timeToComplete, timeSubmitted from quizRecords where userName = \"" + username + "\" order by timeSubmitted desc;";
+		
+		return getList2(query);
 	}
+	
+	
 	
 	private void addChoices(MultipleChoice question, int quizID){
 		String query = "Select choice from questions where quizID = " + quizID + " and questionNum = "
@@ -805,6 +817,23 @@ public class DBConnection {
 		return list;
 	}
 	
+	private ArrayList<ArrayList<Object>> getList2(String query){
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()) {
+				ArrayList<Object> row = new ArrayList<Object>();
+				row.add(rs.getInt("quizID"));
+				row.add((double)rs.getInt("numCorrect")/rs.getInt("numQuestions"));
+				row.add(rs.getInt("timeToComplete")/1000);
+				row.add(Timestamp.valueOf(rs.getString("timeSubmitted")));
+				list.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
 	public void addQuizToDB(Quiz quiz, int isOnePage, int isRandom, int isImmediateCorrection, int hasPracticeMode){
 		Calendar calendar = Calendar.getInstance();
 		String insertion = "INSERT INTO quizzes VALUES (" + quiz.getID() + ",\""  + quiz.getName() + "\",\"" 

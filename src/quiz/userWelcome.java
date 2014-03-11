@@ -198,6 +198,8 @@ public class userWelcome extends HttpServlet {
 				
 				int totalUsers=DB.getTotalUsers();
 				out.println("<p><h4>There are "+totalUsers+" users in the database.</h4></p>");
+				int totalQuizzesTaken=DB.getQuizzesTotal();
+				out.println("<p><h4>There have been a total of "+totalQuizzesTaken+" quizzes taken thus far.</h4></p>");
 			
 			}
 		} catch (SQLException e) {
@@ -329,8 +331,9 @@ public class userWelcome extends HttpServlet {
 		
 		for(int i = 0; i < ml.size(); ++i){
 			//make it limited size and scrolling 
+			String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format( ml.get(i).getSentTime());
 			if(i<5){
-				out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
+				out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + date + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
 			}
 		}
 		out.println("</table>");
@@ -350,7 +353,7 @@ public class userWelcome extends HttpServlet {
 				Challenge c = pendingChallenges.get(i);
 				String challenger = c.getChallenger();
 				String quizName = c.getQuizName();
-				String date = new SimpleDateFormat("MM/dd/yyyy").format(c.getTime());
+				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(c.getTime());
 				int index = DB.quizNameToID(quizName);
 				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
 

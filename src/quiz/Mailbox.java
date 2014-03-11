@@ -3,6 +3,7 @@ package quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -133,7 +134,8 @@ public class Mailbox extends HttpServlet {
 			ml = unreadMessages;
 			out.println("<table style=\"width:300px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th><th>Mark As Read</th>\n</tr>");
 			for(int i=0;i<ml.size();i++){
-				out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + ml.get(i).getSentTime() + "</td><td>" + ml.get(i).getMessage() + "</td><td><a href=\"Mailbox?From="+ ml.get(i).getTo()+"&Time="+ ml.get(i).getSentTime()+"\"><img src=\"markAsRead.jpg\"title=\"Mark As Read \"></img></a></td></tr>");
+				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format( ml.get(i).getSentTime());
+				out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + date + "</td><td>" + ml.get(i).getMessage() + "</td><td><a href=\"Mailbox?From="+ ml.get(i).getTo()+"&Time="+ ml.get(i).getSentTime()+"\"><img src=\"markAsRead.jpg\"title=\"Mark As Read \"></img></a></td></tr>");
 			}
 			out.println("</table>");
 		}
