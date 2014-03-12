@@ -113,9 +113,9 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 		<div class="col-md-6">
 			<!-- Highest performers table -->
 			<div class="panel panel-default">
+			<div class="panel-heading">Highest Scores</div>
 			<% 
 				if(leaderboard.size() > 0){
-					out.println("<div class=\"panel-heading\">Highest Scores</div>");
 					out.println("<table class=\"table\">");
 					out.println("<tr>");
 					out.println("<th>Rank</th>");
@@ -151,9 +151,9 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 		<div class="col-md-6">
 			<!-- Recent high scores table -->
 			<div class="panel panel-default">
+				<div class="panel-heading">Today's Top Scores</div>
 				<% ArrayList<ArrayList<Object>> recentHighScores = db.getRecentHighScores(quiz.getID());
 				if(recentHighScores.size() > 0){
-					out.println("<div class=\"panel-heading\">Today's Top Scores</div>");
 					out.println("<table class=\"table\">");
 					out.println("<tr>");
 					out.println("<th>Rank</th>");
@@ -174,6 +174,8 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 						out.println("</tr>");
 					}
 					out.println("</table>");
+				} else {
+					out.println("<p>No scores today</p>");
 				}
 				%>
 			</div>
@@ -182,9 +184,9 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 		<div class="col-md-6">
 			<!-- Recent test takers table -->
 			<div class="panel panel-default">
+				<div class="panel-heading">Recent Scores</div>
 				<% ArrayList<ArrayList<Object>> recentTestTakers = db.getRecentScores(quiz.getID());
 				if(recentTestTakers.size() > 0){
-					out.println("<div class=\"panel-heading\">Recent Scores</div>");
 					out.println("<table class=\"table\">");
 					out.println("<tr>");
 					out.println("<th>Rank</th>");
@@ -203,6 +205,8 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 						out.println("</tr>");
 					}
 					out.println("</table>");
+				} else {
+					out.println("<p>No recent scores</p>");
 				}
 				%>
 			</div>
