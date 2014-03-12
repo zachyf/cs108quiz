@@ -391,8 +391,6 @@ public class userWelcome extends HttpServlet {
 		out.println("<div class=\"col-md-4\">");
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Messaging</div>");
-		out.println("<b>Send messages:</b><br>");
-		out.println("<a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a><br><br>");
 		out.println("<b>Recent messages</b><br>");
 		ArrayList<Message> ml = DB.getMessages(username);
 		if(ml.size()!=0){
@@ -408,11 +406,13 @@ public class userWelcome extends HttpServlet {
 			}
 		}
 		out.println("</table><br>");
-		out.println("<b>View all messages:</b><br>");
-		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a>");
 		}else{
 			out.println("<h4>You have no recent messages. </h4>");
 		}
+		out.println("<b>View all messages:</b><br>");
+		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a>");
+		out.println("<b>Send messages:</b><br>");
+		out.println("<a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a><br><br>");
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 		
@@ -420,13 +420,39 @@ public class userWelcome extends HttpServlet {
 		out.println("<div class=\"col-md-4\">");
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Challenges</div>");
-		out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<div class=\"input-group input-group-lg\">");
+		out.println("<b>Pending challenges:</b><br>");
+		
+		if (numChallenges == 0){
+			out.println("You have no pending challenges.");
+		}else{
+			out.println("<table class=\"table\"><tr><th>Challenger</th><th>Quiz</th><th>Date</th><th>Take Quiz</th></tr>");
+			for (int i = 0; i < pendingChallenges.size(); ++i){
+				Challenge c = pendingChallenges.get(i);
+				String challenger = c.getChallenger();
+				int index = c.getQuizID();
+				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(c.getTime());
+				String quizName = DB.getQuizAt(index).getName();
+				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
+
+			}
+			out.println("</table><br>");
+		}
+		out.println("<b>Send a challenge:</b><br>");
+		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
+		out.println("<div class=\"input-group\">");
 		out.println("<span class=\"input-group-addon\">Enter a username:</span>");
-		out.println("<input type=\"text\" name=\"userName\" class=\"form-control\">");
+		out.println("<input type=\"text\" name=\"userName\" class=\"form-control\"><br>");
 		out.println("</div><br>");
-		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
-		out.println("</form>");
+		out.println("Select a Quiz:");
+		out.println("<br>");
+		out.println("<select name=\"quizID\">");
+		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+		for(int i=0;i<allQuizzes.size();i++){
+			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
+		}
+		out.println("</select><br><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Send Challenge</button><br>"); 
+		out.println("</form><br>");
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 		
@@ -435,7 +461,7 @@ public class userWelcome extends HttpServlet {
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Find Friends</div>");
 		out.println("<br><form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<div class=\"input-group input-group-lg\">");
+		out.println("<div class=\"input-group\">");
 		out.println("<span class=\"input-group-addon\">Enter a username:</span>");
 		out.println("<input type=\"text\" name=\"userName\" class=\"form-control\">");
 		out.println("</div><br>");
@@ -447,70 +473,8 @@ public class userWelcome extends HttpServlet {
 		
 		out.println("<div class=\"row\">");
 		
+		out.println("<a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a>");
 		
-		out.println("<table><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
-		out.println("<tr><td>");
-		out.println("Enter A User Name:");
-		out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<input type=\"text\" name=\"userName\"><br>");
-		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
-		out.println("</form>");
-		out.println("<div id=\"message1\"></td></div><td>");
-		out.println("Enter a User Name:");
-		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
-		out.println("<input type=\"text\" name=\"userName\"><br>");
-		out.println("Select a Quiz:");
-		out.println("<br>");
-		out.println("<select name=\"quizID\">");
-		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
-		for(int i=0;i<allQuizzes.size();i++){
-			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
-		}
-		out.println("</select><br>");
-		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>"); 
-		out.println("</form>");
-		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
-		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");
-
-
-
-		out.println("<h2>Your Recent Messages:</h2>");
-		ml = DB.getMessages(username);
-		if(ml.size()!=0){
-		out.println("<table style=\"width:500px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
-
-		for(int i = 0; i < ml.size(); ++i){
-			//make it limited size and scrolling 
-			String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format( ml.get(i).getSentTime());
-			if(i<5){
-
-				out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + date + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
-
-			}
-		}
-		out.println("</table>");
-		out.println("<table><tr><td>");
-		out.println("<h4> View all messages here:</h4></td>");
-		out.println("<td><a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a></td></tr></table>");
-		}else{
-			out.println("<h4>You have no recent messages. </h4>");
-		}
-		out.println("<div id=\"challenges\">");
-		out.println("<h2>Pending Challenges:</h2>");
-		if (numChallenges == 0){
-			out.println("<h4>You have no pending challenges. </h4>");
-		}else{
-			out.println("<table style=\"width:500px\"><tr><th>Challenger</th><th>Quiz</th><th>Date</th><th>Take Quiz</th></tr>");
-			for (int i = 0; i < pendingChallenges.size(); ++i){
-				Challenge c = pendingChallenges.get(i);
-				String challenger = c.getChallenger();
-				int index = c.getQuizID();
-				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(c.getTime());
-				String quizName = DB.getQuizAt(index).getName();
-				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
-
-			}
-		}
 		out.println("</div>");
 		out.println("</div>"); // Row
 		out.println("</div>"); // Container
