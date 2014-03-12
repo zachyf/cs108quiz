@@ -2,6 +2,9 @@ package quiz;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -10,18 +13,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class promote
+ * Servlet implementation class MakeAnnouncement
  */
-@WebServlet("/promote")
-public class promote extends HttpServlet {
+@WebServlet("/MakeAnnouncement")
+public class MakeAnnouncement extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public promote() {
+    public MakeAnnouncement() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,20 +43,23 @@ public class promote extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext context = request.getServletContext();
 		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
-		String userName = (String) request.getParameter("userName");
+		String note = (String) request.getParameter("note");
+		HttpSession ses = request.getSession();
+		String loggedInUser = (String) ses.getAttribute("name");
 		PrintWriter out = response.getWriter();
-		try{
-		if (!DB.userExists(userName)){
-			out.println("Can't promote " + userName + " because " + userName + " isn't a user in the database.");
-		}else{
-			DB.makeAdmin(userName);
-			out.println("User " + userName + " has been promoted to admin status.");
+		response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+		DB.addAnnouncement(loggedInUser, note);
+		ArrayList<String> users = DB.getAllUsers();
+		for (int i = 0; i < users.size(); ++i){
+			java.util.Date date = new java.util.Date();
+			Timestamp t = new Timestamp(date.getTime());
+			Message m  = new Message(users.get(i), loggedInUser, "ANNOUNCEMNT", note, t, 0);
 		}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		out.print("You announced " + note);
 		RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
-		dispatch.forward(request, response);
+		dispatch.forward(request, response); 
+
 	}
 
 }

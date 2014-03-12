@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="quiz.*" %>
-<%@ page import="java.util.*, quiz.*" %>
+<%@ page import="java.util.*, quiz/*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <% String quizID = request.getParameter("id"); 
@@ -45,7 +45,7 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="userWelcome">Quiz Mania!</a>
+      <a class="navbar-brand" href="HomepageBootstrap.jsp">Quiz Mania!</a>
     </div>
     <div class="navbar-collapse collapse">
       <form class="navbar-form navbar-right" role="form">
