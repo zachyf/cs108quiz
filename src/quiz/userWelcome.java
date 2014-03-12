@@ -68,7 +68,7 @@ public class userWelcome extends HttpServlet {
 			e3.printStackTrace();
 		}
 
-		if(animal.equals("Cow")){
+		if(animal.equals( "Cow")){
 			animalPic="Cow.png";
 			info="You are a member of Team Cow.";
 			teamWelcome = "Make Team Cow proud!";
@@ -101,7 +101,21 @@ public class userWelcome extends HttpServlet {
 		out.println("<title> Welcome "+username+"</title>");
 		out.println("</head>");
 		out.println("<body>");
-
+		out.println("<script type=\"text/javascript\">");
+		out.println("function handleFriend(){");
+		out.println("var xmlhttp;");
+		    out.println("if (window.XMLHttpRequest){");
+		       out.println("xmlhttp = new XMLHttpRequest();"); //for IE7+, Firefox, Chrome, Opera, Safari
+		    out.println("} else {");
+		        out.println("xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");"); //for IE6, IE5
+		    out.println("}");
+		    out.println("xmlhttp.open(\"POST\", \"FriendRequest\", true);"); 
+		    out.println("xmlhttp.onreadystatechange = function() {");
+		        out.println("if (xmlhttp.readyState == 4) { ");
+		            out.println("if (xmlhttp.status == 200) {");
+		            out.println("document.getElementById(\"message1\").innerHTML = xmlhttp.responseText;}else{");
+		            out.println("alert(\"problem\");}}};");   
+		    out.println("xmlhttp.send(null);}</script>");        
 		// Nav bar html
 		out.println("<div class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">");
 		out.println("<div class=\"container\"><div class=\"navbar-header\">");
@@ -218,7 +232,24 @@ public class userWelcome extends HttpServlet {
 				out.println("<input type=\"text\" name=\"userName\">");
 				out.println("<input type=\"submit\" value=\"Remove User\"><br>"); 
 				out.println("</form></p>");
-
+				out.println("<p><h4>Promote A User to Admin Status</h4>");
+				out.println("Enter the User You Wish to Promote:");
+				out.println("<form action=\"promote\" METHOD=\"post\">");
+				out.println("<input type=\"text\" name=\"userName\">");
+				out.println("<input type=\"submit\" value=\"Promote\"><br>"); 
+				out.println("</form></p>");
+				out.println("<p><h4>Delete A Quiz:</h4>");
+				out.println("Select the Quiz You Wish to Delete:");
+				out.println("<form action=\"deleteQuiz\" METHOD=\"post\">");
+				out.println("<select name=\"quizID\">");
+				ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+				for(int i=0;i<allQuizzes.size();i++){
+					out.println("<option value=\""+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</option>");
+				}
+				out.println("</select>");
+				out.println("<input type=\"submit\" value=\"Delete\"><br>"); 
+				out.println("</form></p>");
+				
 				int totalUsers=DB.getTotalUsers();
 				out.println("<p><h4>There are "+totalUsers+" users in the database.</h4></p>");
 				int totalQuizzesTaken=DB.getQuizzesTotal();
@@ -336,34 +367,25 @@ public class userWelcome extends HttpServlet {
 		out.println("<input type=\"text\" name=\"userName\"><br>");
 		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
 		out.println("</form>");
-
-		out.println("</td><td>");
+		out.println("<div id=\"message1\"></td></div><td>");
 		out.println("Enter a User Name:");
 		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
 		out.println("<input type=\"text\" name=\"userName\"><br>");
-		out.println("Enter a Quiz Name:");
+		out.println("Select a Quiz:");
 		out.println("<br>");
-		out.println("<input type=\"text\" name=\"quizName\"><br>");
+		out.println("<select name=\"quizID\">");
+		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+		for(int i=0;i<allQuizzes.size();i++){
+			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
+		}
+		out.println("</select><br>");
 		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>"); 
 		out.println("</form>");
 		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
 		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");
 
-		out.println("<div id=\"message\"></div>");
-		out.println("<script type=\"text/javascript/\">");
-		out.println("var xmlhttp;");
-		    out.println("if (window.XMLHttpRequest){");
-		       out.println("xmlhttp = new XMLHttpRequest();"); //for IE7+, Firefox, Chrome, Opera, Safari
-		    out.println("} else {");
-		        out.println("xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");"); //for IE6, IE5
-		    out.println("}");
-		    out.println("xmlhttp.open(\"GET\", \"FriendRequest\", true);"); 
-		    out.println("xmlhttp.onreadystatechange = function() {");
-		        out.println("if (xmlhttp.readyState == 4) { ");
-		            out.println("if (xmlhttp.status == 200) {");
-		            out.println("document.getElementById(\"message\").innerHTML = xmlhttp.responseText;}else{");
-		            out.println("alert(\"problem\");}}};");   
-		    out.println("xmlhttp.send(null);</script>");        
+		
+		
 
 		out.println("<h2>Your Recent Messages:</h2>");
 		ArrayList<Message> ml = DB.getMessages(username);
@@ -395,9 +417,9 @@ public class userWelcome extends HttpServlet {
 			for (int i = 0; i < pendingChallenges.size(); ++i){
 				Challenge c = pendingChallenges.get(i);
 				String challenger = c.getChallenger();
-				String quizName = c.getQuizName();
+				int index = c.getQuizID();
 				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(c.getTime());
-				int index = DB.quizNameToID(quizName);
+				String quizName = DB.getQuizAt(index).getName();
 				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
 
 			}

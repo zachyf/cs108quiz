@@ -44,7 +44,7 @@ public class FriendRequest extends HttpServlet {
 		String userName = (String) request.getParameter("userName");
 		HttpSession ses = request.getSession();
 		String loggedInUser = (String) ses.getAttribute("name");
-		response.setContentType("text/html; charset=UTF-8");
+		//response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -57,14 +57,18 @@ public class FriendRequest extends HttpServlet {
 				if(DB.alreadyFriends(userName,loggedInUser) || DB.alreadyFriends(loggedInUser,userName)){
 					out.println("You are already friends with "+userName+".");
 				}else if(DB.alreadyPending(userName,loggedInUser)){
-
-					out.print("User "+userName+" has already sent you a request. Check your mail.");
+					out.print("User "+userName+" has already sent you a request. Check your requests.");
+				}else if(DB.alreadyPending(loggedInUser,userName)){
+					out.print("You have already requested "+userName+" .Wait for a response.");
 				}else{
 					DB.addRequest(loggedInUser,userName);
 					out.print("A friend request has just been sent to "+userName+".");
 
 				}
 			}
+			RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
+
+			dispatch.forward(request, response); 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

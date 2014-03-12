@@ -40,14 +40,15 @@ public class SendNewChallenge extends HttpServlet {
 		ServletContext context = request.getServletContext();
 		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
 		String userName = (String) request.getParameter("userName");
-		String quizName = (String) request.getParameter("quizName");
+		Integer quizID = Integer.parseInt(request.getParameter("quizID"));
 		HttpSession ses = request.getSession();
 		String loggedInUser = (String) ses.getAttribute("name");
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-		int v = DB.addChallenge(loggedInUser, userName, quizName);
+        String quizName=DB.getQuizAt(quizID).getName();
+		int v = DB.addChallenge(loggedInUser, userName, quizID);
 		if (v == 0){
 			out.println("You have challenged " + userName + " to quiz " + quizName);
 		} else if (v == 1){

@@ -235,7 +235,7 @@ public class DBConnection {
 			 stmt.executeQuery("USE " + database);
 			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + challenged + "' and pending=1 ORDER BY sentTime;");
 			 while(rs.next()){
-					 a.add(new Challenge(rs.getString("challenger"), rs.getString("challenged"),  rs.getString("quizName"), true, Timestamp.valueOf(rs.getString("sentTime"))));
+					 a.add(new Challenge(rs.getString("challenger"), rs.getString("challenged"),  rs.getInt("quizID"), true, Timestamp.valueOf(rs.getString("sentTime"))));
 			 }
 		 } catch (SQLException e) {
 	         e.printStackTrace();
@@ -243,12 +243,12 @@ public class DBConnection {
 		 return a;
 	 }
 	 
-	 public boolean challengePending(String challenger, String challenged, String quizName){
+	 public boolean challengePending(String challenger, String challenged, Integer quizID){
 		 int count = 0;
 		 try{
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + challenged + "' and challenger='" + challenger + "' and quizName='" + quizName + "' and pending=1;");
+			 ResultSet rs =  stmt.executeQuery("SELECT * FROM challenges where challenged='" + challenged + "' and challenger='" + challenger + "' and quizID=" + quizID + " and pending=1;");
 			 while(rs.next()){
 				 count++;
 			 }
@@ -259,7 +259,7 @@ public class DBConnection {
 		 return false;
 	 }
 	 
-	 public int addChallenge(String challenger, String challenged, String quizName){
+	 public int addChallenge(String challenger, String challenged, Integer quizID){
 		 try {
 			 if (!userExists(challenger)){
 				 	return 1;
@@ -267,13 +267,13 @@ public class DBConnection {
 			if (!userExists(challenged)){
 					return 2;
 				}
-			if (challengePending(challenger, challenger, quizName)){
+			if (challengePending(challenger, challenger, quizID)){
 					return 3;
 				}
 
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 String q = "INSERT into challenges VALUES('" + challenger +"','" + challenged + "','"  + quizName+ "',1,CURRENT_TIMESTAMP);";
+			 String q = "INSERT into challenges VALUES('" + challenger +"','" + challenged + "','"  + quizID+ "',1,CURRENT_TIMESTAMP);";
 			 stmt.executeUpdate(q);
 			 return 0;
 		} catch (SQLException e1) {
@@ -289,6 +289,20 @@ public class DBConnection {
 		 stmt.executeUpdate("UPDATE users SET adminStatus=TRUE where user_name=\""+username+"\";");
 	 }
 	 
+	 public void deleteQuiz(Integer id){
+		 try{
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 String q = "DELETE FROM quizzes WHERE id="+id + ";";
+			 String r = "DELETE FROM quizRecords WHERE quizID="+id + ";";
+			 String s = "DELETE FROM challenges WHERE quizID="+id + ";";
+			 stmt.executeUpdate(q);
+		     stmt.executeUpdate(r);
+		     stmt.executeUpdate(s);
+			 }catch(SQLException e) { 
+		         e.printStackTrace();
+			} 
+	 }
 	 public int removeUser(String username){
 		 try{
 		 Statement stmt = con.createStatement();
@@ -742,6 +756,11 @@ public class DBConnection {
 		return getList(query);
 	}
 	
+	public ArrayList<ArrayList<Object>> getAllQuizzes(){
+		String query = "Select quizName,id from quizzes order by quizName asc;";
+		return getList3(query);
+	}
+	
 	public ArrayList<ArrayList<Object>> getRecentScores(int quizID){
 		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
 				" from quizRecords where quizID = " + quizID + 
@@ -844,6 +863,23 @@ public class DBConnection {
 		} 
 		return list;
 	}
+	
+	private ArrayList<ArrayList<Object>> getList3(String query){
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()) {
+				ArrayList<Object> row = new ArrayList<Object>();
+				row.add(rs.getString("quizName"));
+				row.add(rs.getInt("id"));
+				list.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
+	
 	public void addQuizToDB(Quiz quiz, int isOnePage, int isRandom, int isImmediateCorrection, int hasPracticeMode){
 		Calendar calendar = Calendar.getInstance();
 		String insertion = "INSERT INTO quizzes VALUES (" + quiz.getID() + ",\""  + quiz.getName() + "\",\"" 

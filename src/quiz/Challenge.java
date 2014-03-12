@@ -6,14 +6,14 @@ import java.sql.Timestamp;
 public class Challenge {
 	private String challenger;
 	private String challenged;
-	private String quizName;
+	private Integer quizID;
 	private boolean pending;
 	private Timestamp sentTime;
 	
-	public Challenge(String cer, String ced, String name, boolean p, Timestamp st){
+	public Challenge(String cer, String ced,Integer ID, boolean p, Timestamp st){
 		challenger = cer;
 		challenged = ced;
-		quizName = name;
+		quizID = ID;
 		pending = p;
 		sentTime = st; 
 	}
@@ -26,8 +26,8 @@ public class Challenge {
 		return challenged;
 	}
 	
-	public String getQuizName(){
-		return quizName;
+	public Integer getQuizID(){
+		return quizID;
 	}
 	
 	public boolean getPending(){
