@@ -194,6 +194,23 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Col 2
 		out.println("<div class=\"col-md-4\">");
 		
+		//Announcements
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Announcements</div>");
+		ArrayList<Announcement> ann = DB.getAnnouncements();
+		if (ann.size() == 0){
+			out.println("<h4>No recent announcements.</h4>");
+		}else{
+			for (int i = 0; i < ann.size(); ++i){
+				if (i == 5) 
+					break;
+				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
+				out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
+
+			}
+		}
+	    out.println("</div>"); // panel
+		
 		// Notifications panel
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Notications</div>");
@@ -251,6 +268,12 @@ public class userWelcome extends HttpServlet {
 
 				out.println("<h2>Admin Privileges:</h2>");
 				out.println();
+				out.println("<p><h4>Make an Announcement</h4>");
+				out.println("Enter the Announcement:");
+				out.println("<form action=\"MakeAnnouncement\" METHOD=\"post\">");
+				out.println("<input type=\"text\" name=\"note\">");
+				out.println("<input type=\"submit\" value=\"Announce\"><br>"); 
+				out.println("</form></p>");
 				out.println("<p><h4>Remove A User from the Database</h4>");
 				out.println("Enter the User You Wish to Remove:");
 				out.println("<form action=\"RemoveUser\" METHOD=\"post\">");
@@ -457,14 +480,15 @@ public class userWelcome extends HttpServlet {
 		if (numChallenges == 0){
 			out.println("You have no pending challenges.");
 		}else{
-			out.println("<table class=\"table\"><tr><th>Challenger</th><th>Quiz</th><th>Date</th><th>Take Quiz</th></tr>");
+			out.println("<table class=\"table\"><tr><th>Challenger</th><th>Challenger's Score</th><th>Quiz</th><th>Date</th><th>Take Quiz</th></tr>");
 			for (int i = 0; i < pendingChallenges.size(); ++i){
 				Challenge c = pendingChallenges.get(i);
 				String challenger = c.getChallenger();
 				int index = c.getQuizID();
 				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(c.getTime());
 				String quizName = DB.getQuizAt(index).getName();
-				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
+				int highestScore = DB.getHighScoreQuizUser(username, index);
+				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td>" + highestScore + "</td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
 
 			}
 			out.println("</table><br>");
@@ -478,9 +502,9 @@ public class userWelcome extends HttpServlet {
 		out.println("Select a Quiz:");
 		out.println("<br>");
 		out.println("<select name=\"quizID\">");
-		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
-		for(int i=0;i<allQuizzes.size();i++){
-			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
+		ArrayList<ArrayList<Object>> allQ = DB.getAllQuizzes();
+		for(int i=0;i<allQ.size();i++){
+			out.println("<option value=\""+allQ.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQ.get(i).get(1)+"\">"+allQ.get(i).get(0)+"</a></option>");
 		}
 		out.println("</select><br><br>");
 		out.println("<button type=\"submit\" class=\"btn btn-default\">Send Challenge</button><br>"); 
