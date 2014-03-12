@@ -210,14 +210,15 @@ public class DBConnection {
 		 return a;
 	 }
 	 
-	 public boolean addAnnouncement(String user, String note){
+	 public boolean addAnnouncement(Announcement a){
+		 String user = a.getUser();
 		 try {
 			if (!userExists(user) || !isAdmin(user)){
 				 return false;
 			 }
 			 Statement stmt = con.createStatement();
 			 stmt.executeQuery("USE " + database);
-			 String q = "INSERT into announcements VALUES('" + user+"','" + note + "', CURRENT_TIMESTAMP);";
+			 String q = "INSERT into announcements VALUES('" + a.getUser() +"','" + a.getAnnouncement() + "', CURRENT_TIMESTAMP);";
 			 stmt.executeUpdate(q);
 			 return true;
 		} catch (SQLException e1) {
@@ -336,21 +337,6 @@ public class DBConnection {
 		 }else{
 			 return -1;
 		 }
-	 }
-	 
-	 public ArrayList<String> getAllUsers(){
-		 ArrayList<String> users = new ArrayList<String>();
-		 String query = "Select * from users;";
-		 ResultSet rs = executeQuery(query);
-		 try {
-			 while(rs.next()){
-				users.add(rs.getString("user_name"));
-			 }
-		 }catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		 }
-		 return users;
 	 }
 	 
 	 public int getQuizzesTotal() throws SQLException{
@@ -783,24 +769,6 @@ public class DBConnection {
 				" from quizRecords where quizID = " + quizID + 
 				" order by numCorrect  desc, timeToComplete asc limit 5;";
 		return getList(query);
-	}
-	
-	public int getHighScoreQuizUser(String user, int quizID){
-		String query = "Select * from quizRecords where quiz =" + quizID + " order by numCorrect desc;";
-		ResultSet rs = executeQuery(query);
-		try {
-		if (rs.next()){
-			int numCorrect;
-				numCorrect = rs.getInt("numCorrect");
-				int numQuestions = rs.getInt("numQuestions");
-				double percent = numCorrect*100.0/numQuestions;
-				return (int)percent;
-			} 
-		}catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return 0;
 	}
 	
 	public ArrayList<ArrayList<Object>> getAllQuizzes(){
