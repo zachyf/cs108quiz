@@ -128,14 +128,28 @@ public class userWelcome extends HttpServlet {
 		out.println("<div class=\"form-group\">");
 		out.println("<input type=\"text\" placeholder=\"Search Quizzes...\" class=\"form-control\">");
 		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search</button>");
-		out.println("</form></div></div></div><br>");
+		out.println("</form></div></div></div>");
 
-
-		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
+		// Jumbotron html
+	    out.println("<div class=\"jumbotron\">");
+	    out.println("<div class=\"container\">");
+	    out.println("<h1>Welcome "+username+"</h1>");
+	    out.println("<div class=\"row\">");
+		out.println("<div class=\"col-md-4\">");
 		
-		out.println("<div class=\"container\">");
-		out.println("<h1>Welcome "+username+"</h1>");
-		out.println("<h2>Awards:</h2>");
+		// Team panel
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Team "+animal+"</div>");
+		out.println("<center><img src=\""+animalPic+"\" title=\"Team Crest\"></img></center>");
+		out.println("<p>Team "+animal+" has taken "+totalTaken+" quizzes. </p>");
+		out.println("<p>Continue to take quizzes to help your team take the lead.</p>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col 1
+		out.println("<div class=\"col-md-4\">");
+		
+		// Awards panel
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Awards</div>");
 		int check=0;
 		try {
 			if(DB.winningTeam().equals(animal)){
@@ -176,14 +190,13 @@ public class userWelcome extends HttpServlet {
 		if(check==0){
 			out.println("<h4> No awards yet.  To win awards, start taking quizzes, making quizzes, or practicing in quiz practice mode.</h4>");
 		}
-		out.println("<h2>Team Info:</h2>");
-		out.println("<table><tr><td>");
-		if(totalTaken==1){
-			out.println("<img src=\""+animalPic+"\" title=\"Team Crest\"></img></td><td><h3>"+info+"<br> Team "+animal+" has taken a total of "+totalTaken+" quiz. <br> Continue to take quizzes to help your team take the lead.</h3></td></tr></table>");
-		}else{
-			out.println("<img src=\""+animalPic+"\" title=\"Team Crest\"></img></td><td><h3>"+info+"<br> Team "+animal+" has taken a total of "+totalTaken+" quizzes. <br> Continue to take quizzes to help your team take the lead.</h3></td></tr></table>");
-		}
-		out.println("<h2>Notifications:</h2>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col 2
+		out.println("<div class=\"col-md-4\">");
+		
+		// Notifications panel
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Notications</div>");
 		int check2=0;
 		try {
 			int requests = DB.getNumRequests(username);
@@ -221,6 +234,18 @@ public class userWelcome extends HttpServlet {
 		if(check2==0){
 			out.println("<h4>No new notifications at the moment.</h4>");
 		}
+		out.println("</div>"); // Thumbnail
+		out.println("</div>"); // Thumbnail
+		out.println("</div>"); // Col 3
+		out.println("</div>"); // Row 1
+	    out.println("</div>"); // Container
+	    out.println("</div>"); // Jumbotron
+
+
+		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
+
+		out.println("<div class=\"container\">");
+		
 		try {
 			if(DB.isAdmin(username)){
 
@@ -249,12 +274,12 @@ public class userWelcome extends HttpServlet {
 				out.println("</select>");
 				out.println("<input type=\"submit\" value=\"Delete\"><br>"); 
 				out.println("</form></p>");
-				
+
 				int totalUsers=DB.getTotalUsers();
 				out.println("<p><h4>There are "+totalUsers+" users in the database.</h4></p>");
 				int totalQuizzesTaken=DB.getQuizzesTotal();
 				out.println("<p><h4>There have been a total of "+totalQuizzesTaken+" quizzes taken thus far.</h4></p>");
-			
+
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -262,7 +287,7 @@ public class userWelcome extends HttpServlet {
 		}
 		out.println("<h2>Leader Boards and Recent Activity:</h2>");
 		out.println("<div class=\"row\">");
-		
+
 		// Most popular quizzes table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -272,7 +297,7 @@ public class userWelcome extends HttpServlet {
 		ArrayList<Integer> popularQuizzes = null;
 		try {
 			popularQuizzes = DB.getMostPopularQuizzes();
-			
+
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -287,7 +312,7 @@ public class userWelcome extends HttpServlet {
 		}
 		out.println("</table>");
 		out.println("</div></div>"); // Column 1
-		
+
 		// Recently Created Quizzes Table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -297,7 +322,7 @@ public class userWelcome extends HttpServlet {
 		ArrayList<Integer> recentQuizzes = null;
 		try {
 			recentQuizzes = DB.getRecentQuizzes1();
-			
+
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -314,7 +339,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</div></div>"); // Column 2
 		out.println("</div>"); // Row 1
 		out.println("<div class=\"row\">");
-		
+
 		// Your recently taken quizzes table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -326,7 +351,7 @@ public class userWelcome extends HttpServlet {
 		try {
 			takenQuizzes = DB.getTakenQuizzes(username);
 			yourCreatedQuizzes = DB.getYourCreatedQuizzes(username);
-			
+
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
@@ -340,7 +365,7 @@ public class userWelcome extends HttpServlet {
 		}
 		out.println("</table>");
 		out.println("</div></div>"); // Column 1
-		
+
 		// Your recently created quizzes table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -358,6 +383,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</table>");
 		
 		out.println("</div></div>"); // Column 2
+
 		
 		
 		out.println("</div>"); // Row 2
@@ -389,13 +415,18 @@ public class userWelcome extends HttpServlet {
 		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
 		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");
 
+		// Friends
+		out.println("<div class=\"row\">");
+		out.println("<h2>Friends:</h2>");
 		
-		
-
-		out.println("<h2>Your Recent Messages:</h2>");
+		// Messaging Column
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Messaging</div>");
+		out.println("<b>Recent messages</b><br>");
 		ArrayList<Message> ml = DB.getMessages(username);
 		if(ml.size()!=0){
-		out.println("<table style=\"width:500px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
+		out.println("<table class=\"table\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
 
 		for(int i = 0; i < ml.size(); ++i){
 			//make it limited size and scrolling 
@@ -406,19 +437,27 @@ public class userWelcome extends HttpServlet {
 
 			}
 		}
-		out.println("</table>");
-		out.println("<table><tr><td>");
-		out.println("<h4> View all messages here:</h4></td>");
-		out.println("<td><a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a></td></tr></table>");
+		out.println("</table><br>");
 		}else{
 			out.println("<h4>You have no recent messages. </h4>");
 		}
-		out.println("<div id=\"challenges\">");
-		out.println("<h2>Pending Challenges:</h2>");
+		out.println("<b>View all messages:</b><br>");
+		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br>");
+		out.println("<b>Send messages:</b><br>");
+		out.println("<a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a><br><br>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col
+		
+		// Challenges Column
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Challenges</div>");
+		out.println("<b>Pending challenges:</b><br>");
+		
 		if (numChallenges == 0){
-			out.println("<h4>You have no pending challenges. </h4>");
+			out.println("You have no pending challenges.");
 		}else{
-			out.println("<table style=\"width:500px\"><tr><th>Challenger</th><th>Quiz</th><th>Date</th><th>Take Quiz</th></tr>");
+			out.println("<table class=\"table\"><tr><th>Challenger</th><th>Quiz</th><th>Date</th><th>Take Quiz</th></tr>");
 			for (int i = 0; i < pendingChallenges.size(); ++i){
 				Challenge c = pendingChallenges.get(i);
 				String challenger = c.getChallenger();
@@ -428,9 +467,49 @@ public class userWelcome extends HttpServlet {
 				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
 
 			}
+			out.println("</table><br>");
 		}
+		out.println("<b>Send a challenge:</b><br>");
+		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
+		out.println("<div class=\"input-group\">");
+		out.println("<span class=\"input-group-addon\">Enter a username:</span>");
+		out.println("<input type=\"text\" name=\"userName\" class=\"form-control\"><br>");
+		out.println("</div><br>");
+		out.println("Select a Quiz:");
+		out.println("<br>");
+		out.println("<select name=\"quizID\">");
+		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+		for(int i=0;i<allQuizzes.size();i++){
+			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
+		}
+		out.println("</select><br><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Send Challenge</button><br>"); 
+		out.println("</form><br>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col
+		
+		// Find friends Column
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Find Friends</div>");
+		out.println("<br><form action=\"FriendRequest\" METHOD=\"post\">");
+		out.println("<div class=\"input-group\">");
+		out.println("<span class=\"input-group-addon\">Enter a username:</span>");
+		out.println("<input type=\"text\" name=\"userName\" class=\"form-control\">");
+		out.println("</div><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
+		out.println("</form>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col
+		out.println("</div>"); // Row
+		
+		out.println("<div class=\"row\">");
+		
+		out.println("<a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a>");
+		
 		out.println("</div>");
-		out.println("</div>");
+		out.println("</div>"); // Row
+		out.println("</div>"); // Container
 		out.println("</body>");
 		out.println("</html>");
 
