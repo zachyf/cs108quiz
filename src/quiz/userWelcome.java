@@ -115,26 +115,26 @@ public class userWelcome extends HttpServlet {
 		            out.println("if (xmlhttp.status == 200) {");
 		            out.println("document.getElementById(\"message1\").innerHTML = xmlhttp.responseText;}else{");
 		            out.println("alert(\"problem\");}}};");   
-		    out.println("xmlhttp.send(null);}</script>");
-		    
+		    out.println("xmlhttp.send(null);}</script>");        
 		// Nav bar html
 		out.println("<div class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">");
 		out.println("<div class=\"container\"><div class=\"navbar-header\">");
 		out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">");
 		out.println("<span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span>");
 		out.println("</button>");
-		out.println("<a class=\"navbar-brand\" href=\"userWelcome\">Quiz Mania!</a>");
+		out.println("<a class=\"navbar-brand\" href=\"HomepageBootstrap.jsp\">Quiz Mania!</a>");
 		out.println("</div><div class=\"navbar-collapse collapse\">");
+
 		out.println("<ul class=\"nav navbar-nav\">");
-		out.println("<li><a href=\"userWelcome\">Home</a></li>");
-		out.println("<li><a href=\"quizPerformanceSummary\">My Quiz History</a></li>");
-		out.println("<li><a href=\"createQuiz.html\">Create Quiz</a></li>");
-		out.println("<li><a href=\"logout\">Logout</a></li>");
+		out.println("<li><a href=\"userWelcome\">Home <span class=\"glyphicon glyphicon-home\"></span></a></li>");
+		out.println("<li><a href=\"quizPerformanceSummary\">My Quiz History <span class=\"glyphicon glyphicon-th-list\"></a></li>");
+		out.println("<li><a href=\"createQuiz.html\">Create Quiz <span class=\"glyphicon glyphicon-pencil\"></a></li>");
+		out.println("<li><a href=\"logout\">Logout <span class=\"glyphicon glyphicon-off\"></a></li>");
 		out.println("</ul>");
 		out.println("<form action=\"SearchQuizzesServlet\" method=\"GET\" class=\"navbar-form navbar-right\" role=\"form\">");
 		out.println("<div class=\"form-group\">");
 		out.println("<input name=\"search\" type=\"text\" placeholder=\"Search Quizzes...\" class=\"form-control\">");
-		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search</button>");
+		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search <span class=\"glyphicon glyphicon-search\"></button>");
 		out.println("</form>");
 		out.println("</div></div></div>");
 
@@ -201,7 +201,24 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col 2
 		out.println("<div class=\"col-md-4\">");
+		
+		//Announcements
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Announcements</div>");
+		ArrayList<Announcement> ann = DB.getAnnouncements();
+		if (ann.size() == 0){
+			out.println("<h4>No recent announcements.</h4>");
+		}else{
+			for (int i = 0; i < ann.size(); ++i){
+				if (i == 5) 
+					break;
+				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
+				out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
 
+			}
+		}
+	    out.println("</div>"); // panel
+		
 		// Notifications panel
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Notications</div>");
@@ -249,27 +266,9 @@ public class userWelcome extends HttpServlet {
 	    out.println("</div>"); // Container
 	    out.println("</div>"); // Jumbotron
 
-	    
-
-		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
 
 		out.println("<div class=\"container\">");
-		//Announcements
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Announcements</div>");
-		ArrayList<Announcement> ann = DB.getAnnouncements();
-		if (ann.size() == 0){
-			out.println("<h4>No recent announcements.</h4>");
-		}else{
-			for (int i = 0; i < ann.size(); ++i){
-				if (i == 5) 
-					break;
-				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
-				out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
 
-			}
-		}
-	    out.println("</div>"); // panel
 	    
 		try {
 			if(DB.isAdmin(username)){
@@ -415,7 +414,7 @@ public class userWelcome extends HttpServlet {
 		// Your recently created quizzes table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Your Recently Taken Quizzes</div>");
+		out.println("<div class=\"panel-heading\">Your Recently Created Quizzes</div>");
 		out.println("<table class=\"table\">");
 		out.println("<tr>");
 		for(int i=0; i<yourCreatedQuizzes.size();i++){
@@ -430,10 +429,6 @@ public class userWelcome extends HttpServlet {
 
 		out.println("</div></div>"); // Column 2
 
-
-
-		out.println("</div>"); // Row 2
-		out.println("<h4> View Your Entire Quiz History Here. <a href=\"quizPerformanceSummary\"><img src=\"quizPerformance.jpg\"></img></a></h4>");
 
 		out.println("<h2>Explore:</h2>");
 
@@ -480,12 +475,33 @@ public class userWelcome extends HttpServlet {
 		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
 		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");
 
+		out.println("</div>"); // Row 2
+
 		// Friends
 		out.println("<div class=\"row\">");
 		out.println("<h2>Friends:</h2>");
-
+		out.println("<b>Find Friends</b></br>");
+		out.println("<br><form action=\"FriendRequest\" METHOD=\"post\">");
+		out.println("<div class=\"input-group\">");
+		out.println("Select a user:");
+		out.println("<select name=\"userName\">");
+		ArrayList<String> userNamesF2 = DB.getAllUsers();
+		for(int i=0;i<userNamesF2.size();i++){
+			try {
+				if (!DB.alreadyFriends(username, userNamesF2.get(i)) && !username.equals(userNamesF2.get(i))){
+					out.println("<option value=\""+userNamesF2.get(i)+"\">" + userNamesF2.get(i) +"</option>");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		out.println("</select><br>");
+		out.println("</div><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
+		out.println("</form><br>");
 		// Messaging Column
-		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Messaging</div>");
 		out.println("<b>Recent messages</b><br>");
@@ -514,7 +530,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Col
 
 		// Challenges Column
-		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Challenges</div>");
 		out.println("<b>Pending challenges:</b><br>");
@@ -560,20 +576,20 @@ public class userWelcome extends HttpServlet {
 		out.println("</form><br>");
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
-
+		
 		// Find friends Column
 		out.println("<div class=\"col-md-4\">");
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Find Friends</div>");
 		out.println("<br><form action=\"FriendRequest\" METHOD=\"post\">");
 		out.println("<div class=\"input-group\">");
-		out.println("Select a user:");
+		out.println("Select a user you're not friends with:");
 		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesF2 = DB.getAllUsers();
+		ArrayList<String> userNamesF3 = DB.getAllUsers();
 		for(int i=0;i<userNamesF2.size();i++){
 			try {
-				if (!DB.alreadyFriends(username, userNamesF2.get(i)) && !username.equals(userNamesF2.get(i))){
-					out.println("<option value=\""+userNamesF2.get(i)+"\">" + userNamesF2.get(i) +"</option>");
+				if (!DB.alreadyFriends(username, userNamesF3.get(i)) && !username.equals(userNamesF3.get(i))){
+					out.println("<option value=\""+userNamesF3.get(i)+"\">" + userNamesF3.get(i) +"</option>");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -585,12 +601,36 @@ public class userWelcome extends HttpServlet {
 		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
 		out.println("</form>");
 		out.println("</div>"); // Panel
+		
+		// Remove friends Column
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Unfriend</div>");
+		out.println("<br><form action=\"Unfriend\" METHOD=\"post\">");
+		out.println("<div class=\"input-group\">");
+		out.println("Select a user you're friends with:");
+		out.println("<select name=\"userName\">");
+		ArrayList<String> userNamesU = DB.getAllUsers();
+		for(int i=0;i<userNamesU.size();i++){
+			try {
+				if (DB.alreadyFriends(username, userNamesU.get(i)) && !username.equals(userNamesU.get(i))){
+					out.println("<option value=\""+userNamesU.get(i)+"\">" + userNamesU.get(i) +"</option>");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		out.println("</select><br>");
+		out.println("</div><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Remove Friend</button><br>"); 
+		out.println("</form>");
+		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
+
 		out.println("</div>"); // Row
 
 		out.println("<div class=\"row\">");
-
-		out.println("<a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a>");
 
 		out.println("</div>");
 		out.println("</div>"); // Row
