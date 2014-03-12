@@ -224,7 +224,7 @@ public class userWelcome extends HttpServlet {
 		try {
 			if(DB.isAdmin(username)){
 
-				out.println("<h2>Admin Priviledges:</h2>");
+				out.println("<h2>Admin Privileges:</h2>");
 				out.println();
 				out.println("<p><h4>Remove A User from the Database</h4>");
 				out.println("Enter the User You Wish to Remove:");
@@ -352,15 +352,16 @@ public class userWelcome extends HttpServlet {
 			int ip=i+1;
 			out.println("<tr>");
 			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
-			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"></img></a></td>");
 			out.println("</tr>");
 		}
 		out.println("</table>");
+		
 		out.println("</div></div>"); // Column 2
 		
 		
 		out.println("</div>"); // Row 2
-
+		out.println("<h4> View Your Entire Quiz History Here. <a href=\"quizPerformanceSummary\"><img src=\"quizPerformance.jpg\"></img></a></h4>");
 
 		out.println("<h2>Explore:</h2>");
 
@@ -380,7 +381,7 @@ public class userWelcome extends HttpServlet {
 		out.println("<select name=\"quizID\">");
 		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
 		for(int i=0;i<allQuizzes.size();i++){
-			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
+			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
 		}
 		out.println("</select><br>");
 		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>"); 

@@ -159,13 +159,20 @@ public class userPage extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	
+		
 		out.println("</td><td><h4>Challenge "+username+":</h4>");
 		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
 		out.println("<input type=\"hidden\" name=\"userName\" value=\""+username+"\"><br>");
-		out.println("Enter a Quiz Name:");
-		out.println("<br>");
-		out.println("<input type=\"text\" name=\"quizName\"><br>");
+		out.println("<select name=\"quizID\">");
+		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+		for(int i=0;i<allQuizzes.size();i++){
+			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
+		}
+		out.println("</select><br>");
 		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>");
+		out.println("</form>");
 		out.println("</td><td><h4>Message "+username+":</h4>");
 		out.println("<a href=\"NewMessage.jsp?user=" + loggedInUser + "&to="+username+"\"><img src=\"Message.png\" title=\"Click to Message "+username+"\"></img></a></td></tr></table>");
 	
