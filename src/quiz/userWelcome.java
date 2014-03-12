@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.sun.xml.internal.ws.api.server.Container;
 
 
 
@@ -478,7 +477,6 @@ public class userWelcome extends HttpServlet {
 		out.println("Select a Quiz:");
 		out.println("<br>");
 		out.println("<select name=\"quizID\">");
-		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
 		for(int i=0;i<allQuizzes.size();i++){
 			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
 		}
