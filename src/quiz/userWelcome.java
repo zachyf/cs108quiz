@@ -136,6 +136,8 @@ public class userWelcome extends HttpServlet {
 	    out.println("<h1>Welcome "+username+"</h1>");
 	    out.println("<div class=\"row\">");
 		out.println("<div class=\"col-md-4\">");
+		
+		// Team panel
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Team "+animal+"</div>");
 		out.println("<center><img src=\""+animalPic+"\" title=\"Team Crest\"></img></center>");
@@ -144,6 +146,8 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col 1
 		out.println("<div class=\"col-md-4\">");
+		
+		// Awards panel
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Awards</div>");
 		int check=0;
@@ -157,9 +161,6 @@ public class userWelcome extends HttpServlet {
 			e2.printStackTrace();
 		}
 		try {
-			out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
-			out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
-			out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
 			if(DB.practiced(username)==true){
 				out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
 				check+=1;
@@ -192,6 +193,8 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col 2
 		out.println("<div class=\"col-md-4\">");
+		
+		// Notifications panel
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Notications</div>");
 		int check2=0;
@@ -410,7 +413,7 @@ public class userWelcome extends HttpServlet {
 			out.println("<h4>You have no recent messages. </h4>");
 		}
 		out.println("<b>View all messages:</b><br>");
-		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a>");
+		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br>");
 		out.println("<b>Send messages:</b><br>");
 		out.println("<a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a><br><br>");
 		out.println("</div>"); // Panel
