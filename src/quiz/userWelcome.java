@@ -235,8 +235,8 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Thumbnail
 		out.println("</div>"); // Col 3
 		out.println("</div>"); // Row 1
-	    	out.println("</div>"); // Container
-	    	out.println("</div>"); // Jumbotron
+	    out.println("</div>"); // Container
+	    out.println("</div>"); // Jumbotron
 
 
 		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
@@ -383,9 +383,71 @@ public class userWelcome extends HttpServlet {
 
 		out.println("</div>"); // Row 2
 
+		// Friends
+		out.println("<div class=\"row\">");
+		out.println("<h2>Friends:</h2>");
+		
+		// Messaging Column
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Messaging</div>");
+		out.println("<b>Send messages:</b><br>");
+		out.println("<a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a><br><br>");
+		out.println("<b>Recent messages</b><br>");
+		ArrayList<Message> ml = DB.getMessages(username);
+		if(ml.size()!=0){
+		out.println("<table class=\"table\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
 
-		out.println("<h2>Explore:</h2>");
+		for(int i = 0; i < ml.size(); ++i){
+			//make it limited size and scrolling 
+			String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format( ml.get(i).getSentTime());
+			if(i<5){
 
+				out.println("<tr><td><a href=\"userPage?ID=" + ml.get(i).getTo() + "\">"+ ml.get(i).getTo() +"</a></td><td>" + ml.get(i).getSubject() + "</td><td>" + date + "</td><td>" + ml.get(i).getMessage() + "</td></tr>");
+
+			}
+		}
+		out.println("</table><br>");
+		out.println("<b>View all messages:</b><br>");
+		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a>");
+		}else{
+			out.println("<h4>You have no recent messages. </h4>");
+		}
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col
+		
+		// Challenges Column
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Challenges</div>");
+		out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
+		out.println("<div class=\"input-group input-group-lg\">");
+		out.println("<span class=\"input-group-addon\">Enter a username:</span>");
+		out.println("<input type=\"text\" name=\"userName\" class=\"form-control\">");
+		out.println("</div><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
+		out.println("</form>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col
+		
+		// Find friends Column
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Find Friends</div>");
+		out.println("<br><form action=\"FriendRequest\" METHOD=\"post\">");
+		out.println("<div class=\"input-group input-group-lg\">");
+		out.println("<span class=\"input-group-addon\">Enter a username:</span>");
+		out.println("<input type=\"text\" name=\"userName\" class=\"form-control\">");
+		out.println("</div><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
+		out.println("</form>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col
+		out.println("</div>"); // Row
+		
+		out.println("<div class=\"row\">");
+		
+		
 		out.println("<table><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
 		out.println("<tr><td>");
 		out.println("Enter A User Name:");
@@ -412,9 +474,8 @@ public class userWelcome extends HttpServlet {
 
 
 
-
 		out.println("<h2>Your Recent Messages:</h2>");
-		ArrayList<Message> ml = DB.getMessages(username);
+		ml = DB.getMessages(username);
 		if(ml.size()!=0){
 		out.println("<table style=\"width:500px\"><tr><th>From</th><th>Subject</th><th>Time</th>\n\t<th>Note</th>\n</tr>");
 
@@ -451,7 +512,8 @@ public class userWelcome extends HttpServlet {
 			}
 		}
 		out.println("</div>");
-		out.println("</div>");
+		out.println("</div>"); // Row
+		out.println("</div>"); // Container
 		out.println("</body>");
 		out.println("</html>");
 
