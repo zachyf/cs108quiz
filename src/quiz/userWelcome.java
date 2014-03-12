@@ -126,15 +126,15 @@ public class userWelcome extends HttpServlet {
 		out.println("<a class=\"navbar-brand\" href=\"userWelcome\">Quiz Mania!</a>");
 		out.println("</div><div class=\"navbar-collapse collapse\">");
 		out.println("<ul class=\"nav navbar-nav\">");
-		out.println("<li><a href=\"userWelcome\">Home</a></li>");
-		out.println("<li><a href=\"quizPerformanceSummary\">My Quiz History</a></li>");
-		out.println("<li><a href=\"createQuiz.html\">Create Quiz</a></li>");
-		out.println("<li><a href=\"logout\">Logout</a></li>");
+		out.println("<li><a href=\"userWelcome\">Home <span class=\"glyphicon glyphicon-home\"></span></a></li>");
+		out.println("<li><a href=\"quizPerformanceSummary\">My Quiz History <span class=\"glyphicon glyphicon-th-list\"></a></li>");
+		out.println("<li><a href=\"createQuiz.html\">Create Quiz <span class=\"glyphicon glyphicon-pencil\"></a></li>");
+		out.println("<li><a href=\"logout\">Logout <span class=\"glyphicon glyphicon-off\"></a></li>");
 		out.println("</ul>");
 		out.println("<form action=\"SearchQuizzesServlet\" method=\"GET\" class=\"navbar-form navbar-right\" role=\"form\">");
 		out.println("<div class=\"form-group\">");
 		out.println("<input name=\"search\" type=\"text\" placeholder=\"Search Quizzes...\" class=\"form-control\">");
-		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search</button>");
+		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search <span class=\"glyphicon glyphicon-search\"></button>");
 		out.println("</form>");
 		out.println("</div></div></div>");
 
@@ -412,7 +412,7 @@ public class userWelcome extends HttpServlet {
 		// Your recently created quizzes table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Your Recently Taken Quizzes</div>");
+		out.println("<div class=\"panel-heading\">Your Recently Created Quizzes</div>");
 		out.println("<table class=\"table\">");
 		out.println("<tr>");
 		for(int i=0; i<yourCreatedQuizzes.size();i++){

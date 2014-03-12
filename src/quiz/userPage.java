@@ -94,16 +94,70 @@ public class userPage extends HttpServlet {
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<meta charset=\"UTF-8\" />");
+		out.println("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
+		out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+		out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\">");
+		out.println("<link href=\"bootstrap/css/bootstrap-theme.min.css\" rel=\"stylesheet\">");
+		out.println("<link href=\"css/jumbotron.css\" rel=\"stylesheet\">");
 		out.println("<title> Welcome to "+username+"'s Profile</title>");
 		out.println("</head>");
 		out.println("<body>");
-		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
-		out.println("<h1>Welcome to "+username+"'s Profile</h1>");
-		out.println("<h2>Awards:</h2>");
+		
+		// Nav bar html
+		out.println("<div class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">");
+		out.println("<div class=\"container\"><div class=\"navbar-header\">");
+		out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">");
+		out.println("<span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span>");
+		out.println("</button>");
+		out.println("<a class=\"navbar-brand\" href=\"userWelcome\">Quiz Mania!</a>");
+		out.println("</div><div class=\"navbar-collapse collapse\">");
+		out.println("<ul class=\"nav navbar-nav\">");
+		out.println("<li><a href=\"userWelcome\">Home <span class=\"glyphicon glyphicon-home\"></span></a></li>");
+		out.println("<li><a href=\"quizPerformanceSummary\">My Quiz History <span class=\"glyphicon glyphicon-th-list\"></a></li>");
+		out.println("<li><a href=\"createQuiz.html\">Create Quiz <span class=\"glyphicon glyphicon-pencil\"></a></li>");
+		out.println("<li><a href=\"logout\">Logout <span class=\"glyphicon glyphicon-off\"></a></li>");
+		out.println("</ul>");
+		out.println("<form action=\"SearchQuizzesServlet\" method=\"GET\" class=\"navbar-form navbar-right\" role=\"form\">");
+		out.println("<div class=\"form-group\">");
+		out.println("<input name=\"search\" type=\"text\" placeholder=\"Search Quizzes...\" class=\"form-control\">");
+		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search <span class=\"glyphicon glyphicon-search\"></button>");
+		out.println("</form>");
+		out.println("</div></div></div>");		
+		
+		// Jumbotron html
+	    out.println("<div class=\"jumbotron\">");
+	    out.println("<div class=\"container\">");
+	    out.println("<h1>Welcome to "+username+"'s Profile</h1>");
+	    try {
+			if(DB.alreadyFriends(username, loggedInUser)){
+				out.println("<h4> You and "+username+" are friends.</h4><br>");
+			}else{
+				out.println("<h4> Add "+username+" as a friend <a href=\"FriendRequest?userName="+username+"\"><img src=\"acceptButton.jpg\" title=\"Add Friend\"></img></a><br>");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    out.println("<div class=\"row\">");
+		out.println("<div class=\"col-md-4\">");
+
+		// Team panel
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Team "+animal+"</div>");
+		out.println("<center><img src=\""+animalPic+"\" title=\"Team Crest\"></img></center>");
+		out.println("<p>"+info+"</p>");
+		out.println("<p>Team "+animal+" has taken "+totalTaken+" quizzes. </p>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col 1
+		out.println("<div class=\"col-md-4\">");
+
+		// Awards panel
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Awards</div>");
 		int check=0;
 		try {
 			if(DB.winningTeam().equals(animal)){
-				out.print("<img src=\"LionAward.png\" title=\""+username+"'s Team is in 1st Place. \"><img>");
+				out.print("<img src=\"LionAward.png\" title=\"Your Team is in 1st Place. \"><img>");
 				check+=1;
 			}
 		} catch (SQLException e2) {
@@ -138,15 +192,41 @@ public class userPage extends HttpServlet {
 			e.printStackTrace();
 		}
 		if(check==0){
-			out.println("<h4>"+username+" has not won any awards yet.</h4>");
+			out.println("<h4> No awards yet.  To win awards, start taking quizzes, making quizzes, or practicing in quiz practice mode.</h4>");
 		}
-		out.println("<h2>Team Info:</h2>");
-		out.println("<table><tr><td>");
-		if(totalTaken==1){
-			out.println("<img src=\""+animalPic+"\" title=\"Team Crest\"></img></td><td><h3>"+info+"<br> Team "+animal+" has taken a total of "+totalTaken+" quiz. <br> </h3></td></tr></table>");
-		}else{
-			out.println("<img src=\""+animalPic+"\" title=\"Team Crest\"></img></td><td><h3>"+info+"<br> Team "+animal+" has taken a total of "+totalTaken+" quizzes. <br> </h3></td></tr></table>");
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col 2
+		
+		// Interact panel
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Interact with "+username+"</div>");
+		out.println("<table class=\"table\"><tr><td>");
+		out.println("</td><td><h4>Challenge "+username+":</h4>");
+		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
+		out.println("<input type=\"hidden\" name=\"userName\" value=\""+username+"\"><br>");
+		out.println("<select name=\"quizID\">");
+		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+		for(int i=0;i<allQuizzes.size();i++){
+			out.println("<option class=\"dropdown-menu\" value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
 		}
+		out.println("</select><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Send Challenge</button><br>"); 
+		out.println("</form>");
+		out.println("</td><td><h4>Message "+username+":</h4>");
+		out.println("<a href=\"NewMessage.jsp?user=" + loggedInUser + "&to="+username+"\"><img src=\"Message.png\" title=\"Click to Message "+username+"\"></img></a></td></tr></table>");
+		
+		out.println("</div>"); // Panel
+		out.println("</div>"); // Col 1
+		
+		out.println("</div>"); // Row 1
+	    out.println("</div>"); // Container
+	    out.println("</div>"); // Jumbotron
+		
+	    out.println("<div class=\"container\">");
+		
+		
+		
 		out.println("<h2>Interact with "+username+":</h2>");
 		out.println("<table><tr><td>");
 		try {
@@ -166,7 +246,7 @@ public class userPage extends HttpServlet {
 		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
 		out.println("<input type=\"hidden\" name=\"userName\" value=\""+username+"\"><br>");
 		out.println("<select name=\"quizID\">");
-		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+		allQuizzes = DB.getAllQuizzes();
 		for(int i=0;i<allQuizzes.size();i++){
 			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
 		}
@@ -177,31 +257,18 @@ public class userPage extends HttpServlet {
 		out.println("<a href=\"NewMessage.jsp?user=" + loggedInUser + "&to="+username+"\"><img src=\"Message.png\" title=\"Click to Message "+username+"\"></img></a></td></tr></table>");
 	
 		out.println("<h2>Leader Boards and Recent Activity:</h2>");
-		out.println("<table>");
-		out.println("<tr><th><h4>Most Popular Quizzes:</h4></th><th><h4>Recently Created Quizzes:</h4></th>");
-		ArrayList<Integer> takenQuizzes = null;
-		ArrayList<Integer> yourCreatedQuizzes = null;
-		try {
-			takenQuizzes = DB.getTakenQuizzes(username);
-			yourCreatedQuizzes = DB.getYourCreatedQuizzes(username);
-			
-		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		
-		if(takenQuizzes.size()!=0){
-			out.println("<th><h4>"+username+"'s Recently Taken Quizzes:</h4></th>");
-		}
-		if(yourCreatedQuizzes.size()!=0){
-			out.println("<th><h4>"+username+"'s Recently Created Quizzes:</h4></th>");
-		}
-		out.println("</tr><tr><td>");
-		
+		out.println("<div class=\"row\">");
+
+		// Most popular quizzes table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Most Popular Quizzes</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
 		ArrayList<Integer> popularQuizzes = null;
 		try {
 			popularQuizzes = DB.getMostPopularQuizzes();
-			
+
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -209,15 +276,24 @@ public class userPage extends HttpServlet {
 		for(int i=0; i<popularQuizzes.size();i++){
 			int index = popularQuizzes.get(i);
 			int ip=i+1;
-			out.println(ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a>");
-			out.println("<a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a><br>");
+			out.println("<tr>");
+			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
+			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("</tr>");
 		}
-		out.println("</td><td>");
+		out.println("</table>");
+		out.println("</div></div>"); // Column 1
 
+		// Recently Created Quizzes Table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Recently Created Quizzes</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
 		ArrayList<Integer> recentQuizzes = null;
 		try {
 			recentQuizzes = DB.getRecentQuizzes1();
-			
+
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -225,36 +301,63 @@ public class userPage extends HttpServlet {
 		for(int i=0; i<recentQuizzes.size();i++){
 			int index = recentQuizzes.get(i);
 			int ip=i+1;
-			out.println(ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a>");
-			out.println("<a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a><br>");
+			out.println("<tr>");
+			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
+			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("</tr>");
 		}
-		out.println("</td>");
-		
-		if(takenQuizzes!=null){
-			out.println("<td>");
-			for(int i=0; i<takenQuizzes.size();i++){
-				int index = takenQuizzes.get(i);
-				int ip=i+1;
-				out.println(ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a>");
-				out.println("<a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a><br>");
-			}
-			out.println("</td>");
-		}
-		if(yourCreatedQuizzes!=null){
-			out.println("<td>");
-			for(int i=0; i<yourCreatedQuizzes.size();i++){
-				int index = yourCreatedQuizzes.get(i);
-				int ip=i+1;
-				out.println(ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a>");
-				out.println("<a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a><br>");
-			}
-			out.println("</td>");
-		}
-		out.println("</tr></table>");
-	
+		out.println("</table>");
+		out.println("</div></div>"); // Column 2
+		out.println("</div>"); // Row 1
+		out.println("<div class=\"row\">");
 
+		// Users recently taken quizzes table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">"+username+"'s Recently Taken Quizzes</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
+		ArrayList<Integer> takenQuizzes = null;
+		ArrayList<Integer> yourCreatedQuizzes = null;
+		try {
+			takenQuizzes = DB.getTakenQuizzes(username);
+			yourCreatedQuizzes = DB.getYourCreatedQuizzes(username);
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		for(int i=0; i<takenQuizzes.size();i++){
+			int index = takenQuizzes.get(i);
+			int ip=i+1;
+			out.println("<tr>");
+			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
+			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("</tr>");
+		}
+		out.println("</table>");
+		out.println("</div></div>"); // Column 1
+
+		// Users Recently created quizzes table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">"+username+"'s Recently Created Quizzes</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
+		for(int i=0; i<yourCreatedQuizzes.size();i++){
+			int index = yourCreatedQuizzes.get(i);
+			int ip=i+1;
+			out.println("<tr>");
+			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
+			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"></img></a></td>");
+			out.println("</tr>");
+		}
+		out.println("</table>");
+
+		out.println("</div></div>"); // Column 2
+		out.println("</div>"); 		 // Row
+	
+		out.println("</div>"); // Container
 		out.println("<br>");
-		out.println("<br><a href=\"userWelcome\"><img src=\"home.jpg\" title=\"Return Home \"></img></a>");
 		out.println("</body>");
 		out.println("</html>");
 

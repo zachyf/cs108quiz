@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="quiz.*" %>
-<%@ page import="java.util.*, quiz/*" %>
+<%@ page import="java.util.*, quiz.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <% String quizID = request.getParameter("id"); 
@@ -48,11 +48,17 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
       <a class="navbar-brand" href="HomepageBootstrap.jsp">Quiz Mania!</a>
     </div>
     <div class="navbar-collapse collapse">
-      <form class="navbar-form navbar-right" role="form">
+      <ul class="nav navbar-nav">
+      <li><a href="userWelcome">Home <span class="glyphicon glyphicon-home"></a></li>
+      <li><a href="quizPerformanceSummary">My Quiz History <span class="glyphicon glyphicon-th-list"></a></li>
+      <li><a href="createQuiz.html">Create Quiz <span class="glyphicon glyphicon-pencil"></a></li>
+      <li><a href="logout">Logout <span class="glyphicon glyphicon-off"></a></li>
+      </ul>
+      <form action="SearchQuizzesServlet" method="GET" class="navbar-form navbar-right" role="form">
         <div class="form-group">
-          <input type="text" placeholder="Search Quizzes..." class="form-control">
+          <input name="search" type="text" placeholder="Search Quizzes..." class="form-control">
         </div>
-        <button type="submit" class="btn btn-success">Search</button>
+        <button type="submit" class="btn btn-success">Search <span class="glyphicon glyphicon-search"></button>
       </form>
     </div><!--/.navbar-collapse -->
   </div>
@@ -76,8 +82,8 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 				<%
 				if(session.getAttribute("name") != null){
 					ArrayList<ArrayList<Object>> myRecentPerformance = db.getMyRecentPerformance(username, quiz.getID());
+					out.println("<div class=\"panel-heading\">My Recent Scores</div>");
 					if(myRecentPerformance.size() > 0){
-						out.println("<div class=\"panel-heading\">My Recent Scores</div>");
 						out.println("<table class=\"table\">");
 						out.println("<tr>");
 						out.println("<th>Rank</th>");
@@ -95,6 +101,8 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 							out.println("</tr>");
 						}
 						out.println("</table>");
+					} else {
+						out.println("You have not taken this quiz yet");
 					}
 				}
 				%>
