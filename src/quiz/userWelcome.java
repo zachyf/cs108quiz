@@ -268,22 +268,7 @@ public class userWelcome extends HttpServlet {
 
 
 		out.println("<div class=\"container\">");
-		//Announcements
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Announcements</div>");
-		ArrayList<Announcement> ann = DB.getAnnouncements();
-		if (ann.size() == 0){
-			out.println("<h4>No recent announcements.</h4>");
-		}else{
-			for (int i = 0; i < ann.size(); ++i){
-				if (i == 5) 
-					break;
-				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
-				out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
 
-			}
-		}
-	    out.println("</div>"); // panel
 	    
 		try {
 			if(DB.isAdmin(username)){
@@ -600,11 +585,11 @@ public class userWelcome extends HttpServlet {
 		out.println("<div class=\"input-group\">");
 		out.println("Select a user:");
 		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesF2 = DB.getAllUsers();
+		ArrayList<String> userNamesF3 = DB.getAllUsers();
 		for(int i=0;i<userNamesF2.size();i++){
 			try {
-				if (!DB.alreadyFriends(username, userNamesF2.get(i)) && !username.equals(userNamesF2.get(i))){
-					out.println("<option value=\""+userNamesF2.get(i)+"\">" + userNamesF2.get(i) +"</option>");
+				if (!DB.alreadyFriends(username, userNamesF3.get(i)) && !username.equals(userNamesF3.get(i))){
+					out.println("<option value=\""+userNamesF3.get(i)+"\">" + userNamesF3.get(i) +"</option>");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
