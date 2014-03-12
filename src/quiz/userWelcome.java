@@ -115,20 +115,28 @@ public class userWelcome extends HttpServlet {
 		            out.println("if (xmlhttp.status == 200) {");
 		            out.println("document.getElementById(\"message1\").innerHTML = xmlhttp.responseText;}else{");
 		            out.println("alert(\"problem\");}}};");   
-		    out.println("xmlhttp.send(null);}</script>");        
+		    out.println("xmlhttp.send(null);}</script>");
+		    
 		// Nav bar html
 		out.println("<div class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">");
 		out.println("<div class=\"container\"><div class=\"navbar-header\">");
 		out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">");
 		out.println("<span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span>");
 		out.println("</button>");
-		out.println("<a class=\"navbar-brand\" href=\"HomepageBootstrap.jsp\">Quiz Mania!</a>");
+		out.println("<a class=\"navbar-brand\" href=\"userWelcome\">Quiz Mania!</a>");
 		out.println("</div><div class=\"navbar-collapse collapse\">");
-		out.println("<form class=\"navbar-form navbar-right\" role=\"form\">");
+		out.println("<ul class=\"nav navbar-nav\">");
+		out.println("<li><a href=\"userWelcome\">Home</a></li>");
+		out.println("<li><a href=\"quizPerformanceSummary\">My Quiz History</a></li>");
+		out.println("<li><a href=\"createQuiz.html\">Create Quiz</a></li>");
+		out.println("<li><a href=\"logout\">Logout</a></li>");
+		out.println("</ul>");
+		out.println("<form action=\"SearchQuizzesServlet\" method=\"GET\" class=\"navbar-form navbar-right\" role=\"form\">");
 		out.println("<div class=\"form-group\">");
-		out.println("<input type=\"text\" placeholder=\"Search Quizzes...\" class=\"form-control\">");
+		out.println("<input name=\"search\" type=\"text\" placeholder=\"Search Quizzes...\" class=\"form-control\">");
 		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search</button>");
-		out.println("</form></div></div></div>");
+		out.println("</form>");
+		out.println("</div></div></div>");
 
 		// Jumbotron html
 	    out.println("<div class=\"jumbotron\">");
@@ -136,7 +144,7 @@ public class userWelcome extends HttpServlet {
 	    out.println("<h1>Welcome "+username+"</h1>");
 	    out.println("<div class=\"row\">");
 		out.println("<div class=\"col-md-4\">");
-		
+
 		// Team panel
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Team "+animal+"</div>");
@@ -146,7 +154,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col 1
 		out.println("<div class=\"col-md-4\">");
-		
+
 		// Awards panel
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Awards</div>");
@@ -193,24 +201,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col 2
 		out.println("<div class=\"col-md-4\">");
-		
-		//Announcements
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Announcements</div>");
-		ArrayList<Announcement> ann = DB.getAnnouncements();
-		if (ann.size() == 0){
-			out.println("<h4>No recent announcements.</h4>");
-		}else{
-			for (int i = 0; i < ann.size(); ++i){
-				if (i == 5) 
-					break;
-				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
-				out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
 
-			}
-		}
-	    out.println("</div>"); // panel
-		
 		// Notifications panel
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Notications</div>");
@@ -258,11 +249,28 @@ public class userWelcome extends HttpServlet {
 	    out.println("</div>"); // Container
 	    out.println("</div>"); // Jumbotron
 
+	    
 
 		out.println("<a href=\"logout\" align=\"right\"><img src=\"logout.jpg\" title=\"Click to Logout\" align=\"right\"></img></a>");
 
 		out.println("<div class=\"container\">");
-		
+		//Announcements
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Announcements</div>");
+		ArrayList<Announcement> ann = DB.getAnnouncements();
+		if (ann.size() == 0){
+			out.println("<h4>No recent announcements.</h4>");
+		}else{
+			for (int i = 0; i < ann.size(); ++i){
+				if (i == 5) 
+					break;
+				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
+				out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
+
+			}
+		}
+	    out.println("</div>"); // panel
+	    
 		try {
 			if(DB.isAdmin(username)){
 
@@ -419,11 +427,11 @@ public class userWelcome extends HttpServlet {
 			out.println("</tr>");
 		}
 		out.println("</table>");
-		
+
 		out.println("</div></div>"); // Column 2
 
-		
-		
+
+
 		out.println("</div>"); // Row 2
 		out.println("<h4> View Your Entire Quiz History Here. <a href=\"quizPerformanceSummary\"><img src=\"quizPerformance.jpg\"></img></a></h4>");
 
@@ -475,7 +483,7 @@ public class userWelcome extends HttpServlet {
 		// Friends
 		out.println("<div class=\"row\">");
 		out.println("<h2>Friends:</h2>");
-		
+
 		// Messaging Column
 		out.println("<div class=\"col-md-4\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -504,13 +512,13 @@ public class userWelcome extends HttpServlet {
 		out.println("<a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a><br><br>");
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
-		
+
 		// Challenges Column
 		out.println("<div class=\"col-md-4\">");
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Challenges</div>");
 		out.println("<b>Pending challenges:</b><br>");
-		
+
 		if (numChallenges == 0){
 			out.println("You have no pending challenges.");
 		}else{
@@ -552,7 +560,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</form><br>");
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
-		
+
 		// Find friends Column
 		out.println("<div class=\"col-md-4\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -579,11 +587,11 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 		out.println("</div>"); // Row
-		
+
 		out.println("<div class=\"row\">");
-		
+
 		out.println("<a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a>");
-		
+
 		out.println("</div>");
 		out.println("</div>"); // Row
 		out.println("</div>"); // Container
