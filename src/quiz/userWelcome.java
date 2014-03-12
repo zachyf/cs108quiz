@@ -428,53 +428,6 @@ public class userWelcome extends HttpServlet {
 		out.println("</table>");
 
 		out.println("</div></div>"); // Column 2
-
-
-		out.println("<h2>Explore:</h2>");
-
-		out.println("<table><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
-		out.println("<tr><td>");
-		out.println("Choose a User:");
-		out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesF = DB.getAllUsers();
-		for(int i=0;i<userNamesF.size();i++){
-			try {
-				if (!DB.alreadyFriends(username, userNamesF.get(i)) && !username.equals(userNamesF.get(i))){
-					out.println("<option value=\""+userNamesF.get(i)+"\">" + userNamesF.get(i) +"</option>");
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		out.println("</select><br>");
-		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
-		out.println("</form>");
-		out.println("<div id=\"message1\"></td></div><td>");
-		out.println("Select a User Name:");
-		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
-		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesC = DB.getAllUsers();
-		for(int i=0;i<userNamesC.size();i++){
-			if (!username.equals(userNamesC.get(i))){
-				out.println("<option value=\""+userNamesC.get(i)+"\">" + userNamesC.get(i) +"</option>");
-			}
-		}
-		out.println("</select><br>");
-		out.println("Select a Quiz:");
-		out.println("<br>");
-		out.println("<select name=\"quizID\">");
-		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
-		for(int i=0;i<allQuizzes.size();i++){
-			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
-		}
-		out.println("</select><br>");
-		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>"); 
-		out.println("</form>");
-		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
-		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");
-
 		out.println("</div>"); // Row 2
 
 		// Friends
