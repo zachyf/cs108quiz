@@ -85,6 +85,7 @@
 
 <br><br>
 <form action="viewQuizTest.jsp">
+	<input type="hidden" name="quizID" value=<%= quizID %>>
 	<input type="submit" value="Finish Quiz and View">
 </form>
 </div>

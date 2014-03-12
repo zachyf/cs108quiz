@@ -57,7 +57,7 @@
 </div><br>
 
 <div class="container">
-<h1>View Quiz Test</h1>
+<h1>View Quiz</h1>
 <%
 
 ArrayList<Question> questions = (ArrayList<Question>)application.getAttribute("questions");
@@ -72,7 +72,7 @@ for (int i = 0; i < questions.size(); i++) {
 	out.println(questions.get(i).getQuestion(i));
 	out.println(questions.get(i).getAnswer());
 }
-out.println("<p><a href=\"index.jsp\"> Go to Homepage </a></p>");
+out.println("<p><a href=\"quizPage.jsp?id="+request.getParameter("quizID")+"\"> Go to Quiz Page </a></p>");
 %>
 </div>
 </body>

@@ -55,9 +55,8 @@
   </div>
 </div><br>
 
-<h2 class="createQuestion">Create a Picture-Response Question</h2>
-
 <div class="container">
+<h2 class="createQuestion">Create a Picture-Response Question</h2>
 <form action="CreatePictureResponseServlet" method="post">
 
 	<div class="input-group input-group-lg">
