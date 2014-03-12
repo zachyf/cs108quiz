@@ -265,6 +265,7 @@ public class userWelcome extends HttpServlet {
 		
 		// Most popular quizzes table
 		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Most Popular Quizzes</div>");
 		out.println("<table class=\"table\">");
 		out.println("<tr>");
@@ -285,10 +286,11 @@ public class userWelcome extends HttpServlet {
 			out.println("</tr>");
 		}
 		out.println("</table>");
-		out.println("</div>"); // Column 1
+		out.println("</div></div>"); // Column 1
 		
 		// Recently Created Quizzes Table
 		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Recently Created Quizzes</div>");
 		out.println("<table class=\"table\">");
 		out.println("<tr>");
@@ -309,12 +311,13 @@ public class userWelcome extends HttpServlet {
 			out.println("</tr>");
 		}
 		out.println("</table>");
-		out.println("</div>"); // Column 2
+		out.println("</div></div>"); // Column 2
 		out.println("</div>"); // Row 1
 		out.println("<div class=\"row\">");
 		
 		// Your recently taken quizzes table
 		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Your Recently Taken Quizzes</div>");
 		out.println("<table class=\"table\">");
 		out.println("<tr>");
@@ -336,10 +339,11 @@ public class userWelcome extends HttpServlet {
 			out.println("</tr>");
 		}
 		out.println("</table>");
-		out.println("</div>"); // Column 1
+		out.println("</div></div>"); // Column 1
 		
 		// Your recently created quizzes table
 		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Your Recently Taken Quizzes</div>");
 		out.println("<table class=\"table\">");
 		out.println("<tr>");
@@ -352,7 +356,7 @@ public class userWelcome extends HttpServlet {
 			out.println("</tr>");
 		}
 		out.println("</table>");
-		out.println("</div>"); // Column 2
+		out.println("</div></div>"); // Column 2
 		
 		
 		out.println("</div>"); // Row 2
