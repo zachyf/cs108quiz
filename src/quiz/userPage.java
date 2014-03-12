@@ -134,9 +134,9 @@ public class userPage extends HttpServlet {
 				out.println("<input name=\"userName\" type=\"hidden\" value="+username+">");
 				out.println("You and "+username+" are friends.");
 				out.println("<button type=\"submit\">Unfriend <span class=\"glyphicon glyphicon-remove-sign\"></button>");
-				out.println("</form></h4>");
+				out.println("</form>");
 			}else{
-				out.println("<h4> Add "+username+" as a friend <a href=\"FriendRequest?userName="+username+"\"><img src=\"acceptButton.jpg\" title=\"Add Friend\"></img></a><br>");
+				out.println("<h4> Add "+username+" as a friend <a href=\"FriendRequest?userName="+username+"\"><img src=\"acceptButton.jpg\" title=\"Add Friend\"></img></a><br></h4>");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
