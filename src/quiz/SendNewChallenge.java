@@ -3,6 +3,7 @@ package quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -60,7 +61,8 @@ public class SendNewChallenge extends HttpServlet {
 		} else if (v ==4){
 			out.println("Challenge could not be sent because of a sql error.");
 		}
-		
+		RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
+		dispatch.forward(request, response);
 	}
 
 }

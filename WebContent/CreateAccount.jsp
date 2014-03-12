@@ -34,6 +34,8 @@
           <input type="checkbox" value="remember-me"> Remember me
         </label>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <br><a href="Homepage.jsp">Go to sign in page</a>
+        
       </form><br>
 
     </div> <!-- /container -->
