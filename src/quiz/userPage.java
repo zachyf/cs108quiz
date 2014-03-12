@@ -230,61 +230,9 @@ public class userPage extends HttpServlet {
 	    out.println("<div class=\"container\">");
 		
 	
-		out.println("<h2>Leader Boards and Recent Activity:</h2>");
+		out.println("<h2>"+username+"'s Recent Quiz Activity</h2>");
 		out.println("<div class=\"row\">");
-
-		// Most popular quizzes table
-		out.println("<div class=\"col-md-6\">");
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Most Popular Quizzes</div>");
-		out.println("<table class=\"table\">");
-		out.println("<tr>");
-		ArrayList<Integer> popularQuizzes = null;
-		try {
-			popularQuizzes = DB.getMostPopularQuizzes();
-
-		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		for(int i=0; i<popularQuizzes.size();i++){
-			int index = popularQuizzes.get(i);
-			int ip=i+1;
-			out.println("<tr>");
-			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
-			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
-			out.println("</tr>");
-		}
-		out.println("</table>");
-		out.println("</div></div>"); // Column 1
-
-		// Recently Created Quizzes Table
-		out.println("<div class=\"col-md-6\">");
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Recently Created Quizzes</div>");
-		out.println("<table class=\"table\">");
-		out.println("<tr>");
-		ArrayList<Integer> recentQuizzes = null;
-		try {
-			recentQuizzes = DB.getRecentQuizzes1();
-
-		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		for(int i=0; i<recentQuizzes.size();i++){
-			int index = recentQuizzes.get(i);
-			int ip=i+1;
-			out.println("<tr>");
-			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
-			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
-			out.println("</tr>");
-		}
-		out.println("</table>");
-		out.println("</div></div>"); // Column 2
-		out.println("</div>"); // Row 1
-		out.println("<div class=\"row\">");
-
+		
 		// Users recently taken quizzes table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
