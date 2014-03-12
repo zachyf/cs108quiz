@@ -427,6 +427,13 @@ public class DBConnection {
 			
 	 }
 	 
+	 public void unfriend(String user1,String user2) throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 stmt.executeUpdate("DELETE FROM friends where user1='" + user1 + "' and user2='" + user2 + "';");
+		 stmt.executeUpdate("DELETE FROM friends where user1='" + user2 + "' and user2='" + user1 + "';");
+	 }
+	 
 	 public Boolean userExists(String account) throws SQLException{
 		 Statement stmt=null;
 			try {

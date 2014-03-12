@@ -583,7 +583,7 @@ public class userWelcome extends HttpServlet {
 		out.println("<div class=\"panel-heading\">Find Friends</div>");
 		out.println("<br><form action=\"FriendRequest\" METHOD=\"post\">");
 		out.println("<div class=\"input-group\">");
-		out.println("Select a user:");
+		out.println("Select a user you're not friends with:");
 		out.println("<select name=\"userName\">");
 		ArrayList<String> userNamesF3 = DB.getAllUsers();
 		for(int i=0;i<userNamesF2.size();i++){
@@ -599,6 +599,31 @@ public class userWelcome extends HttpServlet {
 		out.println("</select><br>");
 		out.println("</div><br>");
 		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
+		out.println("</form>");
+		out.println("</div>"); // Panel
+		
+		// Remove friends Column
+		out.println("<div class=\"col-md-4\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Unfriend</div>");
+		out.println("<br><form action=\"Unfriend\" METHOD=\"post\">");
+		out.println("<div class=\"input-group\">");
+		out.println("Select a user you're friends with:");
+		out.println("<select name=\"userName\">");
+		ArrayList<String> userNamesU = DB.getAllUsers();
+		for(int i=0;i<userNamesU.size();i++){
+			try {
+				if (DB.alreadyFriends(username, userNamesU.get(i)) && !username.equals(userNamesU.get(i))){
+					out.println("<option value=\""+userNamesU.get(i)+"\">" + userNamesU.get(i) +"</option>");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		out.println("</select><br>");
+		out.println("</div><br>");
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Remove Friend</button><br>"); 
 		out.println("</form>");
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
