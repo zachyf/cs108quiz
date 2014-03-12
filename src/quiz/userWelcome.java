@@ -115,19 +115,27 @@ public class userWelcome extends HttpServlet {
 		            out.println("document.getElementById(\"message1\").innerHTML = xmlhttp.responseText;}else{");
 		            out.println("alert(\"problem\");}}};");   
 		    out.println("xmlhttp.send(null);}</script>");        
+		
 		// Nav bar html
 		out.println("<div class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">");
 		out.println("<div class=\"container\"><div class=\"navbar-header\">");
 		out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">");
 		out.println("<span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span>");
 		out.println("</button>");
-		out.println("<a class=\"navbar-brand\" href=\"HomepageBootstrap.jsp\">Quiz Mania!</a>");
+		out.println("<a class=\"navbar-brand\" href=\"userWelcome\">Quiz Mania!</a>");
 		out.println("</div><div class=\"navbar-collapse collapse\">");
-		out.println("<form class=\"navbar-form navbar-right\" role=\"form\">");
+		out.println("<ul class=\"nav navbar-nav\">");
+		out.println("<li><a href=\"userWelcome\">Home</a></li>");
+		out.println("<li><a href=\"quizPerformanceSummary\">My Quiz History</a></li>");
+		out.println("<li><a href=\"createQuiz.html\">Create Quiz</a></li>");
+		out.println("<li><a href=\"logout\">Logout</a></li>");
+		out.println("</ul>");
+		out.println("<form action=\"SearchQuizzesServlet\" method=\"GET\" class=\"navbar-form navbar-right\" role=\"form\">");
 		out.println("<div class=\"form-group\">");
-		out.println("<input type=\"text\" placeholder=\"Search Quizzes...\" class=\"form-control\">");
+		out.println("<input name=\"search\" type=\"text\" placeholder=\"Search Quizzes...\" class=\"form-control\">");
 		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search</button>");
-		out.println("</form></div></div></div>");
+		out.println("</form>");
+		out.println("</div></div></div>");
 
 		// Jumbotron html
 	    out.println("<div class=\"jumbotron\">");
@@ -388,31 +396,6 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Row 2
 		out.println("<h4> View Your Entire Quiz History Here. <a href=\"quizPerformanceSummary\"><img src=\"quizPerformance.jpg\"></img></a></h4>");
 
-		out.println("<h2>Explore:</h2>");
-
-		out.println("<table><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
-		out.println("<tr><td>");
-		out.println("Enter A User Name:");
-		out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<input type=\"text\" name=\"userName\"><br>");
-		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
-		out.println("</form>");
-		out.println("<div id=\"message1\"></td></div><td>");
-		out.println("Enter a User Name:");
-		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
-		out.println("<input type=\"text\" name=\"userName\"><br>");
-		out.println("Select a Quiz:");
-		out.println("<br>");
-		out.println("<select name=\"quizID\">");
-		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
-		for(int i=0;i<allQuizzes.size();i++){
-			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
-		}
-		out.println("</select><br>");
-		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>"); 
-		out.println("</form>");
-		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
-		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");
 
 		// Friends
 		out.println("<div class=\"row\">");
@@ -477,8 +460,9 @@ public class userWelcome extends HttpServlet {
 		out.println("Select a Quiz:");
 		out.println("<br>");
 		out.println("<select name=\"quizID\">");
+		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
 		for(int i=0;i<allQuizzes.size();i++){
-			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
+			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
 		}
 		out.println("</select><br><br>");
 		out.println("<button type=\"submit\" class=\"btn btn-default\">Send Challenge</button><br>"); 

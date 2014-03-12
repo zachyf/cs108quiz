@@ -45,7 +45,7 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="HomepageBootstrap.jsp">Quiz Mania!</a>
+      <a class="navbar-brand" href="userWelcome">Quiz Mania!</a>
     </div>
     <div class="navbar-collapse collapse">
       <form class="navbar-form navbar-right" role="form">

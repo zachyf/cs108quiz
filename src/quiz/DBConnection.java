@@ -633,6 +633,20 @@ public class DBConnection {
 		}
 		return result;
 	}
+	
+	public ArrayList<Integer> getSearchedQuizzes(String search) throws SQLException{
+		ArrayList<Integer> result= new ArrayList<Integer>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = executeQuery("SELECT * FROM quizzes WHERE quizName LIKE \"%" + search + "%\";");
+		StringBuilder sb = new StringBuilder();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		while(rs.next()){
+			result.add(rs.getInt("id"));
+		}
+		return result;
+	}
+	
 	public ArrayList<Integer> getTakenQuizzes(String username) throws SQLException{
 		ArrayList<Integer> result= new ArrayList<Integer>();
 		Statement stmt = con.createStatement();
@@ -748,6 +762,7 @@ public class DBConnection {
 			return "";
 		}
 	}
+	
 	
 	public ArrayList<ArrayList<Object>> getHighScorers(int quizID){
 		String query = "Select userName, numCorrect, numQuestions, timeToComplete" +
