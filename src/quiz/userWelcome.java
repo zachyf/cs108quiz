@@ -122,7 +122,7 @@ public class userWelcome extends HttpServlet {
 		out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">");
 		out.println("<span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span>");
 		out.println("</button>");
-		out.println("<a class=\"navbar-brand\" href=\"HomepageBootstrap.jsp\">Quiz Mania!</a>");
+		out.println("<a class=\"navbar-brand\" href=\"userWelcome\">Quiz Mania!</a>");
 		out.println("</div><div class=\"navbar-collapse collapse\">");
 
 		out.println("<ul class=\"nav navbar-nav\">");
