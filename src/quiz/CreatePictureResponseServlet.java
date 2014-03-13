@@ -61,7 +61,7 @@ public class CreatePictureResponseServlet extends HttpServlet {
 		StringBuilder buff = new StringBuilder();
 		buff.append(request.getParameter("answer1"));
 		for (int i = 2; i <= numAnswers; i++) {
-			buff.append(",");
+			buff.append(", ");
 			buff.append(request.getParameter("answer" + String.valueOf(i)));
 		}
 		String answer = buff.toString();

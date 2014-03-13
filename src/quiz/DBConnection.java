@@ -947,6 +947,8 @@ public class DBConnection {
 					MultipleChoice question = new MultipleChoice(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum"));
 					addChoices(question, quiz.getID());
 					quiz.addQuestion(question);
+				} else if (type.equals("MultiAnswer")) {
+					quiz.addQuestion(new MultiAnswerQuestion(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
 				}
 			}
 		}

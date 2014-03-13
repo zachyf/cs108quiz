@@ -7,30 +7,31 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
- * Servlet implementation class CreateQuestionResponseServlet
+ * Servlet implementation class CreateMultiAnswerServlet
  */
-@WebServlet("/CreateQuestionResponseServlet")
-public class CreateQuestionResponseServlet extends HttpServlet {
+@WebServlet("/CreateMultiAnswerServlet")
+public class CreateMultiAnswerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateQuestionResponseServlet() {
+    public CreateMultiAnswerServlet() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -64,13 +65,26 @@ public class CreateQuestionResponseServlet extends HttpServlet {
 			buff.append(", ");
 			buff.append(request.getParameter("answer" + String.valueOf(i)));
 		}
+		
+		String check = (String) request.getParameter("check");
+		boolean ordered = false;
+		if(check!=null){
+			if(check.equals("require-order")){
+				buff.append(", ");
+				buff.append("&=ordered");
+			} 
+		} else {
+			buff.append(", ");
+			buff.append("&=unordered");
+		}
 		String answer = buff.toString();
+		
 		
 		// num was passed in as a hidden input
 		int num = Integer.valueOf(request.getParameter("num"));
 		
 		// Create the question
-		Question q = new QuestionResponse(question, answer, num);
+		Question q = new MultiAnswerQuestion(question, answer, num);
 		db.addQuestion(q, quiz);
 		
 		// DEBUG: This is just for debugging

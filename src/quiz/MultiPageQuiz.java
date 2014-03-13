@@ -57,7 +57,7 @@ public class MultiPageQuiz extends HttpServlet {
 		out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">");
 		out.println("<span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span>");
 		out.println("</button>");
-		out.println("<a class=\"navbar-brand\" href=\"HomepageBootstrap.jsp\">Quiz Mania!</a>");
+		out.println("<a class=\"navbar-brand\" href=\"userWelcome\">Quiz Mania!</a>");
 		out.println("</div><div class=\"navbar-collapse collapse\">");
 		out.println("<ul class=\"nav navbar-nav\">");
 		out.println("<li><a href=\"userWelcome\">Home <span class=\"glyphicon glyphicon-home\"></span></a></li>");
@@ -92,7 +92,19 @@ public class MultiPageQuiz extends HttpServlet {
 		Answer a = (Answer)request.getSession().getAttribute("answer");
 		String questionNum = request.getParameter("questionNum");
 		Question question = quiz.getQuestion(Integer.parseInt(questionNum));
-		String answer = request.getParameter(questionNum);		
+		String answer = null;
+		if (question.getType().equals("MultiAnswer")) {
+			int numAnswers = Integer.valueOf(request.getParameter("numAnswers" + questionNum));
+			StringBuilder buff = new StringBuilder();
+			buff.append(request.getParameter(questionNum + " 0"));
+			for (int i = 1; i < numAnswers; i++) {
+				buff.append(", ");
+				buff.append(request.getParameter(questionNum + " " + String.valueOf(i)));
+			}
+			answer = buff.toString();
+		} else {
+			answer = request.getParameter(questionNum);	
+		}
 		a.setAnswer(question, answer);
 		
 		//If auto-grade 

@@ -10,8 +10,25 @@ a.endTimer();
 Quiz quiz = (Quiz)session.getAttribute("quiz");
 
 if(quiz.isSinglePage()){
-	for(int i = 0; i < quiz.getNumQuestions(); i++)
-		a.setAnswer(quiz.getQuestion(i), request.getParameter("" + i));
+	for(int i = 0; i < quiz.getNumQuestions(); i++) {
+		Question question = quiz.getQuestion(i);
+		String answer = null;
+		String questionNum = String.valueOf(i);
+		if (question.getType().equals("MultiAnswer")) {
+			int numAnswers = Integer.valueOf(request.getParameter("numAnswers" + questionNum));
+			StringBuilder buff = new StringBuilder();
+			buff.append(request.getParameter(questionNum + " 0"));
+			for (int j = 1; j < numAnswers; j++) {
+				buff.append(", ");
+				buff.append(request.getParameter(questionNum + " " + String.valueOf(j)));
+			}
+			answer = buff.toString();
+		} else {
+			answer = request.getParameter(questionNum);	
+		}
+		a.setAnswer(question, answer);
+	}
+		//a.setAnswer(quiz.getQuestion(i), request.getParameter("" + i));
 }
 DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
 db.addAnswerToDB(a);
