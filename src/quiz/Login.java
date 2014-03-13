@@ -7,6 +7,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +45,17 @@ public class Login extends HttpServlet {
 		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
 		String userName = (String) request.getParameter("userName");
 		String password = (String) request.getParameter("password");
+		String check = (String) request.getParameter("check");
+		System.out.println(check);
+		if(check!=null){
+		if(check.equals("remember-me")){
+			Cookie userCookie = new Cookie("userName", userName);
+			Cookie userCookie2 = new Cookie("password", password);
+			userCookie.setMaxAge(60*60*24); //Store cookie for 1 day
+			response.addCookie(userCookie);
+			response.addCookie(userCookie2);
+		}
+		}
 		try {
 			if (!DB.userExists(userName) || !DB.passwordCheck(password,userName)){
 				RequestDispatcher dispatch = request.getRequestDispatcher("tryAgain.jsp"); 

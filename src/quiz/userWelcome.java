@@ -313,7 +313,7 @@ public class userWelcome extends HttpServlet {
 					out.println("<option value=\""+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</option>");
 				}
 				out.println("</select>");
-				out.println("<input type=\"submit\" value=\"Delete\"><br>"); 
+				out.println("<input type=\"submit\" value=\"Clear\"><br>"); 
 				out.println("</form></p>");
 
 				int totalUsers=DB.getTotalUsers();
@@ -477,27 +477,9 @@ public class userWelcome extends HttpServlet {
 
 		// Friends
 		out.println("<div class=\"row\">");
-		out.println("<h2>Friends:</h2>");
-		out.println("<b>Find Friends</b></br>");
-		out.println("<br><form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<div class=\"input-group\">");
-		out.println("Select a user:");
-		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesF2 = DB.getAllUsersNotFriends(username);
-		for(int i=0;i<userNamesF2.size();i++){
-			try {
-				if (!DB.alreadyFriends(username, userNamesF2.get(i)) && !username.equals(userNamesF2.get(i))){
-					out.println("<option value=\""+userNamesF2.get(i)+"\">" + userNamesF2.get(i) +"</option>");
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		out.println("</select><br>");
-		out.println("</div><br>");
-		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
-		out.println("</form><br>");
+		out.println("<h2>Messaging and Challenges:</h2>");
+		
+
 		// Messaging Column
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -522,8 +504,7 @@ public class userWelcome extends HttpServlet {
 		}
 		out.println("<b>View all messages:</b><br>");
 		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br>");
-		out.println("<b>Send messages:</b><br>");
-		out.println("<a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a><br><br>");
+
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 
@@ -549,29 +530,7 @@ public class userWelcome extends HttpServlet {
 			}
 			out.println("</table><br>");
 		}
-		out.println("<b>Send a challenge:</b><br>");
-		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
-		out.println("<div class=\"input-group\">");
-		out.println("Select a user:");
-		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesC2 = DB.getAllUsers();
-		for(int i=0;i<userNamesC2.size();i++){
-			if (!username.equals(userNamesC2.get(i))){
-				out.println("<option value=\""+userNamesC2.get(i)+"\">" + userNamesC2.get(i) +"</option>");
-			}
-		}
-		out.println("</select><br>");
-		out.println("</div><br>");
-		out.println("Select a Quiz:");
-		out.println("<br>");
-		out.println("<select name=\"quizID\">");
-		ArrayList<ArrayList<Object>> allQ = DB.getAllQuizzes();
-		for(int i=0;i<allQ.size();i++){
-			out.println("<option value=\""+allQ.get(i).get(1)+"\"><href=\"quizPage.jsp?id="+allQ.get(i).get(1)+"\">"+allQ.get(i).get(0)+"</a></option>");
-		}
-		out.println("</select><br><br>");
-		out.println("<button type=\"submit\" class=\"btn btn-default\">Send Challenge</button><br>"); 
-		out.println("</form><br>");
+		
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 		
