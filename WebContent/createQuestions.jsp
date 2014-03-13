@@ -36,7 +36,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="HomepageBootstrap.jsp">Quiz Mania!</a>
+      <a class="navbar-brand" href="/userWelcome/">Quiz Mania!</a>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -84,10 +84,15 @@
 </div><br>
 
 <br><br>
-<form action="viewQuizTest.jsp">
-	<input type="hidden" name="quizID" value=<%= quizID %>>
-	<input type="submit" value="Finish Quiz and View">
-</form>
+<% if(!num.equals("1")){ 
+	out.println("<form action=\"viewQuizTest.jsp\">");
+	out.println("<input type=\"hidden\" name=\"quizID\" value=" + quizID + ">");
+	out.println("<input type=\"submit\" value=\"Finish Quiz and View\">");
+	out.println("</form>");
+}
+%>
+
+	
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
