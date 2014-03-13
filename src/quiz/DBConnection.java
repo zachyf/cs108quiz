@@ -749,6 +749,37 @@ public class DBConnection {
 		}
 		return result;
 	}
+	
+	public ArrayList<quizRecord> getTakenQuizzes() throws SQLException{
+		ArrayList<quizRecord> result= new ArrayList<quizRecord>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM quizRecords order by timeSubmitted desc;");
+		while(rs.next()){
+			result.add(new quizRecord(rs.getInt("numCorrect"), rs.getInt("numQuestions"), rs.getInt("timeToComplete"), rs.getString("userName"), rs.getInt("quizID"),rs.getTimestamp("timeSubmitted")));
+		}
+		return result;
+	}
+	
+	public ArrayList<Quiz>  getCreatedQuizzes() throws SQLException{
+		ArrayList<Quiz> result= new ArrayList<Quiz>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM quizzes order by createtime desc;");
+		while(rs.next()){
+			int onePage = rs.getInt("onePage");
+			boolean op = onePage == 1 ? true : false;
+			int isRandomOrder = rs.getInt("isRandomOrder");
+			boolean ro = isRandomOrder == 1 ? true : false;
+			int isImmediate = rs.getInt("isImmediate");
+			boolean im = isImmediate == 1 ? true : false;
+			int hasPracticeMode = rs.getInt("hasPracticeMode");
+			boolean hp = hasPracticeMode == 1 ? true : false;
+			result.add(new Quiz(rs.getString("creatorName"), rs.getInt("id"), rs.getString("quizName"), rs.getString("description"), op, ro, im, hp));
+		}
+		return result;
+	}
+	
 	public int totalTeamQuizesTaken(String animal) throws SQLException{
 		Statement stmt = con.createStatement();
 		stmt.executeQuery("USE " + database);
@@ -860,6 +891,11 @@ public class DBConnection {
 				" from quizRecords where quizID = " + quizID + 
 				" order by numCorrect  desc, timeToComplete asc limit 5;";
 		return getList(query);
+	}
+	
+	public ArrayList<ArrayList<Object>> getHighestRated(){
+		String query = "Select quizName, quizID, avg(stars) as a from quizzes q, ratings r where  r.quizID = q.id group by q.id order by avg(stars) desc,quizName limit 5";
+		return getList4(query);
 	}
 	
 	public int getHighScoreQuizUser(String user, int quizID){
@@ -988,6 +1024,24 @@ public class DBConnection {
 		} 
 		return list;
 	}
+	
+	private ArrayList<ArrayList<Object>> getList4(String query){
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()) {
+				ArrayList<Object> row = new ArrayList<Object>();
+				row.add(rs.getString("quizName"));
+				row.add(rs.getInt("quizID"));
+				row.add(rs.getDouble("a"));
+				list.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
+	
 	
 	private ArrayList<ArrayList<Object>> getList2(String query){
 		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
