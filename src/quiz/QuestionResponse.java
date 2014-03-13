@@ -70,7 +70,13 @@ public class QuestionResponse extends Question {
 	 */
 	@Override
 	public boolean checkAnswer(String answer) {
-		return this.answer.toLowerCase().equals(answer.toLowerCase());
+		String[] parts = this.answer.split(",");
+		for (int i = 0; i < parts.length; i++) {
+			if (parts[i].toLowerCase().equals(answer.toLowerCase())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
