@@ -204,7 +204,7 @@ public class userPage extends HttpServlet {
 		out.println("</td><td><h4>Challenge "+username+":</h4>");
 		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
 		out.println("<input type=\"hidden\" name=\"userName\" value=\""+username+"\"><br>");
-		out.println("<select name=\"quizID\">");
+		out.println("<select name=\"quizID\" class=\"form-control\">");
 		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
 		for(int i=0;i<allQuizzes.size();i++){
 			out.println("<option class=\"dropdown-menu\" value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
@@ -227,7 +227,6 @@ public class userPage extends HttpServlet {
 		
 		
 		out.println("<h2>Interact with "+username+":</h2>");
-		out.println("<table><tr><td>");
 		
 	  
 		try {

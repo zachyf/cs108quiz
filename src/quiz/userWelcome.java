@@ -214,9 +214,9 @@ public class userWelcome extends HttpServlet {
 			if(requests > 0){
 				check2+=1;
 				if(requests==1){
-					out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend request pending.");
+					out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend request pending. <br>");
 				}else{
-					out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend requests pending.");
+					out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend requests pending. <br>");
 				}
 			}
 		} catch (SQLException e1) {
@@ -227,9 +227,9 @@ public class userWelcome extends HttpServlet {
 		if(numUnread > 0){
 			check2+=1;
 			if(numUnread==1){
-				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread message.");
+				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread message. <br>");
 			}else{
-				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread messages.");
+				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread messages. <br>");
 			}
 		}
 		ArrayList<Challenge> pendingChallenges = DB.getChallenges(username);
@@ -348,7 +348,7 @@ public class userWelcome extends HttpServlet {
 			int ip=i+1;
 			out.println("<tr>");
 			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
-			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
 			out.println("</tr>");
 		}
 		out.println("</table>");
@@ -373,7 +373,7 @@ public class userWelcome extends HttpServlet {
 			int ip=i+1;
 			out.println("<tr>");
 			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
-			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
 			out.println("</tr>");
 		}
 		out.println("</table>");
@@ -401,7 +401,7 @@ public class userWelcome extends HttpServlet {
 			int ip=i+1;
 			out.println("<tr>");
 			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
-			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
 			out.println("</tr>");
 		}
 		out.println("</table>");
@@ -418,7 +418,7 @@ public class userWelcome extends HttpServlet {
 			int ip=i+1;
 			out.println("<tr>");
 			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
-			out.println("<td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"></img></a></td>");
+			out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"></img></a></td>");
 			out.println("</tr>");
 		}
 		out.println("</table>");
@@ -429,11 +429,11 @@ public class userWelcome extends HttpServlet {
 
 		out.println("<h2>Explore:</h2>");
 
-		out.println("<table><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
+		out.println("<table class=\"table\"><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
 		out.println("<tr><td>");
 		out.println("Choose a User:");
 		out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<select name=\"userName\">");
+		out.println("<select name=\"userName\" class=\"form-control\">");
 		ArrayList<String> userNamesF = DB.getAllUsersNotFriends(username);
 		for(int i=0;i<userNamesF.size();i++){
 			try {
@@ -446,12 +446,12 @@ public class userWelcome extends HttpServlet {
 			}
 		}
 		out.println("</select><br>");
-		out.println("<input type=\"submit\" value=\"Add Friend\"><br>"); 
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button>"); 
 		out.println("</form>");
 		out.println("<div id=\"message1\"></td></div><td>");
 		out.println("Select a User Name:");
 		out.println("<form action=\"SendNewChallenge\" METHOD=\"post\">");
-		out.println("<select name=\"userName\">");
+		out.println("<select name=\"userName\" class=\"form-control\">");
 		ArrayList<String> userNamesC = DB.getAllUsers();
 		for(int i=0;i<userNamesC.size();i++){
 			if (!username.equals(userNamesC.get(i))){
@@ -461,13 +461,13 @@ public class userWelcome extends HttpServlet {
 		out.println("</select><br>");
 		out.println("Select a Quiz:");
 		out.println("<br>");
-		out.println("<select name=\"quizID\">");
+		out.println("<select name=\"quizID\" class=\"form-control\">");
 		ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
 		for(int i=0;i<allQuizzes.size();i++){
 			out.println("<option value=\""+allQuizzes.get(i).get(1)+"\"><a href=\"quizPage.jsp?id="+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</a></option>");
 		}
 		out.println("</select><br>");
-		out.println("<input type=\"submit\" value=\"Send Challenge\"><br>"); 
+		out.println("<button type=\"submit\" class=\"btn btn-default\">Send Challenge</button>"); 
 		out.println("</form>");
 		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
 		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");

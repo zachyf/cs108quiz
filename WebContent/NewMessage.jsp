@@ -53,6 +53,7 @@
   </div>
 </div><br>
 
+<div class="container">
 <h2 class="sendMessage">Send a New Message</h2>
 
 <!-- Send message form -->
@@ -83,6 +84,6 @@
 <%if(id!=null){%>
 <a href="<%=url %>"><img src="userProfile.png" title="Return to <%=s%>'s Profile"></img></a>
 <%}%>
-<a href="userWelcome"><img src="home.jpg" title="Return Home "></img></a>
+</div>
 </body>
 </html>
