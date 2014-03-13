@@ -45,11 +45,17 @@ Queue<Integer> q_order = (Queue<Integer>)session.getAttribute("questionsLeft" + 
       <a class="navbar-brand" href="HomepageBootstrap.jsp">Quiz Mania!</a>
     </div>
     <div class="navbar-collapse collapse">
-      <form class="navbar-form navbar-right" role="form">
+      <ul class="nav navbar-nav">
+      <li><a href="userWelcome">Home <span class="glyphicon glyphicon-home"></a></li>
+      <li><a href="quizPerformanceSummary">My Quiz History <span class="glyphicon glyphicon-th-list"></a></li>
+      <li><a href="createQuiz.html">Create Quiz <span class="glyphicon glyphicon-pencil"></a></li>
+      <li><a href="logout">Logout <span class="glyphicon glyphicon-off"></a></li>
+      </ul>
+      <form action="SearchQuizzesServlet" method="GET" class="navbar-form navbar-right" role="form">
         <div class="form-group">
-          <input type="text" placeholder="Search Quizzes..." class="form-control">
+          <input name="search" type="text" placeholder="Search Quizzes..." class="form-control">
         </div>
-        <button type="submit" class="btn btn-success">Search</button>
+        <button type="submit" class="btn btn-success">Search <span class="glyphicon glyphicon-search"></button>
       </form>
     </div><!--/.navbar-collapse -->
   </div>

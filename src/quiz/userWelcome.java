@@ -108,7 +108,7 @@ public class userWelcome extends HttpServlet {
 		out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">");
 		out.println("<span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span>");
 		out.println("</button>");
-		out.println("<a class=\"navbar-brand\" href=\"HomepageBootstrap.jsp\">Quiz Mania!</a>");
+		out.println("<a class=\"navbar-brand\" href=\"userWelcome\">Quiz Mania!</a>");
 		out.println("</div><div class=\"navbar-collapse collapse\">");
 
 		out.println("<ul class=\"nav navbar-nav\">");
@@ -426,6 +426,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</div></div>"); // Column 2
 
 
+
 		out.println("<h2>Explore:</h2>");
 
 		out.println("<table><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
@@ -470,6 +471,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</form>");
 		out.println("</td><td><a href=\"createQuiz.html\"> <img src=\"createQuiz.jpg\"></img></a></td>");
 		out.println("<td><a href=\"NewMessage.jsp?user=" + username + "\"><img src=\"Message.png\" title=\"Click to Message Friends\"></img></a></td></tr></table>");
+
 
 		out.println("</div>"); // Row 2
 
@@ -573,56 +575,6 @@ public class userWelcome extends HttpServlet {
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 		
-		// Find friends Column
-		out.println("<div class=\"col-md-4\">");
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Find Friends</div>");
-		out.println("<br><form action=\"FriendRequest\" METHOD=\"post\">");
-		out.println("<div class=\"input-group\">");
-		out.println("Select a user you're not friends with:");
-		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesF3 = DB.getAllUsers();
-		for(int i=0;i<userNamesF2.size();i++){
-			try {
-				if (!DB.alreadyFriends(username, userNamesF3.get(i)) && !username.equals(userNamesF3.get(i))){
-					out.println("<option value=\""+userNamesF3.get(i)+"\">" + userNamesF3.get(i) +"</option>");
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		out.println("</select><br>");
-		out.println("</div><br>");
-		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button><br>"); 
-		out.println("</form>");
-		out.println("</div>"); // Panel
-		
-		// Remove friends Column
-		out.println("<div class=\"col-md-4\">");
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Unfriend</div>");
-		out.println("<br><form action=\"Unfriend\" METHOD=\"post\">");
-		out.println("<div class=\"input-group\">");
-		out.println("Select a user you're friends with:");
-		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesU = DB.getAllUsers();
-		for(int i=0;i<userNamesU.size();i++){
-			try {
-				if (DB.alreadyFriends(username, userNamesU.get(i)) && !username.equals(userNamesU.get(i))){
-					out.println("<option value=\""+userNamesU.get(i)+"\">" + userNamesU.get(i) +"</option>");
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		out.println("</select><br>");
-		out.println("</div><br>");
-		out.println("<button type=\"submit\" class=\"btn btn-default\">Remove Friend</button><br>"); 
-		out.println("</form>");
-		out.println("</div>"); // Panel
-		out.println("</div>"); // Col
 
 		out.println("</div>"); // Row
 
