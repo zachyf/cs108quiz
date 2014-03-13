@@ -56,8 +56,7 @@ public class CreateQuestionResponseServlet extends HttpServlet {
 		// Get question and answer from the form
 		String question = request.getParameter("question");
 		
-		// Get the answer
-		
+		// Get the answer		
 		int numAnswers = Integer.valueOf(request.getParameter("numAnswers"));
 		StringBuilder buff = new StringBuilder();
 		buff.append(request.getParameter("answer1"));

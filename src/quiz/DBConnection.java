@@ -749,6 +749,37 @@ public class DBConnection {
 		}
 		return result;
 	}
+	
+	public ArrayList<quizRecord> getTakenQuizzes() throws SQLException{
+		ArrayList<quizRecord> result= new ArrayList<quizRecord>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM quizRecords order by timeSubmitted desc;");
+		while(rs.next()){
+			result.add(new quizRecord(rs.getInt("numCorrect"), rs.getInt("numQuestions"), rs.getInt("timeToComplete"), rs.getString("userName"), rs.getInt("quizID"),rs.getTimestamp("timeSubmitted")));
+		}
+		return result;
+	}
+	
+	public ArrayList<Quiz>  getCreatedQuizzes() throws SQLException{
+		ArrayList<Quiz> result= new ArrayList<Quiz>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM quizzes order by createtime desc;");
+		while(rs.next()){
+			int onePage = rs.getInt("onePage");
+			boolean op = onePage == 1 ? true : false;
+			int isRandomOrder = rs.getInt("isRandomOrder");
+			boolean ro = isRandomOrder == 1 ? true : false;
+			int isImmediate = rs.getInt("isImmediate");
+			boolean im = isImmediate == 1 ? true : false;
+			int hasPracticeMode = rs.getInt("hasPracticeMode");
+			boolean hp = hasPracticeMode == 1 ? true : false;
+			result.add(new Quiz(rs.getString("creatorName"), rs.getInt("id"), rs.getString("quizName"), rs.getString("description"), op, ro, im, hp));
+		}
+		return result;
+	}
+	
 	public int totalTeamQuizesTaken(String animal) throws SQLException{
 		Statement stmt = con.createStatement();
 		stmt.executeQuery("USE " + database);

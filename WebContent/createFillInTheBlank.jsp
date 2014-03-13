@@ -58,6 +58,24 @@
 <div class="container">
 <h2 class="createQuestion">Create a Fill-In-The-Blank Question</h2>
 
+<!-- Select number of answers -->
+<div class="btn-group">
+	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	  Select Number of Answers <span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu" role="menu">	
+		<%
+		String num = request.getParameter("num");
+		String quizID = request.getParameter("quizID");
+		for (int i = 1; i <= 5; i++) {
+			String choice = String.valueOf(i);
+			String url = "createFillInTheBlank.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=" + choice;
+			out.println("<li><a href=" + url + ">" + choice + "</a></li>");
+		}
+		%>
+	</ul>
+</div><br><br>
+
 <form action="CreateFillInTheBlankServlet" method="post">
 
 	<div class="input-group input-group-lg">
@@ -67,19 +85,28 @@
 		<input type="text" name="questionEnd" class="form-control">	
 	</div><br>
 
-	<div class="input-group input-group-lg">
-		<span class="input-group-addon">Answer: </span>
-		<input type="text" name="answer" class="form-control">
-	</div><br>
-
+	<%
+	int numAnswers = Integer.valueOf(request.getParameter("numAnswers"));
+	for (int i = 1; i <= numAnswers; i++) {
+		out.println("<div class=input-group input-group-lg>");
+		out.println("<span class=input-group-addon>Answers: </span>");
+		out.println("<input type=text name=answer" + i + " class=form-control>");
+		out.println("</div>");
+	}
+	%><br>
+	
 	<input name="num" type="hidden" value="<%= request.getParameter("num") %>"/>
 	<input name="quizID" type="hidden" value="<%= request.getParameter("quizID") %>"/>
+	<input name="numAnswers" type="hidden" value="<%= request.getParameter("numAnswers") %>"/>
 
 	<button type="submit" class="btn btn-default">Create</button>
+	
 
 </form>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 
 </body>
 </html>

@@ -426,6 +426,64 @@ public class userWelcome extends HttpServlet {
 		out.println("</table>");
 
 		out.println("</div></div>"); // Column 2
+		
+		// Friends' recently taken quizzes table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Your Friends' Recently Taken Quizzes</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
+		ArrayList<Quiz> friendCreatedQuizzes = null;
+		ArrayList<quizRecord> friendTakenQuizzes = null;
+		try {
+			friendTakenQuizzes = DB.getTakenQuizzes();
+			friendCreatedQuizzes = DB.getCreatedQuizzes();
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		int numPrinted = 0;
+		for(int i=0; i< friendTakenQuizzes.size();i++){
+			if (numPrinted == 5) break;
+			quizRecord qr = friendTakenQuizzes.get(i);
+			if (DB.alreadyFriends(qr.getUser(), username)){
+				int ip=numPrinted+1;
+				out.println("<tr>");
+				out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+qr.getQuizID()+"\">"+DB.getQuizAt(qr.getQuizID()).getName()+"</a></td>");
+				out.println("<td><a href=\"userPage?ID="+qr.getUser()+"\">"+ qr.getUser() +"</a></td>");
+				out.println("<td>Score: "+ qr.getScore() +"</a></td>");
+				out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+qr.getQuizID()+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+				out.println("</tr>");
+				numPrinted++;
+			}
+		}
+		out.println("</table>");
+		out.println("</div></div>"); // Column 1
+		
+		// Friends' recently created quizzes table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Your Friends' Recently Created Quizzes</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
+		int numP2 = 0;
+		for(int i=0; i< friendCreatedQuizzes.size();i++){
+			if (numP2 == 5) break;
+			Quiz q = friendCreatedQuizzes.get(i);
+			if(DB.alreadyFriends(username, q.getCreator())){
+				int ip=numP2+1;
+				out.println("<tr>");
+				out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+q.getID()+"\">"+DB.getQuizAt(q.getID()).getName()+"</a></td>");
+				out.println("<td>Created by: <a href=\"userPage?ID="+q.getCreator()+"\">"+ q.getCreator() +"</a></td>");
+				out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+q.getID()+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+				out.println("</tr>");
+				numP2++;
+			}
+		}
+		out.println("</table>");
+		out.println("</div></div>"); // Column 1
+		
+		
 
 		// Your highly rated quizzes table
 		out.println("<div class=\"col-md-6\">");
@@ -458,14 +516,10 @@ public class userWelcome extends HttpServlet {
 		out.println("<select name=\"userName\" class=\"form-control\">");
 		ArrayList<String> userNamesF = DB.getAllUsersNotFriends(username);
 		for(int i=0;i<userNamesF.size();i++){
-			try {
-				if (!DB.alreadyFriends(username, userNamesF.get(i)) && !username.equals(userNamesF.get(i))){
-					out.println("<option value=\""+userNamesF.get(i)+"\">" + userNamesF.get(i) +"</option>");
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (!DB.alreadyFriends(username, userNamesF.get(i)) && !username.equals(userNamesF.get(i))){
+				out.println("<option value=\""+userNamesF.get(i)+"\">" + userNamesF.get(i) +"</option>");
 			}
+		
 		}
 		out.println("</select><br>");
 		out.println("<button type=\"submit\" class=\"btn btn-default\">Add Friend</button>"); 
@@ -525,8 +579,8 @@ public class userWelcome extends HttpServlet {
 			out.println("<h4>You have no recent messages. </h4>");
 		}
 		out.println("<b>View all messages:</b><br>");
-		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br><br>");
-		
+		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br>");
+
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 
