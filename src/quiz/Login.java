@@ -46,7 +46,6 @@ public class Login extends HttpServlet {
 		String userName = (String) request.getParameter("userName");
 		String password = (String) request.getParameter("password");
 		String check = (String) request.getParameter("check");
-		System.out.println(check);
 		if(check!=null){
 		if(check.equals("remember-me")){
 			Cookie userCookie = new Cookie("userName", userName);

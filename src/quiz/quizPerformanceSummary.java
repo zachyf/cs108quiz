@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import quiz.adsManager.advertisement;
+
 /**
  * Servlet implementation class quizPerformanceSummary
  */
@@ -37,6 +39,10 @@ public class quizPerformanceSummary extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		HttpSession ses = request.getSession();
+		adsManager AM = (adsManager)context.getAttribute("adsManager");
+		advertisement ad= AM.getRandomAd();
+		String url = ad.getUrl();
+		String img = ad.getPic();
 	
 		String username = (String) ses.getAttribute("name");
 		ArrayList<ArrayList<Object>> myRecentPerformance = DB.getMyRecentPerformanceAll(username);
@@ -76,7 +82,11 @@ public class quizPerformanceSummary extends HttpServlet {
 		out.println("</div></div></div>");
 		
 		out.println("<div class=\"container\">");
+		out.println("<table><tr><td>");
+		out.println("<br><h4>Sponsored Ad</h4><a href=\""+url+"\" ><img src=\""+img+"\"></img></a><br>");
+		out.println("</td><td>");
 		out.println("<h2>"+username+"'s Quiz Performance</h2>");
+
 		
 		if(size>0){
 			out.println("<table class=\"table\">");
@@ -100,6 +110,7 @@ public class quizPerformanceSummary extends HttpServlet {
 		}else{
 			out.println("<h4>You no have quiz history. </h4>");
 		}
+		out.println("</td></tr></table>");
 		out.println("</div>");
 		out.println("</body>");
 		out.println("</html>");
