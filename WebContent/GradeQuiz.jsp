@@ -23,6 +23,20 @@ if(quiz.isSinglePage()){
 				buff.append(request.getParameter(questionNum + " " + String.valueOf(j)));
 			}
 			answer = buff.toString();
+		} else if (question.getType().equals("MultipleChoiceMultipleAnswer")){
+			int numChoices = Integer.valueOf(request.getParameter("numChoices" + questionNum));
+			StringBuilder buff = new StringBuilder();
+			for (int j = 0; j < numChoices; j++) {
+				String check = request.getParameter("check" + questionNum + " " + j);
+				if (check != null && check.equals("checkAnswer")) {
+					if (buff.length() > 0) {
+						buff.append(", ");
+					}
+					String choice = request.getParameter("choice" + questionNum + " " + j);
+					buff.append(request.getParameter("choice" + questionNum + " " + j));
+				}
+			}
+			answer = buff.toString();
 		} else {
 			answer = request.getParameter(questionNum);	
 		}

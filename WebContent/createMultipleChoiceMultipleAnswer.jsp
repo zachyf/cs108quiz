@@ -1,21 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ page import="java.util.*" %>
     <%@ page import="quiz.*" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
+    <%@ page import="java.text.*" %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Questions</title>
+    <title>Create Multiple Choice</title>
 
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
     
     <!-- Custom styles for this template -->
     <link href="css/jumbotron.css" rel="stylesheet">
-    <link href="css/justifiednav.css" rel="stylesheet">
+    
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -56,51 +57,51 @@
 </div><br>
 
 <div class="container">
-<!-- Question type dropdown menu -->
+<h2 class="createQuestion">Create a Multiple Choice Multiple Answer Question</h2>
+
+<!-- Select number of choices -->
 <div class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	  Create Question #<%= String.valueOf(Integer.valueOf(request.getParameter("num")) + 1) %> <span class="caret"></span>
+	  Select Number of Choices <span class="caret"></span>
 	</button>
 	<ul class="dropdown-menu" role="menu">	
-		<%	
-		
+		<%
 		String num = request.getParameter("num");
 		String quizID = request.getParameter("quizID");
-		
-		String url = "createQuestionResponse.jsp?num=" + num + "&quizID=" + quizID +"&numAnswers=1";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\" >Question Response</a></li><br>");
-
-		url = "createFillInTheBlank.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Fill-In-The-Blank</a></li><br>");
-
-		url = "createPictureResponse.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Picture Response</a></li><br>");
-
-		url = "createMultipleChoice.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Choice</a></li><br>");
-		
-		url = "createMultiAnswer.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=2";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Answer</a></li><br>");
-		
-		url = "createMultipleChoiceMultipleAnswer.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Choice Multiple Answer</a></li><br>");
-		
-		
-
+		for (int i = 2; i <= 10; i++) {
+			String choice = String.valueOf(i);
+			String url = "createMultipleChoiceMultipleAnswer.jsp?num=" + num + "&quizID=" + quizID + "&choices=" + choice;
+			out.println("<li><a href=" + url + ">" + choice + "</a></li>");
+		}
 		%>
 	</ul>
-</div><br>
+</div><br><br>
 
-<br><br>
-<% if(!num.equals("0")){ 
-	out.println("<form action=\"viewQuizTest.jsp\">");
-	out.println("<input type=\"hidden\" name=\"quizID\" value=" + quizID + ">");
-	out.println("<input type=\"submit\" value=\"Finish Quiz and View\">");
-	out.println("</form>");
-}
-%>
+<!-- Create multiple choice question form -->
+<form action="CreateMultipleChoiceMultipleAnswerServlet" method="post">
 
+	<div class="input-group input-group-lg">
+		<span class="input-group-addon">Question: </span>
+		<input type="text" name="question" class="form-control">
+	</div><br>
 	
+	<%
+	int numChoices = Integer.valueOf(request.getParameter("choices"));
+	for (int i = 1; i <= numChoices; i++) {
+		out.println("<div class=input-group input-group-lg>");
+		out.println("<span class=input-group-addon><input type=\"checkbox\" value=\"choice\" name=\"check" + i + "\"> </span>");
+		out.println("<input type=text name=\"choice" + i + "\" class=form-control>");
+		out.println("</div>");
+	}
+	%><br>
+	
+	<input name="num" type="hidden" value="<%= request.getParameter("num") %>"/>
+	<input name="quizID" type="hidden" value="<%= request.getParameter("quizID") %>"/>
+	<input name="choices" type="hidden" value="<%= request.getParameter("choices") %>"/>
+	
+	<button type="submit" class="btn btn-default">Create</button>
+
+</form>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
