@@ -72,7 +72,7 @@ public class FillInTheBlank extends Question {
 	 */
 	@Override
 	public boolean checkAnswer(String answer) {
-		return this.answer.equals(answer);
+		return this.answer.toLowerCase().equals(answer.toLowerCase());
 	}
 
 	/**
