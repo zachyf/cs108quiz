@@ -424,6 +424,56 @@ public class userWelcome extends HttpServlet {
 		out.println("</table>");
 
 		out.println("</div></div>"); // Column 2
+		
+		// Friends' recently taken quizzes table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Your Friends' Recently Taken Quizzes</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
+		ArrayList<Quiz> friendCreatedQuizzes = null;
+		ArrayList<quizRecord> friendTakenQuizzes = null;
+		try {
+			friendTakenQuizzes = DB.getTakenQuizzes();
+			friendCreatedQuizzes = DB.getCreatedQuizzes();
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		for(int i=0; i< friendTakenQuizzes.size();i++){
+			if (i == 5) break;
+			quizRecord qr = friendTakenQuizzes.get(i);
+			int ip=i+1;
+			out.println("<tr>");
+			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+qr.getQuizID()+"\">"+DB.getQuizAt(qr.getQuizID()).getName()+"</a></td>");
+			out.println("<td><a href=\"userPage?ID="+qr.getUser()+"\">"+ qr.getUser() +"</a></td>");
+			out.println("<td>Score: "+ qr.getScore() +"</a></td>");
+			out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+qr.getQuizID()+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("</tr>");
+		}
+		out.println("</table>");
+		out.println("</div></div>"); // Column 1
+		
+		// Friends' recently created quizzes table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Your Friends' Recently Created Quizzes</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
+		for(int i=0; i< friendCreatedQuizzes.size();i++){
+			if (i == 5) break;
+			Quiz q = friendCreatedQuizzes.get(i);
+			int ip=i+1;
+			out.println("<tr>");
+			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+q.getID()+"\">"+DB.getQuizAt(q.getID()).getName()+"</a></td>");
+			out.println("<td>Created by: <a href=\"userPage?ID="+q.getCreator()+"\">"+ q.getCreator() +"</a></td>");
+			out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+q.getID()+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+			out.println("</tr>");
+		}
+		out.println("</table>");
+		out.println("</div></div>"); // Column 1
+		
+		
 
 
 
@@ -503,8 +553,8 @@ public class userWelcome extends HttpServlet {
 			out.println("<h4>You have no recent messages. </h4>");
 		}
 		out.println("<b>View all messages:</b><br>");
-		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br><br>");
-		
+		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br>");
+
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 
