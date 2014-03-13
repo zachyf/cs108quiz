@@ -42,7 +42,7 @@ Queue<Integer> q_order = (Queue<Integer>)session.getAttribute("questionsLeft" + 
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="HomepageBootstrap.jsp">Quiz Mania!</a>
+      <a class="navbar-brand" href="userWelcome">Quiz Mania!</a>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
