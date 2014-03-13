@@ -862,6 +862,11 @@ public class DBConnection {
 		return getList(query);
 	}
 	
+	public ArrayList<ArrayList<Object>> getHighestRated(){
+		String query = "Select quizName, quizID, avg(stars) as a from quizzes q, ratings r where  r.quizID = q.id group by q.id order by avg(stars) desc,quizName limit 5";
+		return getList4(query);
+	}
+	
 	public int getHighScoreQuizUser(String user, int quizID){
 		String query = "Select * from quizRecords where quizID =" + quizID + " order by numCorrect desc;";
 		ResultSet rs = executeQuery(query);
@@ -970,6 +975,24 @@ public class DBConnection {
 		} 
 		return list;
 	}
+	
+	private ArrayList<ArrayList<Object>> getList4(String query){
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()) {
+				ArrayList<Object> row = new ArrayList<Object>();
+				row.add(rs.getString("quizName"));
+				row.add(rs.getInt("quizID"));
+				row.add(rs.getDouble("a"));
+				list.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
+	
 	
 	private ArrayList<ArrayList<Object>> getList2(String query){
 		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();

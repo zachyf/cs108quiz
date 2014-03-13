@@ -3,6 +3,7 @@ package quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -354,6 +355,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</table>");
 		out.println("</div></div>"); // Column 1
 
+	
 		// Recently Created Quizzes Table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -425,9 +427,29 @@ public class userWelcome extends HttpServlet {
 
 		out.println("</div></div>"); // Column 2
 
+		// Your highly rated quizzes table
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Highest Rated Quizzes</div>");
+		out.println("<table class=\"table\">");
+		
+		ArrayList<ArrayList<Object>>ratedQuizzes = null;
+		ratedQuizzes = DB.getHighestRated();
+		for(int i=0; i<ratedQuizzes.size();i++){
+			int index = (Integer) ratedQuizzes.get(i).get(1);
+			int ip=i+1;
+			out.println("<tr>");
+			out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
+			Double avg =(Double) ratedQuizzes.get(i).get(2);
+			DecimalFormat df = new DecimalFormat("#.0");
+			out.println("<td> Average Rating:  "+df.format(avg)+"</td>");
+			out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"></img></a></td>");
+			out.println("</tr>");
+		}
+		out.println("</table>");
+		out.println("</div></div>"); // Column 1
 
-
-		out.println("<h2>Explore:</h2>");
+		out.println("<br><h2>Explore:</h2>");
 
 		out.println("<table class=\"table\"><tr><th>Find New Friends</th><th>Challenge Other Users</th><th>Create Quizzes</th><th>Send Messages</th></tr>");
 		out.println("<tr><td>");
@@ -474,7 +496,7 @@ public class userWelcome extends HttpServlet {
 
 
 		out.println("</div>"); // Row 2
-
+		
 		// Friends
 		out.println("<div class=\"row\">");
 		out.println("<h2>Messaging and Challenges:</h2>");
