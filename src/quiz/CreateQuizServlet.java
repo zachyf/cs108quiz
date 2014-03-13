@@ -55,7 +55,7 @@ public class CreateQuizServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Quiz q = createQuiz(request);
-		RequestDispatcher dispatch = request.getRequestDispatcher("createQuestions.jsp?num=1&quizID=" + q.getID());
+		RequestDispatcher dispatch = request.getRequestDispatcher("createQuestions.jsp?num=0&quizID=" + q.getID());
 		dispatch.forward(request, response);
 	}
 

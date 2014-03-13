@@ -59,7 +59,7 @@
 <div class="container">
 <h2 class="createQuestion">Create a Multiple Question</h2>
 
-<!-- Select number of choices button button -->
+<!-- Select number of choices -->
 <div class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 	  Select Number of Choices <span class="caret"></span>

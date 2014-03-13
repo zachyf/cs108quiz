@@ -59,7 +59,7 @@
 <!-- Question type dropdown menu -->
 <div class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	  Create Question #<%= request.getParameter("num") %> <span class="caret"></span>
+	  Create Question #<%= String.valueOf(Integer.valueOf(request.getParameter("num")) + 1) %> <span class="caret"></span>
 	</button>
 	<ul class="dropdown-menu" role="menu">	
 		<%	
@@ -67,13 +67,13 @@
 		String num = request.getParameter("num");
 		String quizID = request.getParameter("quizID");
 		
-		String url = "createQuestionResponse.jsp?num=" + num + "&quizID=" + quizID;
+		String url = "createQuestionResponse.jsp?num=" + num + "&quizID=" + quizID +"&numAnswers=1";
 		out.println("<li><a href=" + url + " class=\"btn btn-large\" >Question Response</a></li><br>");
 
-		url = "createFillInTheBlank.jsp?num=" + num + "&quizID=" + quizID;
+		url = "createFillInTheBlank.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
 		out.println("<li><a href=" + url + " class=\"btn btn-large\">Fill-In-The-Blank</a></li><br>");
 
-		url = "createPictureResponse.jsp?num=" + num + "&quizID=" + quizID;
+		url = "createPictureResponse.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
 		out.println("<li><a href=" + url + " class=\"btn btn-large\">Picture Response</a></li><br>");
 
 		url = "createMultipleChoice.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";
@@ -84,7 +84,7 @@
 </div><br>
 
 <br><br>
-<% if(!num.equals("1")){ 
+<% if(!num.equals("0")){ 
 	out.println("<form action=\"viewQuizTest.jsp\">");
 	out.println("<input type=\"hidden\" name=\"quizID\" value=" + quizID + ">");
 	out.println("<input type=\"submit\" value=\"Finish Quiz and View\">");
