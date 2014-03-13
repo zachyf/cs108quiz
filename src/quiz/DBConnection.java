@@ -983,6 +983,18 @@ public class DBConnection {
 		catch(SQLException e){}
 	}
 	
+	private void addChoices2(MultipleChoiceMultipleAnswer question, int quizID) {
+		String query = "Select choice from questions where quizID = " + quizID + " and questionNum = "
+			+ question.getNum() + ";";
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()){
+				question.addChoices(rs.getString("choice"));
+			}
+		}
+		catch(SQLException e){}
+	}
+	
 	public void getQuestions(Quiz quiz){
 	String query = "SELECT question, answer, questionNum, type from questions where quizID = " + quiz.getID() + " " +
 			"group by question, answer, questionNum, type order by questionNum asc;";
@@ -1000,6 +1012,12 @@ public class DBConnection {
 					//	public MultipleChoice(String question, List<String> choices, String answer, int num) {
 					MultipleChoice question = new MultipleChoice(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum"));
 					addChoices(question, quiz.getID());
+					quiz.addQuestion(question);
+				} else if (type.equals("MultiAnswer")) {
+					quiz.addQuestion(new MultiAnswerQuestion(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+				} else if (type.equals("MultipleChoiceMultipleAnswer")) {
+					MultipleChoiceMultipleAnswer question = new MultipleChoiceMultipleAnswer(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum"));
+					addChoices2(question, quiz.getID());
 					quiz.addQuestion(question);
 				}
 			}
@@ -1108,13 +1126,31 @@ public class DBConnection {
 		return insertion.toString();
 	}
 	
+	public String getMultipleChoiceQuestionString2(Question question, Quiz quiz){
+		StringBuilder insertion = new StringBuilder();
+		MultipleChoiceMultipleAnswer mcQuestion = (MultipleChoiceMultipleAnswer)question;
+		List<String> choices = mcQuestion.getChoices();
+		if(choices.size() > 0) insertion.append("INSERT INTO questions VALUES ");
+		for(int i = 0; i < choices.size(); i++){
+			if(i > 0) insertion.append(",");
+			insertion.append("(" + quiz.getID() + ",\""  + question.rawQuestion() + "\",\"" 
+			+ question.getAnswer() + "\"," + question.getNum() + ",\"MultipleChoiceMultipleAnswer\",\"" + choices.get(i) + "\")");
+			System.out.println("choices");
+		}
+		insertion.append(";");
+		return insertion.toString();
+	}
+	
 	public void addQuestion(Question question, Quiz quiz){
 		String insertion = "";
-		if(question.getType().equals("MultipleChoice"))
+		if (question.getType().equals("MultipleChoiceMultipleAnswer")) {
+			insertion = getMultipleChoiceQuestionString2(question, quiz);
+		} else if (question.getType().equals("MultipleChoice")) {
 			insertion = getMultipleChoiceQuestionString(question, quiz);
-		else
+		} else {
 			insertion = "INSERT INTO questions VALUES (" + quiz.getID() + ",\""  + question.rawQuestion() + "\",\"" 
-				+ question.getAnswer() + "\"," + question.getNum() + ",\"" + question.getType() + "\",\"\");";
+			+ question.getAnswer() + "\"," + question.getNum() + ",\"" + question.getType() + "\",\"\");";
+		}
 		updateDB(insertion);
 		quiz.addQuestion(question);
 	}

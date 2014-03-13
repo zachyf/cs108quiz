@@ -1,64 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ page import="java.util.*, quiz.*" %>    
+    <%@ page import="java.util.*" %>
+    <%@ page import="quiz.*" %>
+    <%@ page import="java.text.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<% 
-String curUser = (String)session.getAttribute("name");
-
-Answer a = (Answer)session.getAttribute("answer");
-a.endTimer();
-Quiz quiz = (Quiz)session.getAttribute("quiz");
-
-if(quiz.isSinglePage()){
-	for(int i = 0; i < quiz.getNumQuestions(); i++) {
-		Question question = quiz.getQuestion(i);
-		String answer = null;
-		String questionNum = String.valueOf(i);
-		if (question.getType().equals("MultiAnswer")) {
-			int numAnswers = Integer.valueOf(request.getParameter("numAnswers" + questionNum));
-			StringBuilder buff = new StringBuilder();
-			buff.append(request.getParameter(questionNum + " 0"));
-			for (int j = 1; j < numAnswers; j++) {
-				buff.append(", ");
-				buff.append(request.getParameter(questionNum + " " + String.valueOf(j)));
-			}
-			answer = buff.toString();
-		} else if (question.getType().equals("MultipleChoiceMultipleAnswer")){
-			int numChoices = Integer.valueOf(request.getParameter("numChoices" + questionNum));
-			StringBuilder buff = new StringBuilder();
-			for (int j = 0; j < numChoices; j++) {
-				String check = request.getParameter("check" + questionNum + " " + j);
-				if (check != null && check.equals("checkAnswer")) {
-					if (buff.length() > 0) {
-						buff.append(", ");
-					}
-					String choice = request.getParameter("choice" + questionNum + " " + j);
-					buff.append(request.getParameter("choice" + questionNum + " " + j));
-				}
-			}
-			answer = buff.toString();
-		} else {
-			answer = request.getParameter(questionNum);	
-		}
-		a.setAnswer(question, answer);
-	}
-		//a.setAnswer(quiz.getQuestion(i), request.getParameter("" + i));
-}
-DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
-db.addAnswerToDB(a);
-db.bumpNumQuizesTaken(curUser);
-session.removeAttribute("answer");
-%>
 <html>
-<head>
+ <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%=quiz.getName()%></title>
+    <title>Create Multiple-Answer Question</title>
 
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
     
     <!-- Custom styles for this template -->
     <link href="css/jumbotron.css" rel="stylesheet">
@@ -69,7 +23,7 @@ session.removeAttribute("answer");
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-</head>
+  </head>
 <body>
 
 <!-- Navigation Bar -->
@@ -102,16 +56,57 @@ session.removeAttribute("answer");
 </div><br>
 
 <div class="container">
-	<h3>Your Score is: <%=Math.round((a.getScore() * 100))%>%</h3>
-	<h4>You took <%=(a.getTimeToComplete()/1000) %> seconds to complete.</h4>
+<h2 class="createQuestion">Create a Multiple-Answer Question</h2>
+
+<!-- Select number of answers -->
+<div class="btn-group">
+	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	  Select Number of Answers <span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu" role="menu">	
+		<%
+		String num = request.getParameter("num");
+		String quizID = request.getParameter("quizID");
+		for (int i = 2; i <= 100; i++) {
+			String choice = String.valueOf(i);
+			String url = "createMultiAnswer.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=" + choice;
+			out.println("<li><a href=" + url + ">" + choice + "</a></li>");
+		}
+		%>
+	</ul>
+</div><br><br>
+
+<form action="CreateMultiAnswerServlet" method="post">
+	
+	<div class="input-group input-group-lg">
+		<span class="input-group-addon">Question: </span>
+		<input type="text" name="question" class="form-control">
+	</div><br>
+	
 	<%
-	for(int i = 0; i < quiz.getNumQuestions(); i++){
-        Question question = quiz.getQuestion(i);
-        out.println(question.displayQuestion(i + 1));
-        out.println("Your answer: " + a.getAnswerToQuestion(question));
-    }
-	%>
+	int numAnswers = Integer.valueOf(request.getParameter("numAnswers"));
+	for (int i = 1; i <= numAnswers; i++) {
+		out.println("<div class=input-group input-group-lg>");
+		out.println("<span class=input-group-addon>Answers: </span>");
+		out.println("<input type=text name=answer" + i + " class=form-control>");
+		out.println("</div>");
+	}
+	%><br>
+	
+	<label class="checkbox">
+    	<input type="checkbox" name="check" value="require-order"> Require correct ordering
+    </label><br>
+	<input name="num" type="hidden" value="<%= request.getParameter("num") %>"/>
+	<input name="quizID" type="hidden" value="<%= request.getParameter("quizID") %>"/>
+	<input name="numAnswers" type="hidden" value="<%= request.getParameter("numAnswers") %>"/>
+	
+	<button type="submit" class="btn btn-default">Create</button>
+	
+</form>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 
 </body>
 </html>

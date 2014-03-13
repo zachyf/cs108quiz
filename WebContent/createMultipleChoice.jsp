@@ -57,7 +57,7 @@
 </div><br>
 
 <div class="container">
-<h2 class="createQuestion">Create a Multiple Question</h2>
+<h2 class="createQuestion">Create a Multiple Choice Question</h2>
 
 <!-- Select number of choices -->
 <div class="btn-group">
