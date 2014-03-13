@@ -8,11 +8,12 @@
 String receive = request.getParameter("received");
 DBConnection db = (DBConnection)application.getAttribute("db");
 Double rating = db.averageRating(Integer.parseInt(quizID));
-
-
+musicManager mm= (musicManager) application.getAttribute("mm");
+Integer numUsersRating = db.numUsersRating(Integer.parseInt(quizID));
 Quiz quiz = db.getQuizAt(Integer.parseInt(quizID));
 request.setAttribute("quiz", quiz);
 String username = (String)session.getAttribute("name");
+String randomSong = mm.getRandomSong();
 ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 
 %>
@@ -58,6 +59,7 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
       <li><a href="quizPerformanceSummary">My Quiz History <span class="glyphicon glyphicon-th-list"></a></li>
       <li><a href="createQuiz.html">Create Quiz <span class="glyphicon glyphicon-pencil"></a></li>
       <li><a href="logout">Logout <span class="glyphicon glyphicon-off"></a></li>
+      	
       </ul>
       <form action="SearchQuizzesServlet" method="GET" class="navbar-form navbar-right" role="form">
         <div class="form-group">
@@ -71,12 +73,20 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 
 
 <div class="container">
+	
+	
+<audio   align="right" controls>
+  <source  align="right" src="<%=randomSong%>" type="audio/mpeg">
+  
+  <embed height="50" width="100" src="horse.mp3">
+</audio>
+	
 	<h1><%=quiz.getName() %></h1>
 
 	<h4><%=quiz.getDescription() %></h4>
 
 
-	<h5>Creator:<a href="userPage?ID=<%=quiz.getCreator()%>"><%=quiz.getCreator()%></a></h5>
+	<h4>Creator:<a href="userPage?ID=<%=quiz.getCreator()%>"><%=quiz.getCreator()%></a></h4>
 	<p><h4>Rate this Quiz:</h4></p>
 	
 	
@@ -119,7 +129,7 @@ $(document).ready(function(){
     
     
 	<h5><%if(leaderboard.size() > 0)
-			out.println( db.getQuizStats(quiz) +"<td>"+rating+"</td></tr></table>"); 
+			out.println( db.getQuizStats(quiz) +"<td>"+rating+"</td><td>"+numUsersRating+"</td></tr></table>"); 
 			%></h5>
 	
 	<div class="row">
@@ -267,7 +277,7 @@ $(document).ready(function(){
 				out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
 			}
 			else{
-				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"> Take this quiz </a></p>");
+				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz2.png\"></img></a></p>");
 				//<p>Take the quiz in practice mode</p>
 				if(quiz.getCreator().equals(session.getAttribute("name")))
 					out.println("<p>Edit Quiz - Since you are the owner</p>");

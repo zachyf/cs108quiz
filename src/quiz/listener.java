@@ -41,6 +41,8 @@ public class listener implements ServletContextListener {
         ServletContext context=arg0.getServletContext();
         AnimalManager am = new AnimalManager();
         adsManager adsManager = new adsManager();
+        musicManager musicManager = new musicManager();
+        context.setAttribute("mm",musicManager);
         context.setAttribute("adsManager",adsManager); 
         context.setAttribute("am",am); 
         context.setAttribute("DBConnection",DB); 
