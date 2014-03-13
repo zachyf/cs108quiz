@@ -503,8 +503,8 @@ public class userWelcome extends HttpServlet {
 			out.println("<h4>You have no recent messages. </h4>");
 		}
 		out.println("<b>View all messages:</b><br>");
-		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br>");
-
+		out.println("<a href=\"MailboxFull\"><img src=\"mailbox.png\" title=\"Click to view all messages.\"></img></a><br><br>");
+		
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col
 

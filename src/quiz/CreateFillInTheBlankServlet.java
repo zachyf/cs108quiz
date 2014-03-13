@@ -56,7 +56,16 @@ public class CreateFillInTheBlankServlet extends HttpServlet {
 		String questionStart = request.getParameter("questionStart");
 		String questionEnd = request.getParameter("questionEnd");
 		String question = questionStart + " __________ " + questionEnd;
-		String answer = request.getParameter("answer");
+		
+		// Get the answer		
+		int numAnswers = Integer.valueOf(request.getParameter("numAnswers"));
+		StringBuilder buff = new StringBuilder();
+		buff.append(request.getParameter("answer1"));
+		for (int i = 2; i <= numAnswers; i++) {
+			buff.append(",");
+			buff.append(request.getParameter("answer" + String.valueOf(i)));
+		}
+		String answer = buff.toString();
 		
 		// num was passed in as a hidden input
 		int num = Integer.valueOf(request.getParameter("num"));

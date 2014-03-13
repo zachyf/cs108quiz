@@ -55,7 +55,16 @@ public class CreateQuestionResponseServlet extends HttpServlet {
 		
 		// Get question and answer from the form
 		String question = request.getParameter("question");
-		String answer = request.getParameter("answer");
+		
+		// Get the answer		
+		int numAnswers = Integer.valueOf(request.getParameter("numAnswers"));
+		StringBuilder buff = new StringBuilder();
+		buff.append(request.getParameter("answer1"));
+		for (int i = 2; i <= numAnswers; i++) {
+			buff.append(",");
+			buff.append(request.getParameter("answer" + String.valueOf(i)));
+		}
+		String answer = buff.toString();
 		
 		// num was passed in as a hidden input
 		int num = Integer.valueOf(request.getParameter("num"));

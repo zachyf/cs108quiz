@@ -70,10 +70,10 @@
 		String url = "createQuestionResponse.jsp?num=" + num + "&quizID=" + quizID +"&numAnswers=1";
 		out.println("<li><a href=" + url + " class=\"btn btn-large\" >Question Response</a></li><br>");
 
-		url = "createFillInTheBlank.jsp?num=" + num + "&quizID=" + quizID + " &numAnswers=1";
+		url = "createFillInTheBlank.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
 		out.println("<li><a href=" + url + " class=\"btn btn-large\">Fill-In-The-Blank</a></li><br>");
 
-		url = "createPictureResponse.jsp?num=" + num + "&quizID=" + quizID + " &numAnswers=1";
+		url = "createPictureResponse.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
 		out.println("<li><a href=" + url + " class=\"btn btn-large\">Picture Response</a></li><br>");
 
 		url = "createMultipleChoice.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";

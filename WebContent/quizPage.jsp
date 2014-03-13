@@ -4,8 +4,12 @@
 <%@ page import="java.util.*, quiz.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<% String quizID = request.getParameter("id"); 
+<% String quizID = request.getParameter("id");
+String receive = request.getParameter("received");
 DBConnection db = (DBConnection)application.getAttribute("db");
+Double rating = db.averageRating(Integer.parseInt(quizID));
+
+
 Quiz quiz = db.getQuizAt(Integer.parseInt(quizID));
 request.setAttribute("quiz", quiz);
 String username = (String)session.getAttribute("name");
@@ -25,6 +29,7 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
     <!-- Custom styles for this template -->
     <link href="css/jumbotron.css" rel="stylesheet">
     <link href="css/justifiednav.css" rel="stylesheet">
+    <link href="css/star.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,6 +69,7 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
   </div>
 </div><br>
 
+
 <div class="container">
 	<h1><%=quiz.getName() %></h1>
 
@@ -71,9 +77,49 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 
 
 	<h5>Creator:<a href="userPage?ID=<%=quiz.getCreator()%>"><%=quiz.getCreator()%></a></h5>
+	<p><h4>Rate this Quiz:</h4></p>
 	
+	
+	<div class="rating">
+    <span><input type="radio" name="rating" id="str5" value="5"><label for="str5"></label></span>
+    <span><input type="radio" name="rating" id="str4" value="4"><label for="str4"></label></span>
+    <span><input type="radio" name="rating" id="str3" value="3"><label for="str3"></label></span>
+    <span><input type="radio" name="rating" id="str2" value="2"><label for="str2"></label></span>
+    <span><input type="radio" name="rating" id="str1" value="1"><label for="str1"></label></span>
+	</div>
+    
+    <%if(receive != null){if(receive.equals("true")){ %>
+    <h4>Rating Received</h4>
+    <%}} %>
+    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+//  Check Radio-box
+    $(".rating input:radio").attr("checked", false);
+    $('.rating input').click(function () {
+        $(".rating span").removeClass('checked');
+        $(this).parent().addClass('checked');
+    });
+
+    $('input:radio').change(
+    function(){
+        var userRating = this.value;
+        <% String str= request.getParameter("id");%>
+        var quiz="<%=str%>";
+        var str1 = "rate?quiz=".concat(quiz);
+        var str2 = "&stars=".concat(userRating);
+        window.location = str1.concat(str2);
+    }); 
+});
+</script>
+ 
+ 
+    
+    
+    
 	<h5><%if(leaderboard.size() > 0)
-			out.println("Performance Summary: " + db.getQuizStats(quiz)); 
+			out.println( db.getQuizStats(quiz) +"<td>"+rating+"</td></tr></table>"); 
 			%></h5>
 	
 	<div class="row">
