@@ -28,15 +28,38 @@
       <form class="form-signin" action="Login" method="post" role="form">
       	<h2 class="form-signin-heading">Welcome to Quiz Mania!</h2>
         <p>Please sign in</p>
-        <input type="text" class="form-control" name="userName" placeholder="Username" required autofocus>
-        <input type="password" class="form-control" name="password" placeholder="Password" required>
-	    <% String id = request.getParameter("quizID");
+        <%
+        String cookieName = "userName";
+    	String cookieName2 = "password";
+        Cookie[] cookies = request.getCookies();
+        int check=0;
+        if (cookies != null) 
+        {
+            for(int i=0; i<cookies.length; i++) 
+            {
+                Cookie cookie = cookies[i];
+                if (cookieName.equals(cookie.getName())) 
+                { check+=1;%>
+                	<input type="text" class="form-control" name="userName" value=<%=cookie.getValue() %> required autofocus>
+                    
+               <% }
+                if(cookieName2.equals(cookie.getName())){check+=1;%>
+                <input type="password" class="form-control" name="password" value=<%=cookie.getValue() %>  required>
+                <%}
+            }
+        }
+        if(check==0){%>
+            <input type="text" class="form-control" name="userName" placeholder="Username" required autofocus>
+        	<input type="password" class="form-control" name="password" placeholder="Password" required>
+       <% }  
+      
+	    String id = request.getParameter("quizID");
 		if(id != null)
 			out.println("<input name=\"quizID\" type=\"hidden\" value=\"" + id + "\">");
 		%>
         
         <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Remember me
+          <input type="checkbox" name="check" value="remember-me"> Remember me
         </label>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       	<br><a href="CreateAccount.jsp">Create an account</a>

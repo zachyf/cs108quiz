@@ -77,7 +77,8 @@ public class DBConnection {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-			if(rs.next()){ 
+			boolean next= rs.next();
+			if(next){ 
 				return true;
 			}
 		 return false;
@@ -302,6 +303,21 @@ public class DBConnection {
 		         e.printStackTrace();
 			} 
 	 }
+	 
+	 public void clearHistory(Integer id){
+		 try{
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 String q = "DELETE FROM quizRecords WHERE quizID="+id + ";";
+			
+			 stmt.executeUpdate(q);
+		     
+			 }catch(SQLException e) { 
+		         e.printStackTrace();
+			} 
+	 }
+	 
+	 
 	 public int removeUser(String username){
 		 try{
 		 Statement stmt = con.createStatement();
@@ -353,6 +369,35 @@ public class DBConnection {
 		 return users;
 	 }
 	 
+	 public ArrayList<String> getAllUsersNotFriends(String username){
+		 ArrayList<String> users = new ArrayList<String>();
+		 String query = "Select user_name from users where user_name not in (select user1 as user_name from friends where user2=\""+username+"\" union select user2 as user_name from friends where user1=\""+username+"\" union select \""+username+"\");";
+		 ResultSet rs = executeQuery(query);
+		 try {
+			 while(rs.next()){
+				users.add(rs.getString("user_name"));
+			 }
+		 }catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		 }
+		 return users;
+	 }
+	 
+	 public ArrayList<String> getAllUsersNotAdmin(){
+		 ArrayList<String> users = new ArrayList<String>();
+		 String query = "Select * from users where adminStatus=false;";
+		 ResultSet rs = executeQuery(query);
+		 try {
+			 while(rs.next()){
+				users.add(rs.getString("user_name"));
+			 }
+		 }catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		 }
+		 return users;
+	 }
 	 public int getQuizzesTotal() throws SQLException{
 		 Statement stmt = con.createStatement();
 		 stmt.executeQuery("USE " + database);
@@ -378,13 +423,13 @@ public class DBConnection {
 	 public Boolean alreadyFriends(String user1, String user2) throws SQLException{
 		 Statement stmt = con.createStatement();
 		 stmt.executeQuery("USE " + database);
-		 ResultSet rs =  stmt.executeQuery("SELECT * FROM friends where user1=\""+user1+"\" and user2=\""+user2+"\";");
-		 if(rs.next()){ 
+		 ResultSet rs =  stmt.executeQuery("SELECT * FROM friends where user1=\""+user1+"\" and user2=\""+user2+"\" union SELECT * FROM friends where user1=\""+user2+"\" and user2=\""+user1+"\";");  
+		 if(rs.next() ){ 
 				return true;
 		}else{
 			return false;
+		
 		}
-		 
 	 }
 	 public void addRequest(String user1,String user2) throws SQLException{
 		 Statement stmt = con.createStatement();
@@ -419,6 +464,8 @@ public class DBConnection {
 			return false;
 		}
 	 }
+	 
+	 
 	 
 	 public void addFriend(String user1,String user2) throws SQLException{
 		 Statement stmt = con.createStatement();
