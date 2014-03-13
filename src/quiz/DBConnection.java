@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 
@@ -367,6 +368,30 @@ public class DBConnection {
 				e.printStackTrace();
 		 }
 		 return users;
+	 }
+	 
+	 public void addRating(Integer id,Integer stars) throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 stmt.executeUpdate("INSERT INTO ratings VALUES("+id+","+stars+");");
+	 }
+	 
+	 public Double averageRating(Integer id) throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 String s = "Select avg(stars) from ratings where quizID="+id;
+		 ResultSet rs = executeQuery(s);
+		 try {
+			 if(rs.next()){
+				DecimalFormat df = new DecimalFormat("#.0");
+				return (Double.parseDouble(df.format(rs.getDouble("avg(stars)"))));
+			 }
+		 }catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		 }
+		 return (double)0;
+		 
 	 }
 	 
 	 public ArrayList<String> getAllUsersNotFriends(String username){
@@ -1028,14 +1053,13 @@ public class DBConnection {
 			ResultSet rs = executeQuery("SELECT count(*) as c, avg(numCorrect) as av, count(distinct userName) as numUsers,  " + 
 					"avg(numQuestions) as numQuestions, avg(timeToComplete)/1000 as avgTime from quizRecords where quizID = " + quiz.getID() + ";");
 			rs.next();
-			sb.append(quiz.getName() + " has been taken " + rs.getInt("c") + " times by " + rs.getInt("numUsers"));
-			if(rs.getInt("numUsers") > 1)
-				sb.append(" different users with an average score of ");
-			else sb.append(" user with an average score of ");
+			sb.append("<table class=\"table\"><tr><th>Times Taken</th><th>Number of Different Users</th><th>Average Score</th><th>Average Time Taken</th><th>Average Score</th></tr>");
+			sb.append("<tr><td>" + rs.getInt("c") + "</td> <td> " + rs.getInt("numUsers"));
+			
 			Double averageNumCorrect = rs.getDouble("av");
 			Double numQuestions = rs.getDouble("numQuestions");
 			int average = Math.round((int)(averageNumCorrect*100/numQuestions));
-			sb.append(average + "% and average time of " + rs.getInt("avgTime") + " seconds.");
+			sb.append("</td><td>"+average + "</td><td>" + rs.getInt("avgTime") + "</td>");
 		}
 		catch (SQLException e) {}
 		return sb.toString();
