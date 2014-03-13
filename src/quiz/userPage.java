@@ -131,8 +131,6 @@ public class userPage extends HttpServlet {
 	    try {
 			if(DB.alreadyFriends(username, loggedInUser)){
 				out.println("<h4> You and "+username+" are friends.</h4><br>");
-			}else{
-				out.println("<h4> Add "+username+" as a friend <a href=\"FriendRequest?userName="+username+"\"><img src=\"acceptButton.jpg\" title=\"Add Friend\"></img></a><br>");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -192,7 +190,7 @@ public class userPage extends HttpServlet {
 			e.printStackTrace();
 		}
 		if(check==0){
-			out.println("<h4> No awards yet.  To win awards, start taking quizzes, making quizzes, or practicing in quiz practice mode.</h4>");
+			out.println("<h4>"+username+ " has not won any awards yet.</h4>");
 		}
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col 2
@@ -229,11 +227,20 @@ public class userPage extends HttpServlet {
 		
 		out.println("<h2>Interact with "+username+":</h2>");
 		out.println("<table><tr><td>");
+		
+	  
 		try {
 			if(DB.alreadyFriends(username, loggedInUser)){
 				out.println("<h4> You are already friends with "+username+".</h4>");
+				out.println("<h4> Click to unfriend "+username+": <a href=\"Unfriend?userName="+username+"\"><img src=\"rejectButton.jpg\"></img></a></h4>");
+			}else if(DB.alreadyPending(loggedInUser,username)){
+				out.println("<h4> You have already requested "+username+". Wait for a response.</h4>");
+			}else if(DB.alreadyPending(username,loggedInUser)){
+				out.println("<h4> "+username+" has requested you. Check your requests.</h4>");
 			}else{
+				
 				out.println("<h4> Add "+username+" as a friend <a href=\"FriendRequest?userName="+username+"\"><img src=\"acceptButton.jpg\" title=\"Add Friend\"></img></a>");
+				 
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

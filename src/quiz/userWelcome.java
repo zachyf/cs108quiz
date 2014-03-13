@@ -101,21 +101,7 @@ public class userWelcome extends HttpServlet {
 		out.println("<title> Welcome "+username+"</title>");
 		out.println("</head>");
 		out.println("<body>");
-		out.println("<script type=\"text/javascript\">");
-		out.println("function handleFriend(){");
-		out.println("var xmlhttp;");
-		    out.println("if (window.XMLHttpRequest){");
-		       out.println("xmlhttp = new XMLHttpRequest();"); //for IE7+, Firefox, Chrome, Opera, Safari
-		    out.println("} else {");
-		        out.println("xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");"); //for IE6, IE5
-		    out.println("}");
-		    out.println("xmlhttp.open(\"POST\", \"FriendRequest\", true);"); 
-		    out.println("xmlhttp.onreadystatechange = function() {");
-		        out.println("if (xmlhttp.readyState == 4) { ");
-		            out.println("if (xmlhttp.status == 200) {");
-		            out.println("document.getElementById(\"message1\").innerHTML = xmlhttp.responseText;}else{");
-		            out.println("alert(\"problem\");}}};");   
-		    out.println("xmlhttp.send(null);}</script>");        
+		     
 		// Nav bar html
 		out.println("<div class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">");
 		out.println("<div class=\"container\"><div class=\"navbar-header\">");
@@ -214,7 +200,7 @@ public class userWelcome extends HttpServlet {
 					break;
 				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
 				out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
-
+				out.println("<br>");
 			}
 		}
 	    out.println("</div>"); // panel
@@ -299,7 +285,7 @@ public class userWelcome extends HttpServlet {
 				out.println("Enter the User You Wish to Promote:");
 				out.println("<form action=\"promote\" METHOD=\"post\">");
 				out.println("<select name=\"userName\">");
-				ArrayList<String> userNamesP = DB.getAllUsers();
+				ArrayList<String> userNamesP = DB.getAllUsersNotAdmin();
 				for(int i=0;i<userNamesP.size();i++){
 					if (!userNamesP.get(i).equals(username)){
 						out.println("<option value=\""+userNamesP.get(i)+"\">" + userNamesP.get(i) +"</option>");
@@ -313,6 +299,16 @@ public class userWelcome extends HttpServlet {
 				out.println("<form action=\"deleteQuiz\" METHOD=\"post\">");
 				out.println("<select name=\"quizID\">");
 				ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+				for(int i=0;i<allQuizzes.size();i++){
+					out.println("<option value=\""+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</option>");
+				}
+				out.println("</select>");
+				out.println("<input type=\"submit\" value=\"Delete\"><br>"); 
+				out.println("</form></p>");
+				out.println("<p><h4>Clear Quiz History:</h4>");
+				out.println("Select which Quiz's History You Wish to Clear:");
+				out.println("<form action=\"ClearHistory\" METHOD=\"post\">");
+				out.println("<select name=\"quizID\">");
 				for(int i=0;i<allQuizzes.size();i++){
 					out.println("<option value=\""+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</option>");
 				}
@@ -437,7 +433,7 @@ public class userWelcome extends HttpServlet {
 		out.println("Choose a User:");
 		out.println("<form action=\"FriendRequest\" METHOD=\"post\">");
 		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesF = DB.getAllUsers();
+		ArrayList<String> userNamesF = DB.getAllUsersNotFriends(username);
 		for(int i=0;i<userNamesF.size();i++){
 			try {
 				if (!DB.alreadyFriends(username, userNamesF.get(i)) && !username.equals(userNamesF.get(i))){
@@ -485,7 +481,7 @@ public class userWelcome extends HttpServlet {
 		out.println("<div class=\"input-group\">");
 		out.println("Select a user:");
 		out.println("<select name=\"userName\">");
-		ArrayList<String> userNamesF2 = DB.getAllUsers();
+		ArrayList<String> userNamesF2 = DB.getAllUsersNotFriends(username);
 		for(int i=0;i<userNamesF2.size();i++){
 			try {
 				if (!DB.alreadyFriends(username, userNamesF2.get(i)) && !username.equals(userNamesF2.get(i))){

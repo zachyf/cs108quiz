@@ -31,7 +31,24 @@ public class Unfriend extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		ServletContext context = request.getServletContext();
+		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
+		HttpSession ses = request.getSession();
+		String loggedInUser = (String) ses.getAttribute("name");
+		String userName = (String) request.getParameter("userName");
+		PrintWriter out = response.getWriter();
+		try{
+		if (!DB.userExists(userName)){
+			System.out.println("Can't unfriend " + userName + " because " + userName + " isn't a user in the quizapp.");
+		}else{
+			DB.unfriend(userName, loggedInUser);
+			out.println("User " + userName + " has been unfriended");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		RequestDispatcher dispatch = request.getRequestDispatcher("userPage?ID="+userName); 
+		dispatch.forward(request, response);
 	}
 
 	/**
@@ -46,7 +63,7 @@ public class Unfriend extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		try{
 		if (!DB.userExists(userName)){
-			out.println("Can't unfriend " + userName + " because " + userName + " isn't a user in the quizapp.");
+			System.out.println("Can't unfriend " + userName + " because " + userName + " isn't a user in the quizapp.");
 		}else{
 			DB.unfriend(userName, loggedInUser);
 			out.println("User " + userName + " has been unfriended");
