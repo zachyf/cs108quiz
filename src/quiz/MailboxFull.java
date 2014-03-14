@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import quiz.adsManager.advertisement;
+
 /**
  * Servlet implementation class MailboxFull
  */
@@ -34,6 +36,10 @@ public class MailboxFull extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext context = request.getServletContext();
 		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
+		adsManager AM = (adsManager)context.getAttribute("adsManager");
+		advertisement ad= AM.getRandomAd();
+		String url = ad.getUrl();
+		String img = ad.getPic();
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		HttpSession ses = request.getSession();
@@ -46,11 +52,12 @@ public class MailboxFull extends HttpServlet {
 		out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\">");
 		out.println("<link href=\"bootstrap/css/bootstrap-theme.min.css\" rel=\"stylesheet\">");
 		out.println("<link href=\"css/jumbotron.css\" rel=\"stylesheet\">");
+		if(username!=null){
 		out.println("<title>"+username+"'s Mailbox</title>");
+		}
 		out.println("</head>");
 		out.println("<body>");
-		
-		// Nav bar html
+		//Nav bar
 		out.println("<div class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">");
 		out.println("<div class=\"container\"><div class=\"navbar-header\">");
 		out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">");
@@ -70,8 +77,11 @@ public class MailboxFull extends HttpServlet {
 		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search <span class=\"glyphicon glyphicon-search\"></button>");
 		out.println("</form>");
 		out.println("</div></div></div>");
-		
+		out.println("<table><tr><td>");
+		out.println("<br><h4>Sponsored Ad</h4><a href=\""+url+"\" ><img src=\""+img+"\"></img></a><br>");
+		out.println("</td><td>");
 		out.println("<div class=\"container\">");
+		if(username!=null){
 		out.println("<h2>"+username+"'s Mailbox</h2>");
 		ArrayList<Message> ml = DB.getMessages(username);
 		if(ml.size()!=0){
@@ -87,6 +97,10 @@ public class MailboxFull extends HttpServlet {
 		}else{
 			out.println("<h4>You have no recent messages. </h4>");
 		}
+		}else{
+			out.println("<h2>Please Login: <a href=\"Homepage.jsp\"><img src=\"Login.jpg\"></img></a></h2>");
+		}
+		out.println("</td></tr></table>");
 		out.println("</div>");
 		out.println("</body>");
 		out.println("</html>");

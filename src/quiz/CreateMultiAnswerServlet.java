@@ -44,7 +44,7 @@ public class CreateMultiAnswerServlet extends HttpServlet {
 		DBConnection db = (DBConnection)context.getAttribute("db");
 		int quizID = Integer.valueOf(request.getParameter("quizID"));
 		Quiz quiz  = db.getQuizAt(quizID);
-
+		String username = (String)request.getSession().getAttribute("name");
 		// DEBUG: This is just for debugging
 		ArrayList<Question> questions;
 		if (context.getAttribute("questions") == null) {
@@ -85,7 +85,9 @@ public class CreateMultiAnswerServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new MultiAnswerQuestion(question, answer, num);
+		if(username!=null){
 		db.addQuestion(q, quiz);
+		}
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);

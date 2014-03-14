@@ -43,6 +43,7 @@ public class CreateQuestionResponseServlet extends HttpServlet {
 		DBConnection db = (DBConnection)context.getAttribute("db");
 		int quizID = Integer.valueOf(request.getParameter("quizID"));
 		Quiz quiz  = db.getQuizAt(quizID);
+		String username = (String)request.getSession().getAttribute("name");
 
 		// DEBUG: This is just for debugging
 		ArrayList<Question> questions;
@@ -71,7 +72,9 @@ public class CreateQuestionResponseServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new QuestionResponse(question, answer, num);
-		db.addQuestion(q, quiz);
+		if(username!=null){
+			db.addQuestion(q, quiz);
+		}
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);

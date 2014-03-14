@@ -1,14 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="quiz.*" %>
-<%@ page import="java.util.*, quiz.*" %>
+<%@ page import="java.util.* %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <% String quizID = request.getParameter("id");
-String receive = request.getParameter("received");
 DBConnection db = (DBConnection)application.getAttribute("db");
-Double rating = db.averageRating(Integer.parseInt(quizID));
-Integer numUsersRating = db.numUsersRating(Integer.parseInt(quizID));
 Quiz quiz = db.getQuizAt(Integer.parseInt(quizID));
 request.setAttribute("quiz", quiz);
 String username = (String)session.getAttribute("name");
@@ -71,7 +68,7 @@ String username = (String)session.getAttribute("name");
 
 <div class="container">
 
-    <form class="form-signin" action="CreateQuizServlet" method="post" role="form">
+    <form class="form-signin" action="editQuizServlet" method="post" role="form">
     	<h1 class="form-signin-heading">Edit Quiz: <%=quiz.getName() %></h1>
     	
     	<div class="input-group input-group-lg">
@@ -100,9 +97,11 @@ String username = (String)session.getAttribute("name");
 		<label class="checkbox">
 		  <input type="checkbox" name="practice" <%if(quiz.hasPracticeMode()) out.println("checked"); %>> Allow Practice Mode:
 		</label>
+		<input type=hidden name="id" value=<%=quiz.getID()%> >
       
-      	<button class="btn btn-lg btn-primary btn-block" type="submit">Submit Edits</button> 	
-      	<a href=quizPage.jsp?id=<%=quiz.getID()%> style="color: #FFFFFF"><button class="btn btn-lg btn-primary btn-block">Cancel</button></a>
+      	<button class="btn btn-lg btn-primary btn-block" name="submit" type="submit" value="update">Submit Edits</button> 
+      	<button class="btn btn-lg btn-primary btn-block" name="submit" type="submit" value="delete">Delete</button> 
+      	<button class="btn btn-lg btn-primary btn-block" name="submit" type="submit" value="Cancel">Cancel</button> 
       	
     </form><br>
     

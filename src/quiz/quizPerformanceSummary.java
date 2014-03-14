@@ -56,7 +56,9 @@ public class quizPerformanceSummary extends HttpServlet {
 		out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\">");
 		out.println("<link href=\"bootstrap/css/bootstrap-theme.min.css\" rel=\"stylesheet\">");
 		out.println("<link href=\"css/jumbotron.css\" rel=\"stylesheet\">");
+		if(username!=null){
 		out.println("<title>"+username+"'s Quiz Performance</title>");
+		}
 		out.println("</head>");
 		out.println("<body>");
 
@@ -84,7 +86,10 @@ public class quizPerformanceSummary extends HttpServlet {
 		out.println("<div class=\"container\">");
 		out.println("<table><tr><td>");
 		out.println("<br><h4>Sponsored Ad</h4><a href=\""+url+"\" ><img src=\""+img+"\"></img></a><br>");
-		out.println("</td><td>");
+		out.println("</td>");
+		if(username!=null){
+			out.println("<td>");
+		
 		out.println("<h2>"+username+"'s Quiz Performance</h2>");
 
 		
@@ -110,7 +115,12 @@ public class quizPerformanceSummary extends HttpServlet {
 		}else{
 			out.println("<h4>You no have quiz history. </h4>");
 		}
-		out.println("</td></tr></table>");
+		out.println("</td>");
+		}else{
+			out.println("<h2>Please Login: <a href=\"Homepage.jsp\"><img src=\"Login.jpg\"></img></a></h2>");
+		}
+		out.println("</tr></table>");
+		
 		out.println("</div>");
 		out.println("</body>");
 		out.println("</html>");
