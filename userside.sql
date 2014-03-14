@@ -47,6 +47,16 @@ CREATE TABLE announcements (
     postTime TIMESTAMP
 );
 
+DROP TABLE IF EXISTS flags;                                                                     
+
+
+CREATE TABLE flags (
+    username CHAR(64),
+    quizID INTEGER,
+    reviewed BOOLEAN
+);
+
+
 DROP TABLE IF EXISTS challenges;
 
 CREATE TABLE challenges (
