@@ -57,7 +57,7 @@
 
 <div class="container">
 <!-- Question type dropdown menu -->
-<div class="btn-group">
+<br><br><br><div class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 	  Create Question #<%= String.valueOf(Integer.valueOf(request.getParameter("num")) + 1) %> <span class="caret"></span>
 	</button>
