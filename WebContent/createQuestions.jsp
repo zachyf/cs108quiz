@@ -85,6 +85,9 @@
 		url = "createMultipleChoiceMultipleAnswer.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";
 		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Choice Multiple Answer</a></li><br>");
 		
+		url = "createMathQuestion.jsp?num=" + num + "&quizID=" + quizID;
+		out.println("<li><a href=" + url + " class=\"btn btn-large\">Math Question</a></li><br>");
+		
 		
 
 		%>

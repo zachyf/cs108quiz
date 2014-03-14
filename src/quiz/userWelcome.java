@@ -446,15 +446,19 @@ public class userWelcome extends HttpServlet {
 		for(int i=0; i< friendTakenQuizzes.size();i++){
 			if (numPrinted == 5) break;
 			quizRecord qr = friendTakenQuizzes.get(i);
-			if (DB.alreadyFriends(qr.getUser(), username)){
-				int ip=numPrinted+1;
-				out.println("<tr>");
-				out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+qr.getQuizID()+"\">"+DB.getQuizAt(qr.getQuizID()).getName()+"</a></td>");
-				out.println("<td><a href=\"userPage?ID="+qr.getUser()+"\">"+ qr.getUser() +"</a></td>");
-				out.println("<td>Score: "+ qr.getScore() +"</a></td>");
-				out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+qr.getQuizID()+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
-				out.println("</tr>");
-				numPrinted++;
+			try {
+				if (DB.alreadyFriends(qr.getUser(), username)){
+					int ip=numPrinted+1;
+					out.println("<tr>");
+					out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+qr.getQuizID()+"\">"+DB.getQuizAt(qr.getQuizID()).getName()+"</a></td>");
+					out.println("<td><a href=\"userPage?ID="+qr.getUser()+"\">"+ qr.getUser() +"</a></td>");
+					out.println("<td>Score: "+ qr.getScore() +"</a></td>");
+					out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+qr.getQuizID()+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+					out.println("</tr>");
+					numPrinted++;
+				}
+			} catch (SQLException e) {
+				
 			}
 		}
 		out.println("</table>");
@@ -470,14 +474,18 @@ public class userWelcome extends HttpServlet {
 		for(int i=0; i< friendCreatedQuizzes.size();i++){
 			if (numP2 == 5) break;
 			Quiz q = friendCreatedQuizzes.get(i);
-			if(DB.alreadyFriends(username, q.getCreator())){
-				int ip=numP2+1;
-				out.println("<tr>");
-				out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+q.getID()+"\">"+DB.getQuizAt(q.getID()).getName()+"</a></td>");
-				out.println("<td>Created by: <a href=\"userPage?ID="+q.getCreator()+"\">"+ q.getCreator() +"</a></td>");
-				out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+q.getID()+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
-				out.println("</tr>");
-				numP2++;
+			try {
+				if(DB.alreadyFriends(username, q.getCreator())){
+					int ip=numP2+1;
+					out.println("<tr>");
+					out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+q.getID()+"\">"+DB.getQuizAt(q.getID()).getName()+"</a></td>");
+					out.println("<td>Created by: <a href=\"userPage?ID="+q.getCreator()+"\">"+ q.getCreator() +"</a></td>");
+					out.println("<td align=\"right\"><a href=\"TakeQuiz.jsp?quizID="+q.getID()+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td>");
+					out.println("</tr>");
+					numP2++;
+				}
+			} catch (SQLException e) {
+				
 			}
 		}
 		out.println("</table>");
@@ -516,8 +524,12 @@ public class userWelcome extends HttpServlet {
 		out.println("<select name=\"userName\" class=\"form-control\">");
 		ArrayList<String> userNamesF = DB.getAllUsersNotFriends(username);
 		for(int i=0;i<userNamesF.size();i++){
-			if (!DB.alreadyFriends(username, userNamesF.get(i)) && !username.equals(userNamesF.get(i))){
-				out.println("<option value=\""+userNamesF.get(i)+"\">" + userNamesF.get(i) +"</option>");
+			try {
+				if (!DB.alreadyFriends(username, userNamesF.get(i)) && !username.equals(userNamesF.get(i))){
+					out.println("<option value=\""+userNamesF.get(i)+"\">" + userNamesF.get(i) +"</option>");
+				}
+			} catch (SQLException e) {
+				
 			}
 		
 		}

@@ -128,9 +128,13 @@ public class userPage extends HttpServlet {
 	    out.println("<div class=\"jumbotron\">");
 	    out.println("<div class=\"container\">");
 	    out.println("<h1>Welcome to "+username+"'s Profile</h1>");
-		if(DB.alreadyFriends(username, loggedInUser)){
-
-			out.println("<h4> You and "+username+" are friends.</h4><br>");
+	    try {
+			if(DB.alreadyFriends(username, loggedInUser)){
+	
+				out.println("<h4> You and "+username+" are friends.</h4><br>");
+			}
+	    } catch (SQLException e) {
+			
 		}
 	    out.println("<div class=\"row\">");
 		out.println("<div class=\"col-md-4\">");

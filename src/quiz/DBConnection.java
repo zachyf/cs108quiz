@@ -1001,6 +1001,8 @@ public class DBConnection {
 					MultipleChoiceMultipleAnswer question = new MultipleChoiceMultipleAnswer(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum"));
 					addChoices2(question, quiz.getID());
 					quiz.addQuestion(question);
+				} else if (type.equals("MathQuestion")) {
+					quiz.addQuestion(new MathQuestion(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
 				}
 			}
 		}
