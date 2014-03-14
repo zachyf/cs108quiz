@@ -139,6 +139,7 @@ public class userPage extends HttpServlet {
 	    } catch (SQLException e) {
 
 		}}
+
 	    out.println("<div class=\"row\">");
 		out.println("<div class=\"col-md-4\">");
 

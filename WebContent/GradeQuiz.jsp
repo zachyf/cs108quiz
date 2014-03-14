@@ -111,6 +111,11 @@ session.removeAttribute("answer");
         out.println("Your answer: " + a.getAnswerToQuestion(question));
     }
 	%>
+	
+	<%
+	String url = "quizPage.jsp?id=" + quiz.getID();
+	out.println("<br><br><a href=" + url + " class=\"btn btn-default\">Back to quiz page</a>");
+	%>
 </div>
 
 </body>

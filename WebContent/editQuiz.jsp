@@ -1,13 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import="quiz.*" %>
+<%@ page import="quiz.*" %>
+<%@ page import="java.util.*, quiz.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<% String quizID = request.getParameter("id");
+String receive = request.getParameter("received");
+DBConnection db = (DBConnection)application.getAttribute("db");
+Double rating = db.averageRating(Integer.parseInt(quizID));
+Integer numUsersRating = db.numUsersRating(Integer.parseInt(quizID));
+Quiz quiz = db.getQuizAt(Integer.parseInt(quizID));
+request.setAttribute("quiz", quiz);
+String username = (String)session.getAttribute("name");
+
+%>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Questions</title>
+    <title><%=quiz.getName()%></title>
 
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -16,6 +27,7 @@
     <!-- Custom styles for this template -->
     <link href="css/jumbotron.css" rel="stylesheet">
     <link href="css/justifiednav.css" rel="stylesheet">
+    <link href="css/star.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,6 +56,7 @@
       <li><a href="quizPerformanceSummary">My Quiz History <span class="glyphicon glyphicon-th-list"></a></li>
       <li><a href="createQuiz.html">Create Quiz <span class="glyphicon glyphicon-pencil"></a></li>
       <li><a href="logout">Logout <span class="glyphicon glyphicon-off"></a></li>
+      	
       </ul>
       <form action="SearchQuizzesServlet" method="GET" class="navbar-form navbar-right" role="form">
         <div class="form-group">
@@ -55,59 +68,50 @@
   </div>
 </div><br>
 
+
 <div class="container">
-<!-- Question type dropdown menu -->
-<div class="btn-group">
-	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	  Create Question #<%= String.valueOf(Integer.valueOf(request.getParameter("num")) + 1) %> <span class="caret"></span>
-	</button>
-	<ul class="dropdown-menu" role="menu">	
-		<%	
+
+    <form class="form-signin" action="CreateQuizServlet" method="post" role="form">
+    	<h1 class="form-signin-heading">Edit Quiz: <%=quiz.getName() %></h1>
+    	
+    	<div class="input-group input-group-lg">
+			<span class="input-group-addon">Quiz Name: </span>
+			<input type="text" name="name" class="form-control" value="<%=quiz.getName()%>">
+		</div><br>
+
+		<div class="input-group input-group-lg">
+			<span class="input-group-addon">Description: </span>
+			<input type="text" name="description" class="form-control" value="<%=quiz.getDescription()%>">
+		</div>
+
+		<label class="checkbox">
+		  <input type="checkbox" name="random" value=random 
+		  <%if(quiz.isRandomOrder()) out.println("checked"); %>> Random Order:
+		</label>
 		
-		String num = request.getParameter("num");
-		String quizID = request.getParameter("quizID");
+		<label class="checkbox">
+		  <input type="checkbox" name="single" <%if(quiz.isSinglePage()) out.println("checked"); %>> Single Page Quiz:
+		</label>
 		
-		String url = "createQuestionResponse.jsp?num=" + num + "&quizID=" + quizID +"&numAnswers=1";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\" >Question Response</a></li><br>");
-
-		url = "createFillInTheBlank.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Fill-In-The-Blank</a></li><br>");
-
-		url = "createPictureResponse.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Picture Response</a></li><br>");
-
-		url = "createMultipleChoice.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Choice</a></li><br>");
+		<label class="checkbox">
+		  <input type="checkbox" name="immediate" <%if(quiz.isImmediateCorrection()) out.println("checked"); %>> Grade Immediately:
+		</label>
 		
-		url = "createMultiAnswer.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=2";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Answer</a></li><br>");
-		
-		url = "createMultipleChoiceMultipleAnswer.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Choice Multiple Answer</a></li><br>");
-		
-		url = "createMathQuestion.jsp?num=" + num + "&quizID=" + quizID;
-		out.println("<li><a href=" + url + " class=\"btn btn-large\">Math Question</a></li><br>");
-		
-		
+		<label class="checkbox">
+		  <input type="checkbox" name="practice" <%if(quiz.hasPracticeMode()) out.println("checked"); %>> Allow Practice Mode:
+		</label>
+      
+      	<button class="btn btn-lg btn-primary btn-block" type="submit">Submit Edits</button> 	
+      	<a href=quizPage.jsp?id=<%=quiz.getID()%> style="color: #FFFFFF"><button class="btn btn-lg btn-primary btn-block">Cancel</button></a>
+      	
+    </form><br>
+    
 
-		%>
-	</ul>
-</div><br>
+  </div> <!-- /container -->
 
-<br><br>
-<% if(!num.equals("0")){ 
-	out.println("<form action=\"viewQuizTest.jsp\">");
-	out.println("<input type=\"hidden\" name=\"quizID\" value=" + quizID + ">");
-	out.println("<input type=\"submit\" value=\"Finish Quiz and View\">");
-	out.println("</form>");
-}
-%>
 
-	
-</div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-
-</body>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
 </html>

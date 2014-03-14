@@ -124,6 +124,14 @@ public class Quiz {
 		return this.isImmediateCorrection;
 	}
 	
+	public boolean isRandomOrder(){
+		return this.isRandomOrder;
+	}
+	
+	public boolean hasPracticeMode(){
+		return this.hasPracticeMode;
+	}
+	
 	public void addAnswer(Answer a){
 		this.answers.put(a.getUser(), a);
 		this.recentTestTakers.add(a.getUser());

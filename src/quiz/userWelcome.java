@@ -472,6 +472,7 @@ public class userWelcome extends HttpServlet {
 					numPrinted++;
 				}
 			} catch (SQLException e) {
+
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -500,8 +501,9 @@ public class userWelcome extends HttpServlet {
 					numP2++;
 				}
 			} catch (SQLException e) {
+
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e.printStackTrace();     
 			}
 		}
 		out.println("</table>");
@@ -545,8 +547,11 @@ public class userWelcome extends HttpServlet {
 					out.println("<option value=\""+userNamesF.get(i)+"\">" + userNamesF.get(i) +"</option>");
 				}
 			} catch (SQLException e) {
+
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				
+
 			}
 		
 		}

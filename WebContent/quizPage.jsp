@@ -87,8 +87,21 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 
 
 	<h4>Creator:<a href="userPage?ID=<%=quiz.getCreator()%>"><%=quiz.getCreator()%></a></h4>
+		
+
+		<%
+		if(session.getAttribute("name") == null){
+			out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
+		}
+		else{
+			out.println("<a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz.png\"></img></a>");
+			//<p>Take the quiz in practice mode</p>
+			if(quiz.getCreator().equals(session.getAttribute("name")))
+				out.println("<p><a href=\"editQuiz.jsp?id=" +  quizID + "\"> Edit Quiz</p>");
+		}
+		%>	
+
 	<p><h4>Rate this Quiz:</h4></p>
-	
 	
 	<div class="rating">
     <span><input type="radio" name="rating" id="str5" value="5"><label for="str5"></label></span>
@@ -268,6 +281,7 @@ $(document).ready(function(){
 			</div>
 		</div>			
 	</div>
+
 	<div class="row">
 		
 
@@ -286,6 +300,7 @@ $(document).ready(function(){
 		}
 		%>	
 	</div>
+
 </div>
 
 
