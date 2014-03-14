@@ -57,4 +57,12 @@ CREATE TABLE challenges (
     sentTime TIMESTAMP
 );
 
+DROP TABLE IF EXISTS achievements;
+
+CREATE TABLE achievements (
+    userName CHAR(64),
+    achievement TEXT,
+    timeEarned TIMESTAMP
+);
+
 
