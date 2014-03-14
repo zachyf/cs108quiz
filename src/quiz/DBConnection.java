@@ -1234,8 +1234,20 @@ public class DBConnection {
 		String insertion = "INSERT INTO quizRecords VALUES (" + answer.getNumCorrect() + ","  + answer.getQuiz().getNumQuestions() + "," 
 			+ answer.getTimeToComplete() + ",\"" + answer.getUser() + "\"," + answer.getQuiz().getID() + ",\'" + answer.getDateCompleted() + "\');";
 		this.updateDB(insertion);
-		if (!hasAchievement(answer.getUser(), "I am the Greatest") && isHighScorer(answer.getUser())){
-			insertAchievement(answer.getUser(), "I am the Greatest");
+		if (!hasAchievement(answer.getUser(), "I am the Greatest")){
+	        try{
+	            Statement stmt = con.createStatement();
+	            stmt.executeQuery("USE " + database);
+	            String query = "Select userName from quizRecords where quizID =" + answer.getQuiz().getID() + " order by numCorrect  desc, timeToComplete asc limit 5;";
+	            ResultSet rs = stmt.executeQuery(query);
+	            if (rs.next()){
+	                if(rs.getString("userName").equals(answer.getUser())){
+	        			insertAchievement(answer.getUser(), "I am the Greatest");
+	                }
+	            }
+	        }catch (SQLException e) {
+	            e.printStackTrace();
+	        }
 		}
 	}
 	
