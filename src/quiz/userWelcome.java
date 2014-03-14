@@ -275,26 +275,6 @@ public class userWelcome extends HttpServlet {
 
 				out.println("<h2>Admin Privileges:</h2>");
 				out.println();
-				out.println("<h4>Review Flagged Quizzes:</h4>");
-				ArrayList<ArrayList<Object>> flaggedQuizzes =DB.getFlaggedQuizzes();
-				if(flaggedQuizzes.size()==0){
-					out.println("None to Review Now.");
-				}
-				out.println("<table>");
-				for(int i=0;i<flaggedQuizzes.size();i++){
-					int index = (Integer) flaggedQuizzes.get(i).get(0);
-					int ip=i+1;
-					out.println("<tr>");
-					out.println("<td>"+ip+") <a href=\"quizPage.jsp?id="+index+"\">"+DB.getQuizAt(index).getName()+"</a></td>");
-					out.println("<td><a href=\"userPage?ID="+flaggedQuizzes.get(i).get(1)+"\">"+flaggedQuizzes.get(i).get(1)+"</a></td>");
-					out.println("</tr>");
-					
-				}
-				out.println("<table>");
-				
-			
-				
-				
 				out.println("<p><h4>Make an Announcement</h4>");
 				out.println("Enter an Announcement:");
 				out.println("<form action=\"MakeAnnouncement\" METHOD=\"post\">");
@@ -460,7 +440,7 @@ public class userWelcome extends HttpServlet {
 		out.println("</table>");
 
 		out.println("</div></div>"); // Column 2
-		
+		}
 		// Friends' recently taken quizzes table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
