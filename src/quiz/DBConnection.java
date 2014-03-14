@@ -1062,6 +1062,22 @@ public class DBConnection {
 		return list;
 	}
 	
+	private ArrayList<ArrayList<Object>> getList5(String query){
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()) {
+				ArrayList<Object> row = new ArrayList<Object>();
+				row.add(rs.getInt("quizID"));
+				row.add(rs.getString("username"));
+				list.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
+	
 	
 	private ArrayList<ArrayList<Object>> getList2(String query){
 		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
@@ -1111,6 +1127,17 @@ public class DBConnection {
 		String insertion = "INSERT INTO quizRecords VALUES (" + answer.getNumCorrect() + ","  + answer.getQuiz().getNumQuestions() + "," 
 			+ answer.getTimeToComplete() + ",\"" + answer.getUser() + "\"," + answer.getQuiz().getID() + ",\'" + answer.getDateCompleted() + "\');";
 		this.updateDB(insertion);
+	}
+	
+	public void addFlag(Integer quizID,String username) throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 stmt.executeUpdate("INSERT INTO flags VALUES(\""+username+"\","+quizID+",FALSE);"); 
+	}
+	
+	public ArrayList<ArrayList<Object>> getFlaggedQuizzes(){
+		String query = "Select quizID, username from flags where reviewed = FALSE;";
+		return getList5(query);
 	}
 	
 	public String getMultipleChoiceQuestionString(Question question, Quiz quiz){
