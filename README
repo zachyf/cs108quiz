@@ -1,0 +1,38 @@
+Team members: 
+
+Julia Schottenstein
+Ethan Nath
+JR Futrell
+Zachary Yellin-Flaherty
+
+Functionality:
+
+We implemented all required features as well as the recommended ones for 4-person teams (achievements and administration), as well as the following extensions.
+
+Cookies - by clicking the "remember me" checkbox at login we can auto complete a user's information next time she logs in
+
+Teams -- each user is assigned to a team at creation of that user. Teams are represented by an animal. We keep track of the total number of quizzes taken by a team, and that team has an achievement that appears on all of its members pages (with all the other achievements).
+
+Ads -- in mailbox and quiz history, random adds appear from our ad database. Allows us to click through to the relevant web side for that add.
+
+Rating -- quizzes can be rated. In their summary we display the average rating for the quiz.
+
+Flagging -- users can flag quizzes as inappropriate. Admins then see those quizzes appear in their "for review" section, and can mark them as reviewed (and delete them in the section to delete quizzes if they care to).
+
+Music -- music play in the quiz pages.  Our music manager selects from our diverse selection of tunes. 
+
+MultiAnswer -- a question has multiple answers. Can choose ordered or not ordered, and a user must get all answers correct to get the single point.
+
+Math -- we randomly generate math problems for this question type. We have all simple arithmetic. 
+
+Scramble -- randomly scramble a word. User types the original to get the question correct. 
+
+MultiChoice MultAnswer -- we  can have one or more answers to the multiple choice -- check box instead of radio button. 
+
+Limited Access for non logged in users -- if a user is not logged in they can see the most popular quizzes, and other limited information about the quiz site;
+
+Marking as Read -- From the mailbox a user can mark a message as read, so that it no longer appears in new messages (but still appears in the mailbox). Similarly, challenges are no longer pending once they're taken, and announcements are sent as mail to all users (with subject ANNOUNCEMENT and from the admin who sent it). 
+
+Edit quiz -- the creator of a quiz can edit it after creation. 
+
+* Flash Card -- practice mode. When a user takes the quiz, they answer each question until they get it right. 

@@ -5,14 +5,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <% 
-int quizID = Integer.parseInt(request.getParameter("quizID"));
-boolean practiceMode = false;
-if(request.getParameter("practice") != null) 
-	practiceMode = true;
-DBConnection db = (DBConnection)application.getAttribute("db");
-Quiz quiz = db.getQuizAt(quizID);
 HttpSession ses = request.getSession();
 String username = (String) ses.getAttribute("name");
+int quizID = Integer.parseInt(request.getParameter("quizID"));
+boolean practiceMode = false;
+DBConnection db = (DBConnection)application.getAttribute("db");
+if(request.getParameter("practice") != null){
+	practiceMode = true;
+	if(!db.hasAchievement(username, "Practice Makes Perfect")){
+		db.insertAchievement(username, "Practice Makes Perfect");
+	}
+	
+}
+Quiz quiz = db.getQuizAt(quizID);
 Answer answer = new Answer(username, quiz);
 quiz.addAnswer(answer);
 session.setAttribute("answer", answer);

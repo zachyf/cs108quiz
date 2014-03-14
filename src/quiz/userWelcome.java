@@ -169,7 +169,7 @@ public class userWelcome extends HttpServlet {
 				e2.printStackTrace();
 			}
 			try {
-				if(DB.practiced(username)==true){
+				if(DB.hasAchievement(username, "Practice Makes Perfect")){
 					out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
 					check+=1;
 				}
