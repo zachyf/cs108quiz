@@ -912,9 +912,9 @@ public class DBConnection {
 	
 	public int getNextQuizID() {
 		try{
-			ResultSet rs = executeQuery("SELECT count(*) as max FROM quizzes;");
+			ResultSet rs = executeQuery("SELECT max(id) as max FROM quizzes;");
 			while(rs.next()){
-				return (int)rs.getLong("max");
+				return ((int)rs.getLong("max") + 1);
 			}
 				
 			return -1;
