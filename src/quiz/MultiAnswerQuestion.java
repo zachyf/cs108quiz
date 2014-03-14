@@ -60,7 +60,7 @@ public class MultiAnswerQuestion extends Question {
 			int index = i + 1;
 			buff.append("<div class=input-group input-group-lg>");
 			buff.append("<span class=input-group-addon>"+ index + ". </span>");
-			buff.append("<input type=text name=\""+ this.num +" " + i + "\" class=form-control>");
+			buff.append("<input type=text name=\""+ this.num +" " + i + "\" class=\"form-control\">");
 			buff.append("</div>");
 		}
 		buff.append("<input type=\"hidden\" name=\"numAnswers"+this.num+"\" value=\""+this.numAnswers+"\">");

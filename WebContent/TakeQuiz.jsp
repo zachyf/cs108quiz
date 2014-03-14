@@ -74,11 +74,10 @@ session.setAttribute("quiz", quiz);
 	
 	if(quiz.isSinglePage()){
 	out.println("<form action=\"GradeQuiz.jsp\" method=\"post\">");
-	while(!q_order.isEmpty())
+	while(!q_order.isEmpty()) {
 		out.println(quiz.getQuestionAt(q_order.poll(), quiz.getNumQuestions() - q_order.size()));
-
     }
-    else {
+	} else {
         out.println("<form action=\"MultiPageQuiz\" method=\"post\">");
         int questionNum = q_order.poll();
         out.println(quiz.getQuestionAt(questionNum, 1));

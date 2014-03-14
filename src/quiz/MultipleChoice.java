@@ -95,7 +95,7 @@ public class MultipleChoice extends Question {
 		buff.append("<ul class=answers>");	
 		for (int i = 0; i < choices.size(); i++) {
 			String choice = choices.get(i);
-			buff.append("<input type=radio name=" + numStr + 
+			buff.append("<input type=radio name=" + this.num + 
 					" value=" + choice + ">" + choice + "<br>");
 		}
 		buff.append("</ul>");
