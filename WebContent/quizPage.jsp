@@ -90,16 +90,14 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 		
 
 		<%
-		if(leaderboard.size() > 0){
-			if(session.getAttribute("name") == null){
-				out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
-			}
-			else{
-				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz.png\"></img></a></p>");
-				//<p>Take the quiz in practice mode</p>
-				if(quiz.getCreator().equals(session.getAttribute("name")))
-					out.println("<p>Edit Quiz - Since you are the owner</p>");
-				}
+		if(session.getAttribute("name") == null){
+			out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
+		}
+		else{
+			out.println("<a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz.png\"></img></a>");
+			//<p>Take the quiz in practice mode</p>
+			if(quiz.getCreator().equals(session.getAttribute("name")))
+				out.println("<p><a href=\"editQuiz.jsp?id=" +  quizID + "\"> Edit Quiz</p>");
 		}
 		%>	
 
