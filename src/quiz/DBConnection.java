@@ -376,6 +376,24 @@ public class DBConnection {
 		 stmt.executeUpdate("INSERT INTO ratings VALUES("+id+","+stars+");");
 	 }
 	 
+	 
+	 public Integer numUsersRating(Integer id) throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 String s = "Select count(stars) from ratings where quizID="+id;
+		 ResultSet rs = executeQuery(s);
+		 try {
+			 if(rs.next()){
+				
+				return rs.getInt("count(stars)");
+			 }
+		 }catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		 }
+		 return 0;
+		 
+	 }
 	 public Double averageRating(Integer id) throws SQLException{
 		 Statement stmt = con.createStatement();
 		 stmt.executeQuery("USE " + database);
@@ -1145,7 +1163,7 @@ public class DBConnection {
 			ResultSet rs = executeQuery("SELECT count(*) as c, avg(numCorrect) as av, count(distinct userName) as numUsers,  " + 
 					"avg(numQuestions) as numQuestions, avg(timeToComplete)/1000 as avgTime from quizRecords where quizID = " + quiz.getID() + ";");
 			rs.next();
-			sb.append("<table class=\"table\"><tr><th>Times Taken</th><th>Number of Different Users</th><th>Average Score</th><th>Average Time Taken</th><th>Average Score</th></tr>");
+			sb.append("<table class=\"table\"><tr><th>Times Taken</th><th>Number of Different Users</th><th>Average Score</th><th>Average Time Taken</th><th>Average Rating</th><th>Times the Quiz was Rated</th></tr>");
 			sb.append("<tr><td>" + rs.getInt("c") + "</td> <td> " + rs.getInt("numUsers"));
 			
 			Double averageNumCorrect = rs.getDouble("av");
