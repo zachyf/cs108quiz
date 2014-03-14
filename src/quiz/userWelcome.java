@@ -467,8 +467,11 @@ public class userWelcome extends HttpServlet {
 		out.println("</table>");
 
 		out.println("</div></div>"); // Column 2
+		out.println("</div>"); // Row
+		
 		}
 		// Friends' recently taken quizzes table
+		out.println("<div class=\"row\">");
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Your Friends' Recently Taken Quizzes</div>");
@@ -535,6 +538,9 @@ public class userWelcome extends HttpServlet {
 		}
 		out.println("</table>");
 		out.println("</div></div>"); // Column 1
+		out.println("</div>"); // Row
+		
+		out.println("<div class=\"row\">");
 		
 		// Friends' recently achieved awards
 		out.println("<div class=\"col-md-6\">");

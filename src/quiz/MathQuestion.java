@@ -44,8 +44,8 @@ public class MathQuestion extends Question {
 	public String getQuestion(int num) {
 		StringBuilder buff = new StringBuilder();
 		Random random = new Random();
-		this.first = random.nextInt(num + 10) + 10;
-		this.second = random.nextInt(num + 10) + 10;
+		this.first = (random.nextInt(num + 10) + 10);
+		this.second = (random.nextInt(num + 10) + 10);
 		
 		// Generate the HTML for the question
 		if (this.question.equals("Addition")) {

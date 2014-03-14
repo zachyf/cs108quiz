@@ -78,7 +78,7 @@ public class MultipleChoiceMultipleAnswer extends Question {
 			String choice = choices.get(i);
 			buff.append("<label class=\"checkbox\">");
 			buff.append("<input type=\"checkbox\" name=\"check" + this.num + " " + i + "\" value=\"checkAnswer\">" + choice + "");
-			buff.append("<input type=\"hidden\" name=\"choice" + this.num + " " + i +"\" value=" + choice + ">");
+			buff.append("<input type=\"hidden\" name=\"choice" + this.num + " " + i +"\" value=\"" + choice + "\">");
 	        buff.append("</label>");
 		}
 		
