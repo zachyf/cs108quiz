@@ -54,7 +54,7 @@ public class MakeAnnouncement extends HttpServlet {
 		for (int i = 0; i < users.size(); ++i){
 			java.util.Date date = new java.util.Date();
 			Timestamp t = new Timestamp(date.getTime());
-			Message m  = new Message(users.get(i), loggedInUser, "ANNOUNCEMNT", note, t, 0);
+			Message m  = new Message(users.get(i), loggedInUser, "ANNOUNCEMENT", note, t, 0);
 			DB.insertMessage(m);
 		}
 		out.print("You announced " + note);
