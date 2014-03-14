@@ -93,12 +93,12 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 			out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
 		}
 		else{
-			out.println("<a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz.png\"></img></a><br>");
+			out.println("<a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz.png\"></img></a>");
 			//<p>Take the quiz in practice mode</p>
 			if(quiz.hasPracticeMode())
 				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "&practice=true\"> Use Flash Card Mode</a></p>");
 			if(quiz.getCreator().equals(session.getAttribute("name")))
-				out.println("<br><br><p><a href=\"editQuiz.jsp?id=" +  quizID + "\"> Edit Quiz</a></p>");
+				out.println("<p><a href=\"editQuiz.jsp?id=" +  quizID + "\"><img src=\"Edit.jpg\"></img></a></p>");
 		}
 		%>	
 
@@ -294,13 +294,11 @@ $(document).ready(function(){
 			if(session.getAttribute("name") == null){
 				out.println("<h2>Login to take the quiz: <a href=\"Homepage.jsp\"><img src=\"Login.jpg\"></img></a></h2>");
 				
-			}
-			else{
+			}else{
 				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz2.png\"></img></a></p>");
 				//<p>Take the quiz in practice mode</p>
-				if(quiz.getCreator().equals(session.getAttribute("name")))
-					out.println("<p>Edit Quiz - Since you are the owner</p>");
-				}
+				
+		}
 		}
 		%>	
 	</div>
