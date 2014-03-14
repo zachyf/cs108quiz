@@ -1282,6 +1282,20 @@ public class DBConnection {
 		return sb.toString();
 	}
 	
+	public void updateQuiz(Quiz quiz){
+		StringBuilder sb = new StringBuilder();
+		sb.append("Update quizzes SET quizName = \"");
+		sb.append(quiz.getName());
+		sb.append("\", description = \"");
+		sb.append(quiz.getDescription());
+		sb.append("\",onePage = " + Quiz.boolToInt(quiz.isSinglePage()));
+		sb.append(",isRandomOrder = " + Quiz.boolToInt(quiz.isRandomOrder()));
+		sb.append(",isImmediate = " + Quiz.boolToInt(quiz.isImmediateCorrection()));
+		sb.append(",hasPracticeMode = " + Quiz.boolToInt(quiz.hasPracticeMode()));
+		sb.append(" WHERE id = " + quiz.getID() + ";");
+		updateDB(sb.toString());
+	}
+	
 	public ResultSet executeQuery(String query){
 		try {
 			Statement stmt = this.con.createStatement();
