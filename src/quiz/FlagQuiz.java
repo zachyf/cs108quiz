@@ -1,6 +1,7 @@
 package quiz;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -11,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class deleteQuiz
+ * Servlet implementation class FlagQuiz
  */
-@WebServlet("/deleteQuiz")
-public class deleteQuiz extends HttpServlet {
+@WebServlet("/FlagQuiz")
+public class FlagQuiz extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public deleteQuiz() {
+    public FlagQuiz() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,7 +30,18 @@ public class deleteQuiz extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request,response);
+		ServletContext context = request.getServletContext();
+		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
+		Integer quizID = Integer.parseInt(request.getParameter("quizID"));
+		String username = (String)request.getParameter("username");
+		try {
+			DB.markAsReviewed(quizID,username);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
+		dispatch.forward(request, response); 
 	}
 
 	/**
@@ -38,9 +50,15 @@ public class deleteQuiz extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext context = request.getServletContext();
 		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
-		Integer id =  Integer.parseInt(request.getParameter("quizID"));
-		DB.deleteQuiz(id);
-		RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
+		Integer quizID = Integer.parseInt(request.getParameter("quizID"));
+		String username = (String)request.getParameter("username");
+		try {
+			DB.addFlag(quizID,username);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		RequestDispatcher dispatch = request.getRequestDispatcher("quizPage.jsp?id="+quizID); 
 		dispatch.forward(request, response); 
 	}
 

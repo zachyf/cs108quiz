@@ -29,7 +29,6 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
     
     <!-- Custom styles for this template -->
     <link href="css/jumbotron.css" rel="stylesheet">
-    <link href="css/justifiednav.css" rel="stylesheet">
     <link href="css/star.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -94,10 +93,12 @@ ArrayList<ArrayList<Object>> leaderboard = db.getHighScorers(quiz.getID());
 			out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
 		}
 		else{
-			out.println("<a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz.png\"></img></a>");
+			out.println("<a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz.png\"></img></a><br>");
 			//<p>Take the quiz in practice mode</p>
+			if(quiz.hasPracticeMode())
+				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "&practice=true\"> Use Flash Card Mode</a></p>");
 			if(quiz.getCreator().equals(session.getAttribute("name")))
-				out.println("<p><a href=\"editQuiz.jsp?id=" +  quizID + "\"> Edit Quiz</p>");
+				out.println("<br><br><p><a href=\"editQuiz.jsp?id=" +  quizID + "\"> Edit Quiz</a></p>");
 		}
 		%>	
 
@@ -137,13 +138,16 @@ $(document).ready(function(){
 });
 </script>
  
- 
+ 	<br><br><table><tr><td><h4>Flag quiz as inappropriate: &nbsp; </h4></td><td>
+     <form action="FlagQuiz" METHOD="post">
+		<input type="hidden" name="quizID" value="<%=quizID%>"><br>
+		<input type="hidden" name="username" value="<%=username%>"><br>
+		<button type="submit" class="btn btn-default">Flag Quiz</button> 
+	</form></td></tr></table>
     
-    
-    
-	<h5><%if(leaderboard.size() > 0)
+	<h4><%if(leaderboard.size() > 0)
 			out.println( db.getQuizStats(quiz) +"<td>"+rating+"</td><td>"+numUsersRating+"</td></tr></table>"); 
-			%></h5>
+			%></h4>
 	
 	<div class="row">
 		<div class="col-md-6">

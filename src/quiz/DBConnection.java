@@ -1245,6 +1245,12 @@ public class DBConnection {
 		 stmt.executeUpdate("INSERT INTO flags VALUES(\""+username+"\","+quizID+",FALSE);"); 
 	}
 	
+	public void markAsReviewed(Integer quizID,String username) throws SQLException{
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		stmt.executeUpdate("Update flags SET reviewed = TRUE where username=\""+username+"\" and quizID="+quizID+";"); 
+	}
+	
 	public ArrayList<ArrayList<Object>> getFlaggedQuizzes(){
 		String query = "Select quizID, username from flags where reviewed = FALSE;";
 		return getList5(query);

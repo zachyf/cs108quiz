@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS friends;
 
 CREATE TABLE friends (
 	user1 CHAR(64),
-    user2 CHAR(64),
+    user2 CHAR(64)
     );
     
 DROP TABLE IF EXISTS users;
@@ -28,7 +28,7 @@ CREATE TABLE users (
     numPlayed INT,
     highScore TINYINT(1),
     practiceMode TINYINT(1),
-    adminStatus TINYINT(1),
+    adminStatus TINYINT(1)
     );
     
 DROP TABLE IF EXISTS pending;
@@ -46,6 +46,16 @@ CREATE TABLE announcements (
     announcement TEXT,
     postTime TIMESTAMP
 );
+
+DROP TABLE IF EXISTS flags;                                                                     
+
+
+CREATE TABLE flags (
+    username CHAR(64),
+    quizID INTEGER,
+    reviewed BOOLEAN
+);
+
 
 DROP TABLE IF EXISTS challenges;
 
