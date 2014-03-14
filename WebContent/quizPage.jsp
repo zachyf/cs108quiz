@@ -296,7 +296,6 @@ $(document).ready(function(){
 				
 			}
 			else{
-				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz2.png\"></img></a></p>");
 				//<p>Take the quiz in practice mode</p>
 				if(quiz.getCreator().equals(session.getAttribute("name")))
 					out.println("<p>Edit Quiz - Since you are the owner</p>");
