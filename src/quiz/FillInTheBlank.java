@@ -45,7 +45,7 @@ public class FillInTheBlank extends Question {
 		// Generate the HTML for the question
 		String numStr = String.valueOf(num);
 		buff.append("<p class=question>" + numStr + ". " + this.question + "</p>");		
-		buff.append("<input type=\"text\" name=\""+ this.num + "\"><br>");
+		buff.append("<input class=\"form-control\" type=\"text\" name=\""+ this.num + "\"><br>");
 		
 		return buff.toString();
 	}
@@ -62,7 +62,7 @@ public class FillInTheBlank extends Question {
 		// Generate the HTML for the question
 		String numStr = String.valueOf(num);
 		buff.append("<p class=question>" + numStr + ". " + this.question + "</p>");		
-		buff.append("<p class=answer> Answer is: " + answer + "</p>");
+		buff.append("<p class=answer> Answer is: " + answer + "</p><br>");
 		return buff.toString();
 	}
 
