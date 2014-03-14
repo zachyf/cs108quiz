@@ -95,7 +95,7 @@ String username = (String)session.getAttribute("name");
 		</label>
 		
 		<label class="checkbox">
-		  <input type="checkbox" name="practice" <%if(quiz.hasPracticeMode()) out.println("checked"); %>> Allow Practice Mode:
+		  <input type="checkbox" name="practice" <%if(quiz.hasPracticeMode()) out.println("checked"); %>> Allows Flash Card Mode (Multi-page quiz only):
 		</label>
 		<input type=hidden name="id" value=<%=quiz.getID()%> >
       

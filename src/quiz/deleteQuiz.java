@@ -2,6 +2,7 @@ package quiz;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,6 +40,8 @@ public class deleteQuiz extends HttpServlet {
 		DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
 		Integer id =  Integer.parseInt(request.getParameter("quizID"));
 		DB.deleteQuiz(id);
+		RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
+		dispatch.forward(request, response); 
 	}
 
 }
