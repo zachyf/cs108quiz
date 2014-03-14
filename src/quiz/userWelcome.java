@@ -680,7 +680,7 @@ public class userWelcome extends HttpServlet {
 				int index = c.getQuizID();
 				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(c.getTime());
 				String quizName = DB.getQuizAt(index).getName();
-				int highestScore = DB.getHighScoreQuizUser(username, index);
+				int highestScore = DB.getHighScoreQuizUser(challenger, index);
 				out.println("<tr><td><a href=\"userPage?ID="+ challenger + "\">" + challenger + "</a></td><td>" + highestScore + "</td><td><a href=\"quizPage.jsp?id="+index+"\">"+quizName + "</a></td><td>" + date + "</td><td><a href=\"TakeQuiz.jsp?quizID="+index+"\"><img src=\"takeQuiz.png\" title=\"Click to take quiz.\"><img></a></td></tr>");
 
 			}
