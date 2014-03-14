@@ -6,6 +6,9 @@
 <html>
 <% 
 int quizID = Integer.parseInt(request.getParameter("quizID"));
+boolean practiceMode = false;
+if(request.getParameter("practice") != null) 
+	practiceMode = true;
 DBConnection db = (DBConnection)application.getAttribute("db");
 Quiz quiz = db.getQuizAt(quizID);
 HttpSession ses = request.getSession();
@@ -14,6 +17,7 @@ Answer answer = new Answer(username, quiz);
 quiz.addAnswer(answer);
 session.setAttribute("answer", answer);
 session.setAttribute("quiz", quiz);
+session.setAttribute("practice", practiceMode);
 %>
 <head>
     <meta charset="utf-8">

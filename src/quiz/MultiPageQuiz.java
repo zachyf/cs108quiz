@@ -86,6 +86,7 @@ public class MultiPageQuiz extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Get the information and record the answer
 		int quizID = Integer.parseInt(request.getParameter("quizID"));
+		boolean practiceMode = (Boolean)request.getSession().getAttribute("practice");
 		Quiz quiz = (Quiz)request.getSession().getAttribute("quiz");
 		@SuppressWarnings("unchecked")
 		Queue<Integer> q_order = (Queue<Integer>)request.getSession().getAttribute("questionsLeft" + quizID);
@@ -121,9 +122,12 @@ public class MultiPageQuiz extends HttpServlet {
 		}
 		a.setAnswer(question, answer);
 		
+		boolean isCorrect = question.checkAnswer(answer);
+		if(practiceMode && !isCorrect)
+			q_order.add(Integer.parseInt(questionNum));
+		
 		//If auto-grade 
 		if(quiz.isImmediateCorrection()){
-			boolean isCorrect = question.checkAnswer(answer);
 			//then display answer and grade for question, then link to next question
 			//Set-up response for output
 			response.setContentType("text/html; charset=UTF-8");
