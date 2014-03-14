@@ -63,7 +63,7 @@ public class MultiAnswerQuestion extends Question {
 			buff.append("<input type=text name=\""+ this.num +" " + i + "\" class=\"form-control\">");
 			buff.append("</div>");
 		}
-		buff.append("<input type=\"hidden\" name=\"numAnswers"+this.num+"\" value=\""+this.numAnswers+"\">");
+		buff.append("<input type=\"hidden\" name=\"numAnswers"+this.num+"\" value=\""+this.numAnswers+"\"><br>");
 		return buff.toString();
 	}
 	

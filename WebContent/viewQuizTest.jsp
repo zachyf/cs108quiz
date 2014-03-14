@@ -71,7 +71,7 @@ if(username!=null){
 
 for (int i = 0; i < quiz.getNumQuestions(); i++) {
 	out.println(quiz.getQuestion(i).displayQuestion(i + 1));
-	out.println(quiz.getQuestion(i).getAnswer());
+	out.println("<br>");
 }
 out.println("<p><a href=\"quizPage.jsp?id="+request.getParameter("quizID")+"\"> Go to Quiz Page </a></p>");
 }else{

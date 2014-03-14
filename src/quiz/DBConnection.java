@@ -1265,7 +1265,6 @@ public class DBConnection {
 			if(i > 0) insertion.append(",");
 			insertion.append("(" + quiz.getID() + ",\""  + question.rawQuestion() + "\",\"" 
 			+ question.getAnswer() + "\"," + question.getNum() + ",\"MultipleChoice\",\"" + choices.get(i) + "\")");
-			System.out.println("choices");
 		}
 		insertion.append(";");
 		return insertion.toString();
@@ -1280,7 +1279,6 @@ public class DBConnection {
 			if(i > 0) insertion.append(",");
 			insertion.append("(" + quiz.getID() + ",\""  + question.rawQuestion() + "\",\"" 
 			+ question.getAnswer() + "\"," + question.getNum() + ",\"MultipleChoiceMultipleAnswer\",\"" + choices.get(i) + "\")");
-			System.out.println("choices");
 		}
 		insertion.append(";");
 		return insertion.toString();

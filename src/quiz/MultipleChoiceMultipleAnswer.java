@@ -82,7 +82,7 @@ public class MultipleChoiceMultipleAnswer extends Question {
 	        buff.append("</label>");
 		}
 		
-		buff.append("<input type=\"hidden\" name=\"numChoices"+this.num+"\" value=\""+choices.size()+"\">");
+		buff.append("<input type=\"hidden\" name=\"numChoices"+this.num+"\" value=\""+choices.size()+"\"><br>");
 		
 		return buff.toString();
 	}

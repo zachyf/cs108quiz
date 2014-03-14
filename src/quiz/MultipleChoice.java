@@ -76,7 +76,7 @@ public class MultipleChoice extends Question {
 			buff.append("<input type=radio name=" + this.num + 
 					" value=\"" + choice + "\">" + choice + "<br>");
 		}
-		buff.append("<br></ul>");
+		buff.append("<br></ul><br>");
 		
 		return buff.toString();
 	}
