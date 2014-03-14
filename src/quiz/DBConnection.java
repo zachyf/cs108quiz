@@ -297,9 +297,13 @@ public class DBConnection {
 			 String q = "DELETE FROM quizzes WHERE id="+id + ";";
 			 String r = "DELETE FROM quizRecords WHERE quizID="+id + ";";
 			 String s = "DELETE FROM challenges WHERE quizID="+id + ";";
+			 String t = "DELETE FROM flags WHERE quizID="+id + ";";
+			 String u = "DELETE FROM ratings WHERE quizID="+id + ";";
 			 stmt.executeUpdate(q);
 		     stmt.executeUpdate(r);
 		     stmt.executeUpdate(s);
+		     stmt.executeUpdate(t);
+		     stmt.executeUpdate(u);
 			 }catch(SQLException e) { 
 		         e.printStackTrace();
 			} 
