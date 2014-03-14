@@ -1071,7 +1071,8 @@ public class DBConnection {
 	}
 	
 	public void getQuestions(Quiz quiz){
-	String query = "SELECT question, answer, questionNum, type from questions where quizID = " + quiz.getID() + " " +
+		quiz.clearQuestions();
+		String query = "SELECT question, answer, questionNum, type from questions where quizID = " + quiz.getID() + " " +
 			"group by question, answer, questionNum, type order by questionNum asc;";
 		try {
 			ResultSet rs = executeQuery(query);

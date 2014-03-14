@@ -151,5 +151,9 @@ public class Quiz {
 	public double getUserScore(String u){
 		return this.answers.get(u).getScore();
 	}
+	
+	public void clearQuestions(){
+		this.questions.clear();
+	}
 
 }
