@@ -35,4 +35,4 @@ Marking as Read -- From the mailbox a user can mark a message as read, so that i
 
 Edit quiz -- the creator of a quiz can edit it after creation. 
 
-* Flash Card -- practice mode. When a user takes the quiz, they answer each question until they get it right. 
+* Flash Card -- When a user takes the quiz, they answer each question until they get it right. This is effectively "practice mode" for the sake of the Practice Makes Perfect Award, which is sensible because the user will have an 100 after the quiz. 
