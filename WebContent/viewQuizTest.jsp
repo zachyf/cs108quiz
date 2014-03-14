@@ -60,17 +60,18 @@
 <h1>View Quiz</h1>
 <%
 
-ArrayList<Question> questions = (ArrayList<Question>)application.getAttribute("questions");
-ServletContext context = request.getServletContext();
-DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
+int quizID = Integer.parseInt(request.getParameter("quizID"));
+DBConnection db = (DBConnection)application.getAttribute("db");
+Quiz quiz = db.getQuizAt(quizID);
+db.getQuestions(quiz);
 HttpSession ses = request.getSession();
 String username = (String) ses.getAttribute("name");
 if(username!=null){
-	DB.bumpNumQuizesCreated(username);
+	db.bumpNumQuizesCreated(username);
 
-for (int i = 0; i < questions.size(); i++) {
-	out.println(questions.get(i).getQuestion(i + 1));
-	out.println(questions.get(i).getAnswer());
+for (int i = 0; i < quiz.getNumQuestions(); i++) {
+	out.println(quiz.getQuestion(i).displayQuestion(i + 1));
+	out.println(quiz.getQuestion(i).getAnswer());
 }
 out.println("<p><a href=\"quizPage.jsp?id="+request.getParameter("quizID")+"\"> Go to Quiz Page </a></p>");
 }else{
