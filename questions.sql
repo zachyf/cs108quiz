@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS questions;
  -- remove table if it already exists and start from scratch
 
 CREATE TABLE questions (
-	quizID SMALLINT(5),
+    quizID SMALLINT(5),
     question TEXT,
     answer TEXT,
     questionNum TINYINT(3),
