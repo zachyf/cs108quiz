@@ -46,8 +46,8 @@ public class PictureResponse extends Question {
 		String numStr = String.valueOf(num);
 		buff.append("<p class=question>" + numStr + ".</p>");	
 		buff.append("<img src=" + question + 
-				" width=" + pixelSize  +"><br>");		
-		buff.append("<input type=\"text\" name=\""+ this.num + "\"><br>");
+				" width=" + pixelSize  +"><br><br>");		
+		buff.append("<input class=\"form-control\" type=\"text\" name=\""+ this.num + "\"><br><br>");
 		
 		return buff.toString();
 	}
@@ -65,7 +65,7 @@ public class PictureResponse extends Question {
 		buff.append("<p class=question>" + numStr + ".</p>");	
 		buff.append("<img src=" + question + 
 				" width=" + pixelSize + " height=" + pixelSize +"><br>");
-		buff.append("<p class=answer> Answer is: " + answer + "</p>");
+		buff.append("<p class=answer> Answer is: " + answer + "</p><br>");
 		return buff.toString();
 	}
 

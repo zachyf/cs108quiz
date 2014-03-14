@@ -53,7 +53,7 @@
       </form>
     </div><!--/.navbar-collapse -->
   </div>
-</div><br>
+</div><br><br><br><br>
 
 <div class="container">
 <!-- Question type dropdown menu -->
@@ -98,7 +98,7 @@
 <br><br>
 <% if(!num.equals("0")){ 
 	out.println("<form action=\"viewQuizTest.jsp\">");
-	out.println("<input type=\"hidden\" name=\"quizID\" value=" + quizID + ">");
+	out.println("<input class=\"btn btn-default\" type=\"hidden\" name=\"quizID\" value=" + quizID + ">");
 	out.println("<input type=\"submit\" value=\"Finish Quiz and View\">");
 	out.println("</form>");
 }

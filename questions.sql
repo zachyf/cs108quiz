@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS questions;
 
 CREATE TABLE questions (
 	quizID SMALLINT(5),
-    question TEXT,
+	question TEXT,
     answer TEXT,
     questionNum TINYINT(3),
     type VARCHAR(128),
