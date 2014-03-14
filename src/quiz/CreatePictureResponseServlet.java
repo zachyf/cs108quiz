@@ -38,7 +38,7 @@ public class CreatePictureResponseServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		
+		String username = (String)request.getSession().getAttribute("name");
 		ServletContext context = request.getServletContext();
 		DBConnection db = (DBConnection)context.getAttribute("db");
 		int quizID = Integer.valueOf(request.getParameter("quizID"));
@@ -71,7 +71,9 @@ public class CreatePictureResponseServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new PictureResponse(imageURL, answer, num);
+		if(username!=null){
 		db.addQuestion(q, quiz);
+		}
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);

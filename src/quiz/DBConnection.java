@@ -474,6 +474,62 @@ public class DBConnection {
 		
 		}
 	 }
+	 
+	 public void insertAchievement(String user, String achievement){
+		 try {
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			stmt.executeUpdate("INSERT INTO achievements VALUES(\""+user+"\",\""+achievement+"\", CURRENT_TIMESTAMP);");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	 }
+	 
+	 public void insertAchievement(achievement a){
+		 try {
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			stmt.executeUpdate("INSERT INTO achievements VALUES(\""+a.getUser()+"\",\""+a.getAchievementName()+"\"," + a.getTime() + ");");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	 }
+	 
+	 public boolean hasAchievement(String user, String achievement){
+		 try {
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM achievements where userName=\""+user+"\" and achievement=\""+achievement+"\";");
+			if (rs.next()){
+				return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+		 return false;
+	 }
+	 
+	 public ArrayList<achievement> getFriendsAchievements(String user){
+		 ArrayList<achievement> al = new ArrayList<achievement>();
+		 try{
+			 Statement stmt = con.createStatement();
+			 stmt.executeQuery("USE " + database);
+			 ResultSet rs = stmt.executeQuery("SELECT DISTINCT timeEarned, achievement, userName from achievements, friends where (user1 = '" + user + "' and user2 = userName) or (user2 = '" + user + "' and user1 = userName) order by timeEarned desc;");
+			 while(rs.next()){
+				 achievement a = new achievement(rs.getString("userName"), rs.getString("achievement"), rs.getTimestamp("timeEarned"));
+				 al.add(a);
+			 }
+		 }catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 return al;
+	 }
+	 
 	 public void addRequest(String user1,String user2) throws SQLException{
 		 Statement stmt = con.createStatement();
 		 stmt.executeQuery("USE " + database);
@@ -798,6 +854,25 @@ public class DBConnection {
 		return result;
 	}
 	
+	public ArrayList<Quiz>  getCreatedQuizzes(String user) throws SQLException{
+		ArrayList<Quiz> result= new ArrayList<Quiz>();
+		Statement stmt = con.createStatement();
+		stmt.executeQuery("USE " + database);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM quizzes where creatorName = '" + user + "';");
+		while(rs.next()){
+			int onePage = rs.getInt("onePage");
+			boolean op = onePage == 1 ? true : false;
+			int isRandomOrder = rs.getInt("isRandomOrder");
+			boolean ro = isRandomOrder == 1 ? true : false;
+			int isImmediate = rs.getInt("isImmediate");
+			boolean im = isImmediate == 1 ? true : false;
+			int hasPracticeMode = rs.getInt("hasPracticeMode");
+			boolean hp = hasPracticeMode == 1 ? true : false;
+			result.add(new Quiz(rs.getString("creatorName"), rs.getInt("id"), rs.getString("quizName"), rs.getString("description"), op, ro, im, hp));
+		}
+		return result;
+	}
+	
 	public int totalTeamQuizesTaken(String animal) throws SQLException{
 		Statement stmt = con.createStatement();
 		stmt.executeQuery("USE " + database);
@@ -1098,6 +1173,26 @@ public class DBConnection {
 	}
 	
 	public void addQuizToDB(Quiz quiz, int isOnePage, int isRandom, int isImmediateCorrection, int hasPracticeMode){
+		if (!hasAchievement(quiz.getCreator(), "Amateur Author")){
+			insertAchievement(quiz.getCreator(), "Amateur Author");
+		}
+		try {
+			if (!hasAchievement(quiz.getCreator(), "Prolific Author") && getCreatedQuizzes(quiz.getCreator()).size() == 4){
+				insertAchievement(quiz.getCreator(), "Prolific Author");
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			if (!hasAchievement(quiz.getCreator(), "Prodigious Author") && getCreatedQuizzes(quiz.getCreator()).size() == 9){
+				insertAchievement(quiz.getCreator(), "Prodigious Author");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Calendar calendar = Calendar.getInstance();
 		String insertion = "INSERT INTO quizzes VALUES (" + quiz.getID() + ",\""  + quiz.getName() + "\",\"" 
 				+ quiz.getDescription() + "\",\"" + quiz.getCreator() + "\",\'" + 
@@ -1108,9 +1203,21 @@ public class DBConnection {
 	}
 	
 	public void addAnswerToDB(Answer answer){
+		try {
+			if (!hasAchievement(answer.getUser(), "Quiz Machine") && getTakenQuizzes(answer.getUser()).size() == 9){
+				insertAchievement(answer.getUser(), "Quiz Machine");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		String insertion = "INSERT INTO quizRecords VALUES (" + answer.getNumCorrect() + ","  + answer.getQuiz().getNumQuestions() + "," 
 			+ answer.getTimeToComplete() + ",\"" + answer.getUser() + "\"," + answer.getQuiz().getID() + ",\'" + answer.getDateCompleted() + "\');";
 		this.updateDB(insertion);
+		if (!hasAchievement(answer.getUser(), "I am the Greatest") && isHighScorer(answer.getUser())){
+			insertAchievement(answer.getUser(), "I am the Greatest");
+		}
 	}
 	
 	public String getMultipleChoiceQuestionString(Question question, Quiz quiz){
@@ -1173,6 +1280,20 @@ public class DBConnection {
 		}
 		catch (SQLException e) {}
 		return sb.toString();
+	}
+	
+	public void updateQuiz(Quiz quiz){
+		StringBuilder sb = new StringBuilder();
+		sb.append("Update quizzes SET quizName = \"");
+		sb.append(quiz.getName());
+		sb.append("\", description = \"");
+		sb.append(quiz.getDescription());
+		sb.append("\",onePage = " + Quiz.boolToInt(quiz.isSinglePage()));
+		sb.append(",isRandomOrder = " + Quiz.boolToInt(quiz.isRandomOrder()));
+		sb.append(",isImmediate = " + Quiz.boolToInt(quiz.isImmediateCorrection()));
+		sb.append(",hasPracticeMode = " + Quiz.boolToInt(quiz.hasPracticeMode()));
+		sb.append(" WHERE id = " + quiz.getID() + ";");
+		updateDB(sb.toString());
 	}
 	
 	public ResultSet executeQuery(String query){

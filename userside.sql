@@ -52,9 +52,17 @@ DROP TABLE IF EXISTS challenges;
 CREATE TABLE challenges (
     challenger CHAR(64),
     challenged CHAR(64),
-    quizName VARCHAR(128),
+    quizID INTEGER,
     pending TINYINT(1),
     sentTime TIMESTAMP
+);
+
+DROP TABLE IF EXISTS achievements;
+
+CREATE TABLE achievements (
+    userName CHAR(64),
+    achievement TEXT,
+    timeEarned TIMESTAMP
 );
 
 

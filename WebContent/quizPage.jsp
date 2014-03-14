@@ -281,7 +281,26 @@ $(document).ready(function(){
 			</div>
 		</div>			
 	</div>
-	
+
+	<div class="row">
+		
+
+		<%
+		if(leaderboard.size() > 0){
+			if(session.getAttribute("name") == null){
+				out.println("<h2>Login to take the quiz: <a href=\"Homepage.jsp\"><img src=\"Login.jpg\"></img></a></h2>");
+				
+			}
+			else{
+				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz2.png\"></img></a></p>");
+				//<p>Take the quiz in practice mode</p>
+				if(quiz.getCreator().equals(session.getAttribute("name")))
+					out.println("<p>Edit Quiz - Since you are the owner</p>");
+				}
+		}
+		%>	
+	</div>
+
 </div>
 
 

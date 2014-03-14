@@ -46,6 +46,17 @@ public class Quiz {
 		this.creatorName = creatorName;
 	}
 	
+	//Abbreviate quiz constructor for updates
+	public Quiz(int id, String name, String description, boolean onePage, boolean isRandomOrder, boolean isImmediateCorrection, boolean hasPracticeMode){
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.onePage = onePage;
+		this.isImmediateCorrection = isImmediateCorrection;
+		this.isRandomOrder = isRandomOrder;
+		this.hasPracticeMode = hasPracticeMode;
+	}
+	
 	public static int boolToInt(boolean b){
 		if(b) 
 			return 1;

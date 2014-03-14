@@ -37,7 +37,7 @@ public class CreateFillInTheBlankServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		
+		String username = (String)request.getSession().getAttribute("name");
 		ServletContext context = request.getServletContext();
 		DBConnection db = (DBConnection)context.getAttribute("db");
 		int quizID = Integer.valueOf(request.getParameter("quizID"));
@@ -72,7 +72,9 @@ public class CreateFillInTheBlankServlet extends HttpServlet {
 		
 		// Create the question
 		Question q = new QuestionResponse(question, answer, num);
+		if(username!=null){
 		db.addQuestion(q, quiz);
+		}
 		
 		// TO DO: add q to Quiz
 		

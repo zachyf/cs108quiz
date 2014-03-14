@@ -2,7 +2,6 @@ package quiz;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -44,7 +43,7 @@ response.setContentType("text/html; charset=UTF-8");
 		DBConnection db = (DBConnection)context.getAttribute("db");
 		int quizID = Integer.valueOf(request.getParameter("quizID"));
 		Quiz quiz  = db.getQuizAt(quizID);
-
+		String username = (String)request.getSession().getAttribute("name");
 		// DEBUG: This is just for debugging
 		ArrayList<Question> questions;
 		if (context.getAttribute("questions") == null) {
@@ -71,7 +70,9 @@ response.setContentType("text/html; charset=UTF-8");
 		
 		// Create the question
 		Question q = new MultipleChoice(question, choices, answer, num);
+		if(username!=null){
 		db.addQuestion(q, quiz);
+		}
 		
 		// DEBUG: This is just for debugging
 		questions.add(q);
