@@ -914,7 +914,7 @@ public class DBConnection {
 		try{
 			ResultSet rs = executeQuery("SELECT max(id) as max FROM quizzes;");
 			while(rs.next()){
-				return (int)rs.getLong("max") + 1;
+				return ((int)rs.getLong("max") + 1);
 			}
 				
 			return -1;
@@ -1096,6 +1096,8 @@ public class DBConnection {
 					quiz.addQuestion(question);
 				} else if (type.equals("MathQuestion")) {
 					quiz.addQuestion(new MathQuestion(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+				} else if (type.equals("Scrambled")) {
+					quiz.addQuestion(new ScrambledWord(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
 				}
 			}
 		}
@@ -1129,6 +1131,22 @@ public class DBConnection {
 				row.add(rs.getString("quizName"));
 				row.add(rs.getInt("quizID"));
 				row.add(rs.getDouble("a"));
+				list.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
+	
+	private ArrayList<ArrayList<Object>> getList5(String query){
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		try {
+			ResultSet rs = executeQuery(query);
+			while(rs.next()) {
+				ArrayList<Object> row = new ArrayList<Object>();
+				row.add(rs.getInt("quizID"));
+				row.add(rs.getString("username"));
 				list.add(row);
 			}
 		} catch (SQLException e) {
@@ -1218,6 +1236,17 @@ public class DBConnection {
 		if (!hasAchievement(answer.getUser(), "I am the Greatest") && isHighScorer(answer.getUser())){
 			insertAchievement(answer.getUser(), "I am the Greatest");
 		}
+	}
+	
+	public void addFlag(Integer quizID,String username) throws SQLException{
+		 Statement stmt = con.createStatement();
+		 stmt.executeQuery("USE " + database);
+		 stmt.executeUpdate("INSERT INTO flags VALUES(\""+username+"\","+quizID+",FALSE);"); 
+	}
+	
+	public ArrayList<ArrayList<Object>> getFlaggedQuizzes(){
+		String query = "Select quizID, username from flags where reviewed = FALSE;";
+		return getList5(query);
 	}
 	
 	public String getMultipleChoiceQuestionString(Question question, Quiz quiz){
