@@ -46,7 +46,9 @@ public class CreateQuizServlet extends HttpServlet {
 		DBConnection db = (DBConnection)request.getServletContext().getAttribute("db");
 		int id = db.getNextQuizID();
 		Quiz quiz = new Quiz(creatorName, id, name, description, onePage, isRandom, isImmediateCorrection, hasPracticeMode);
-		db.addQuizToDB(quiz, Quiz.boolToInt(onePage), Quiz.boolToInt(isRandom), Quiz.boolToInt(isImmediateCorrection), Quiz.boolToInt(hasPracticeMode));
+		if(name!=null){
+			db.addQuizToDB(quiz, Quiz.boolToInt(onePage), Quiz.boolToInt(isRandom), Quiz.boolToInt(isImmediateCorrection), Quiz.boolToInt(hasPracticeMode));
+		}
 		return quiz;
 	}
 	

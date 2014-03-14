@@ -274,7 +274,8 @@ $(document).ready(function(){
 		<%
 		if(leaderboard.size() > 0){
 			if(session.getAttribute("name") == null){
-				out.println("<p><a href=\"Homepage.jsp?quizID=" + quizID + "\"> Login to take this quiz </a></p>");	
+				out.println("<h2>Login to take the quiz: <a href=\"Homepage.jsp\"><img src=\"Login.jpg\"></img></a></h2>");
+				
 			}
 			else{
 				out.println("<p><a href=\"TakeQuiz.jsp?quizID=" + quizID + "\"><img src=\"takeQuiz2.png\"></img></a></p>");

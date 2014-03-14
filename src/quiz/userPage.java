@@ -47,9 +47,11 @@ public class userPage extends HttpServlet {
 		HttpSession ses = request.getSession();
 		String loggedInUser = (String) ses.getAttribute("name");
 		String username = (String) request.getParameter("ID");
+		if(loggedInUser!=null){
 		if(loggedInUser.equals(username)){
 			RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
 			dispatch.forward(request, response);
+		}
 		}
 		String animal="";
 		try {
@@ -68,12 +70,12 @@ public class userPage extends HttpServlet {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
-		
+
 		if(animal.equals("Cow")){
 			animalPic="Cow.png";
 			info=username+" is a member of Team Cow.";
 			teamWelcome = "Make Team Cow proud!";
-			
+
 		}
 		if(animal.equals("Owl")){
 			animalPic="Owl.png";
@@ -102,7 +104,7 @@ public class userPage extends HttpServlet {
 		out.println("<title> Welcome to "+username+"'s Profile</title>");
 		out.println("</head>");
 		out.println("<body>");
-		
+
 		// Nav bar html
 		out.println("<div class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">");
 		out.println("<div class=\"container\"><div class=\"navbar-header\">");
@@ -123,15 +125,20 @@ public class userPage extends HttpServlet {
 		out.println("</div><button type=\"submit\" class=\"btn btn-success\">Search <span class=\"glyphicon glyphicon-search\"></button>");
 		out.println("</form>");
 		out.println("</div></div></div>");		
-		
+
 		// Jumbotron html
 	    out.println("<div class=\"jumbotron\">");
 	    out.println("<div class=\"container\">");
 	    out.println("<h1>Welcome to "+username+"'s Profile</h1>");
-		if(DB.alreadyFriends(username, loggedInUser)){
+	    if(loggedInUser!=null){
+	    try {
+			if(DB.alreadyFriends(username, loggedInUser)){
 
-			out.println("<h4> You and "+username+" are friends.</h4><br>");
-		}
+				out.println("<h4> You and "+username+" are friends.</h4><br>");
+			}
+	    } catch (SQLException e) {
+
+		}}
 	    out.println("<div class=\"row\">");
 		out.println("<div class=\"col-md-4\">");
 
@@ -190,8 +197,9 @@ public class userPage extends HttpServlet {
 		}
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col 2
-		
+
 		// Interact panel
+		if(loggedInUser!=null){
 		out.println("<div class=\"col-md-4\">");
 		out.println("<div class=\"panel panel-default\">");
 		out.println("<div class=\"panel-heading\">Interact with "+username+"</div>");
@@ -209,21 +217,21 @@ public class userPage extends HttpServlet {
 		out.println("</form>");
 		out.println("</td><td><h4>Message "+username+":</h4>");
 		out.println("<a href=\"NewMessage.jsp?user=" + loggedInUser + "&to="+username+"\"><img src=\"Message.png\" title=\"Click to Message "+username+"\"></img></a></td></tr></table>");
-		
+
 		out.println("</div>"); // Panel
 		out.println("</div>"); // Col 1
-		
+		}
 		out.println("</div>"); // Row 1
 	    out.println("</div>"); // Container
 	    out.println("</div>"); // Jumbotron
-		
+
 	    out.println("<div class=\"container\">");
-	       
-		
-		
+
+
+
 		out.println("<h2>Interact with "+username+":</h2>");
-		
-	  
+
+		if(loggedInUser!=null){
 		try {
 			if(DB.alreadyFriends(username, loggedInUser)){
 				out.println("<h4> You are already friends with "+username+".</h4>");
@@ -233,19 +241,19 @@ public class userPage extends HttpServlet {
 			}else if(DB.alreadyPending(username,loggedInUser)){
 				out.println("<h4> "+username+" has requested you. Check your requests.</h4>");
 			}else{
-				
+
 				out.println("<h4> Add "+username+" as a friend <a href=\"FriendRequest?userName="+username+"\"><img src=\"acceptButton.jpg\" title=\"Add Friend\"></img></a>");
-				 
+
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	
+		}
+
 		out.println("<h2>"+username+"'s Recent Quiz Activity</h2>");
 		out.println("<div class=\"row\">");
-		
+
 		// Users recently taken quizzes table
 		out.println("<div class=\"col-md-6\">");
 		out.println("<div class=\"panel panel-default\">");
@@ -290,7 +298,7 @@ public class userPage extends HttpServlet {
 
 		out.println("</div></div>"); // Column 2
 		out.println("</div>"); 		 // Row
-	
+
 		out.println("</div>"); // Container
 		out.println("<br>");
 		out.println("</body>");

@@ -65,14 +65,17 @@ ServletContext context = request.getServletContext();
 DBConnection DB = (DBConnection) context.getAttribute("DBConnection");
 HttpSession ses = request.getSession();
 String username = (String) ses.getAttribute("name");
-
-DB.bumpNumQuizesCreated(username);
+if(username!=null){
+	DB.bumpNumQuizesCreated(username);
 
 for (int i = 0; i < questions.size(); i++) {
 	out.println(questions.get(i).getQuestion(i + 1));
 	out.println(questions.get(i).getAnswer());
 }
 out.println("<p><a href=\"quizPage.jsp?id="+request.getParameter("quizID")+"\"> Go to Quiz Page </a></p>");
+}else{
+	out.println("<h2>Whoops you must be logged in to create a quiz. Please Login: <a href=\"Homepage.jsp\"><img src=\"Login.jpg\"></img></a></h2>");
+}
 %>
 </div>
 </body>

@@ -93,6 +93,7 @@ public class Mailbox extends HttpServlet {
 		out.println("</div></div></div>");
 		
 		out.println("<div class=\"container\"><div class=\"navbar-header\">");
+		if(username!=null){
 		if(ID!=null && accept!=null){
 			if(accept.equals("true")){
 				try {
@@ -169,6 +170,9 @@ public class Mailbox extends HttpServlet {
 		}
 		
 		out.println("</div>");
+		}else{
+			out.println("<h2>Please Login: <a href=\"Homepage.jsp\"><img src=\"Login.jpg\"></img></a></h2>");
+		}
 		out.println("</body></html>");
 		
 
