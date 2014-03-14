@@ -674,8 +674,7 @@ public class userWelcome extends HttpServlet {
 		}
 		out.println("</body>");
 		out.println("</html>");
+		}
 
-
-	}
 
 }

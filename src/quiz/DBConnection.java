@@ -908,7 +908,7 @@ public class DBConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	 }
+	 } 
 	
 	public int getNextQuizID() {
 		try{
@@ -1097,6 +1097,8 @@ public class DBConnection {
 					quiz.addQuestion(question);
 				} else if (type.equals("MathQuestion")) {
 					quiz.addQuestion(new MathQuestion(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
+				} else if (type.equals("Scrambled")) {
+					quiz.addQuestion(new ScrambledWord(rs.getString("question"), rs.getString("answer"), rs.getInt("questionNum")));
 				}
 			}
 		}
