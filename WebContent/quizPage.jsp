@@ -145,7 +145,7 @@ $(document).ready(function(){
 		<button type="submit" class="btn btn-default">Flag Quiz</button> 
 	</form></td></tr></table>
     
-	<h4><%if(leaderboard.size() > 0)
+	<h4><%
 			out.println( db.getQuizStats(quiz) +"<td>"+rating+"</td><td>"+numUsersRating+"</td></tr></table>"); 
 			%></h4>
 	
