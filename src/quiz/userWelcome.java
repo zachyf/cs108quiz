@@ -140,206 +140,206 @@ public class userWelcome extends HttpServlet {
 	    	out.println("<h1>Welcome</h1>");
 	    }
 	    if(username!=null){
-	    out.println("<div class=\"row\">");
-		out.println("<div class=\"col-md-4\">");
-
-		// Team panel
-		
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Team "+animal+"</div>");
-		out.println("<center><img src=\""+animalPic+"\" title=\"Team Crest\"></img></center>");
-		out.println("<p>Team "+animal+" has taken "+totalTaken+" quizzes. </p>");
-		out.println("<p>Continue to take quizzes to help your team take the lead.</p>");
-		out.println("</div>"); // Panel
-		out.println("</div>"); // Col 1
-		out.println("<div class=\"col-md-4\">");
-		
-
-		// Awards panel
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Awards</div>");
-		int check=0;
-		try {
-			if(DB.winningTeam().equals(animal)){
-				out.print("<img src=\"LionAward.png\" title=\"Your Team is in 1st Place. \"><img>");
-				check+=1;
+		    out.println("<div class=\"row\">");
+			out.println("<div class=\"col-md-4\">");
+	
+			// Team panel
+			
+			out.println("<div class=\"panel panel-default\">");
+			out.println("<div class=\"panel-heading\">Team "+animal+"</div>");
+			out.println("<center><img src=\""+animalPic+"\" title=\"Team Crest\"></img></center>");
+			out.println("<p>Team "+animal+" has taken "+totalTaken+" quizzes. </p>");
+			out.println("<p>Continue to take quizzes to help your team take the lead.</p>");
+			out.println("</div>"); // Panel
+			out.println("</div>"); // Col 1
+			out.println("<div class=\"col-md-4\">");
+			
+	
+			// Awards panel
+			out.println("<div class=\"panel panel-default\">");
+			out.println("<div class=\"panel-heading\">Awards</div>");
+			int check=0;
+			try {
+				if(DB.winningTeam().equals(animal)){
+					out.print("<img src=\"LionAward.png\" title=\"Your Team is in 1st Place. \"><img>");
+					check+=1;
+				}
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
-		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		try {
-			if(DB.practiced(username)==true){
-				out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
-				check+=1;
+			try {
+				if(DB.practiced(username)==true){
+					out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
+					check+=1;
+				}
+				if(DB.numQuizesCreated(username)>=1){
+					out.println("<img src=\"1Quiz.jpg\" title=\"Amateur Author-- Awarded when user creates one quiz\">");
+					check+=1;
+				}
+				if(DB.numQuizesCreated(username)>=5){
+					out.println("<img src=\"5Quiz.jpg\" title=\"Prolific Author-- Awarded when user creates five quizes\">");
+				}
+				if(DB.numQuizesCreated(username)>=10){
+					out.println("<img src=\"10Quiz.jpg\" title=\"Prodigious Author-- Awarded when user creates ten quizes\">");
+				}
+				if(DB.numQuizesTaken(username)>=10){
+					out.println("<img src=\"Took10.jpg\" title=\"Quiz Machine-- Awarded when user takes ten quizes\">");
+					check+=1;
+				}
+				if(DB.hasAchievement(username, "I am the Greatest")){
+					out.println("<img src=\"HighScore.jpg\" title=\"I am the Greatest-- Awarded when user achieves a high score on a quiz\">");
+					check+=1;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			if(DB.numQuizesCreated(username)>=1){
-				out.println("<img src=\"1Quiz.jpg\" title=\"Amateur Author-- Awarded when user creates one quiz\">");
-				check+=1;
+			if(check==0){
+				out.println("<h4> No awards yet.  To win awards, start taking quizzes, making quizzes, or practicing in quiz practice mode.</h4>");
 			}
-			if(DB.numQuizesCreated(username)>=5){
-				out.println("<img src=\"5Quiz.jpg\" title=\"Prolific Author-- Awarded when user creates five quizes\">");
+			out.println("</div>"); // Panel
+			out.println("</div>"); // Col 2
+			out.println("<div class=\"col-md-4\">");
+			
+			//Announcements
+			out.println("<div class=\"panel panel-default\">");
+			out.println("<div class=\"panel-heading\">Announcements</div>");
+			ArrayList<Announcement> ann = DB.getAnnouncements();
+			if (ann.size() == 0){
+				out.println("<h4>No recent announcements.</h4>");
+			}else{
+				for (int i = 0; i < ann.size(); ++i){
+					if (i == 5) 
+						break;
+					String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
+					out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
+					out.println("<br>");
+				}
 			}
-			if(DB.numQuizesCreated(username)>=10){
-				out.println("<img src=\"10Quiz.jpg\" title=\"Prodigious Author-- Awarded when user creates ten quizes\">");
+		    out.println("</div>"); // panel
+			
+			// Notifications panel
+			out.println("<div class=\"panel panel-default\">");
+			out.println("<div class=\"panel-heading\">Notications</div>");
+			int check2=0;
+			try {
+				int requests = DB.getNumRequests(username);
+				if(requests > 0){
+					check2+=1;
+					if(requests==1){
+						out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend request pending. <br>");
+					}else{
+						out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend requests pending. <br>");
+					}
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			if(DB.numQuizesTaken(username)>=10){
-				out.println("<img src=\"Took10.jpg\" title=\"Quiz Machine-- Awarded when user takes ten quizes\">");
-				check+=1;
-			}
-			if(DB.hasAchievement(username, "I am the Greatest")){
-				out.println("<img src=\"HighScore.jpg\" title=\"I am the Greatest-- Awarded when user achieves a high score on a quiz\">");
-				check+=1;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(check==0){
-			out.println("<h4> No awards yet.  To win awards, start taking quizzes, making quizzes, or practicing in quiz practice mode.</h4>");
-		}
-		out.println("</div>"); // Panel
-		out.println("</div>"); // Col 2
-		out.println("<div class=\"col-md-4\">");
-		
-		//Announcements
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Announcements</div>");
-		ArrayList<Announcement> ann = DB.getAnnouncements();
-		if (ann.size() == 0){
-			out.println("<h4>No recent announcements.</h4>");
-		}else{
-			for (int i = 0; i < ann.size(); ++i){
-				if (i == 5) 
-					break;
-				String date = new SimpleDateFormat("HH:mm MM/dd/yyyy").format(ann.get(i).getTime());
-				out.println("(" + date + ") " + ann.get(i).getUser() + ": "+ ann.get(i).getAnnouncement());
-				out.println("<br>");
-			}
-		}
-	    out.println("</div>"); // panel
-		
-		// Notifications panel
-		out.println("<div class=\"panel panel-default\">");
-		out.println("<div class=\"panel-heading\">Notications</div>");
-		int check2=0;
-		try {
-			int requests = DB.getNumRequests(username);
-			if(requests > 0){
+			int numUnread = DB.getNumUnread(username);
+			if(numUnread > 0){
 				check2+=1;
-				if(requests==1){
-					out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend request pending. <br>");
+				if(numUnread==1){
+					out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread message. <br>");
 				}else{
-					out.println("You have <a href=\"Mailbox\">"+ requests + "</a> friend requests pending. <br>");
+					out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread messages. <br>");
 				}
 			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		int numUnread = DB.getNumUnread(username);
-		if(numUnread > 0){
-			check2+=1;
-			if(numUnread==1){
-				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread message. <br>");
-			}else{
-				out.println("You have <a href=\"Mailbox\">"+ numUnread + "</a> unread messages. <br>");
+			pendingChallenges = DB.getChallenges(username);
+			numChallenges = pendingChallenges.size();
+			if (numChallenges > 0){
+				check2 += 1;
+				if(numChallenges==1){
+					out.println("You have <a href=\"#challenges\">"+ numChallenges + "</a> pending challenge.");
+				}else{
+					out.println("You have <a href=\"#challenges\">"+ numChallenges + "</a> pending challenges.");
+				}
 			}
-		}
-		pendingChallenges = DB.getChallenges(username);
-		numChallenges = pendingChallenges.size();
-		if (numChallenges > 0){
-			check2 += 1;
-			if(numChallenges==1){
-				out.println("You have <a href=\"#challenges\">"+ numChallenges + "</a> pending challenge.");
-			}else{
-				out.println("You have <a href=\"#challenges\">"+ numChallenges + "</a> pending challenges.");
+			if(check2==0){
+				out.println("<h4>No new notifications at the moment.</h4>");
 			}
-		}
-		if(check2==0){
-			out.println("<h4>No new notifications at the moment.</h4>");
-		}
-		out.println("</div>"); // Thumbnail
-		out.println("</div>"); // Thumbnail
-		out.println("</div>"); // Col 3
-		out.println("</div>"); // Row 1
-	    out.println("</div>"); // Container
-	    out.println("</div>"); // Jumbotron
-
-
-		out.println("<div class=\"container\">");
-
-	    
-		try {
-			if(DB.isAdmin(username)){
-
-				out.println("<h2>Admin Privileges:</h2>");
-				out.println();
-				out.println("<p><h4>Make an Announcement</h4>");
-				out.println("Enter an Announcement:");
-				out.println("<form action=\"MakeAnnouncement\" METHOD=\"post\">");
-				out.println("<input type=\"text\" name=\"note\">");
-				out.println("<input type=\"submit\" value=\"Announce\"><br>"); 
-				out.println("</form></p>");
-				out.println("<p><h4>Remove A User from the Database</h4>");
-				out.println("Choose the User You Wish to Remove:");
-				out.println("<br>");
-				out.println("<form action=\"RemoveUser\" METHOD=\"post\">");
-				out.println("<select name=\"userName\">");
-				ArrayList<String> userNamesR = DB.getAllUsers();
-				for(int i=0;i<userNamesR.size();i++){
-					if (!userNamesR.get(i).equals(username)){
-						out.println("<option value=\""+userNamesR.get(i)+"\">" + userNamesR.get(i) +"</option>");
+			out.println("</div>"); // Thumbnail
+			out.println("</div>"); // Thumbnail
+			out.println("</div>"); // Col 3
+			out.println("</div>"); // Row 1
+		    out.println("</div>"); // Container
+		    out.println("</div>"); // Jumbotron
+	
+	
+			out.println("<div class=\"container\">");
+	
+		    
+			try {
+				if(DB.isAdmin(username)){
+	
+					out.println("<h2>Admin Privileges:</h2>");
+					out.println();
+					out.println("<p><h4>Make an Announcement</h4>");
+					out.println("Enter an Announcement:");
+					out.println("<form action=\"MakeAnnouncement\" METHOD=\"post\">");
+					out.println("<input type=\"text\" name=\"note\">");
+					out.println("<input type=\"submit\" value=\"Announce\"><br>"); 
+					out.println("</form></p>");
+					out.println("<p><h4>Remove A User from the Database</h4>");
+					out.println("Choose the User You Wish to Remove:");
+					out.println("<br>");
+					out.println("<form action=\"RemoveUser\" METHOD=\"post\">");
+					out.println("<select name=\"userName\">");
+					ArrayList<String> userNamesR = DB.getAllUsers();
+					for(int i=0;i<userNamesR.size();i++){
+						if (!userNamesR.get(i).equals(username)){
+							out.println("<option value=\""+userNamesR.get(i)+"\">" + userNamesR.get(i) +"</option>");
+						}
 					}
-				}
-				out.println("</select><br>");
-				out.println("<input type=\"submit\" value=\"Remove User\"><br>"); 
-				out.println("</form></p>");
-				out.println("<p><h4>Promote A User to Admin Status</h4>");
-				out.println("Enter the User You Wish to Promote:");
-				out.println("<form action=\"promote\" METHOD=\"post\">");
-				out.println("<select name=\"userName\">");
-				ArrayList<String> userNamesP = DB.getAllUsersNotAdmin();
-				for(int i=0;i<userNamesP.size();i++){
-					if (!userNamesP.get(i).equals(username)){
-						out.println("<option value=\""+userNamesP.get(i)+"\">" + userNamesP.get(i) +"</option>");
+					out.println("</select><br>");
+					out.println("<input type=\"submit\" value=\"Remove User\"><br>"); 
+					out.println("</form></p>");
+					out.println("<p><h4>Promote A User to Admin Status</h4>");
+					out.println("Enter the User You Wish to Promote:");
+					out.println("<form action=\"promote\" METHOD=\"post\">");
+					out.println("<select name=\"userName\">");
+					ArrayList<String> userNamesP = DB.getAllUsersNotAdmin();
+					for(int i=0;i<userNamesP.size();i++){
+						if (!userNamesP.get(i).equals(username)){
+							out.println("<option value=\""+userNamesP.get(i)+"\">" + userNamesP.get(i) +"</option>");
+						}
 					}
+					out.println("</select><br>");
+					out.println("<input type=\"submit\" value=\"Promote User\"><br>"); 
+					out.println("</form></p>");
+					out.println("<p><h4>Delete A Quiz:</h4>");
+					out.println("Select the Quiz You Wish to Delete:");
+					out.println("<form action=\"deleteQuiz\" METHOD=\"post\">");
+					out.println("<select name=\"quizID\">");
+					ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
+					for(int i=0;i<allQuizzes.size();i++){
+						out.println("<option value=\""+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</option>");
+					}
+					out.println("</select>");
+					out.println("<input type=\"submit\" value=\"Delete\"><br>"); 
+					out.println("</form></p>");
+					out.println("<p><h4>Clear Quiz History:</h4>");
+					out.println("Select which Quiz's History You Wish to Clear:");
+					out.println("<form action=\"ClearHistory\" METHOD=\"post\">");
+					out.println("<select name=\"quizID\">");
+					for(int i=0;i<allQuizzes.size();i++){
+						out.println("<option value=\""+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</option>");
+					}
+					out.println("</select>");
+					out.println("<input type=\"submit\" value=\"Clear\"><br>"); 
+					out.println("</form></p>");
+	
+					int totalUsers=DB.getTotalUsers();
+					out.println("<p><h4>There are "+totalUsers+" users in the database.</h4></p>");
+					int totalQuizzesTaken=DB.getQuizzesTotal();
+					out.println("<p><h4>There have been a total of "+totalQuizzesTaken+" quizzes taken thus far.</h4></p>");
+	
 				}
-				out.println("</select><br>");
-				out.println("<input type=\"submit\" value=\"Promote User\"><br>"); 
-				out.println("</form></p>");
-				out.println("<p><h4>Delete A Quiz:</h4>");
-				out.println("Select the Quiz You Wish to Delete:");
-				out.println("<form action=\"deleteQuiz\" METHOD=\"post\">");
-				out.println("<select name=\"quizID\">");
-				ArrayList<ArrayList<Object>> allQuizzes = DB.getAllQuizzes();
-				for(int i=0;i<allQuizzes.size();i++){
-					out.println("<option value=\""+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</option>");
-				}
-				out.println("</select>");
-				out.println("<input type=\"submit\" value=\"Delete\"><br>"); 
-				out.println("</form></p>");
-				out.println("<p><h4>Clear Quiz History:</h4>");
-				out.println("Select which Quiz's History You Wish to Clear:");
-				out.println("<form action=\"ClearHistory\" METHOD=\"post\">");
-				out.println("<select name=\"quizID\">");
-				for(int i=0;i<allQuizzes.size();i++){
-					out.println("<option value=\""+allQuizzes.get(i).get(1)+"\">"+allQuizzes.get(i).get(0)+"</option>");
-				}
-				out.println("</select>");
-				out.println("<input type=\"submit\" value=\"Clear\"><br>"); 
-				out.println("</form></p>");
-
-				int totalUsers=DB.getTotalUsers();
-				out.println("<p><h4>There are "+totalUsers+" users in the database.</h4></p>");
-				int totalQuizzesTaken=DB.getQuizzesTotal();
-				out.println("<p><h4>There have been a total of "+totalQuizzesTaken+" quizzes taken thus far.</h4></p>");
-
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		}
 		out.println("<h2>Leader Boards and Recent Activity:</h2>");
 		out.println("<div class=\"row\">");
