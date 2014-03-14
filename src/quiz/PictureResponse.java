@@ -2,7 +2,7 @@ package quiz;
 
 public class PictureResponse extends Question {
 	
-	private static final int pixelSize = 300;
+	private static final int pixelSize = 500;
 	private String question, answer;
 	private int num;
 	
@@ -46,7 +46,7 @@ public class PictureResponse extends Question {
 		String numStr = String.valueOf(num);
 		buff.append("<p class=question>" + numStr + ".</p>");	
 		buff.append("<img src=" + question + 
-				" width=" + pixelSize + " height=" + pixelSize +"><br>");		
+				" width=" + pixelSize  +"><br>");		
 		buff.append("<input type=\"text\" name=\""+ this.num + "\"><br>");
 		
 		return buff.toString();
