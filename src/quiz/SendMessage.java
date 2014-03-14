@@ -7,6 +7,7 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -95,6 +96,8 @@ public class SendMessage extends HttpServlet {
 				//put it in the database
 				DB.insertMessage(m);
 				out.println("Message has been sent.");
+				RequestDispatcher dispatch = request.getRequestDispatcher("userWelcome"); 
+				dispatch.forward(request, response); 
 				
 			}
 		} catch (SQLException e) {

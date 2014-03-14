@@ -992,7 +992,7 @@ public class DBConnection {
 	}
 	
 	public int getHighScoreQuizUser(String user, int quizID){
-		String query = "Select * from quizRecords where quizID =" + quizID + " order by numCorrect desc;";
+		String query = "Select * from quizRecords where quizID =" + quizID + " and userName = '" + user + "' order by numCorrect desc;";
 		ResultSet rs = executeQuery(query);
 		if (rs == null) return 0;
 		try {
@@ -1249,6 +1249,10 @@ public class DBConnection {
 	            e.printStackTrace();
 	        }
 		}
+		
+		String q = "DELETE FROM challenges where challenged = '" + answer.getUser() + "';";
+		this.updateDB(q);
+
 	}
 	
 	public void addFlag(Integer quizID,String username) throws SQLException{
