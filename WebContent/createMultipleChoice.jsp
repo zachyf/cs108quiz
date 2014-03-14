@@ -67,7 +67,7 @@
 	<ul class="dropdown-menu" role="menu">	
 		<%
 		String num = request.getParameter("num");
-		String quizID = request.getParameter("quizID");
+		String quizID = request.getParameter("quizID"); 
 		for (int i = 2; i <= 10; i++) {
 			String choice = String.valueOf(i);
 			String url = "createMultipleChoice.jsp?num=" + num + "&quizID=" + quizID + "&choices=" + choice;
@@ -107,6 +107,45 @@
 	<button type="submit" class="btn btn-default">Create</button>
 
 </form>
+
+
+<!-- Question type dropdown menu -->
+	<br><br>
+	<div class="btn-group">
+	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	  Change Question Type <span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu" role="menu">	
+		
+		<%			
+		num = request.getParameter("num");
+		quizID = request.getParameter("quizID");
+		
+		String url = "createQuestionResponse.jsp?num=" + num + "&quizID=" + quizID +"&numAnswers=1";
+		out.println("<li><a href=" + url + " class=\"btn btn-large\" >Question Response</a></li><br>");
+
+		url = "createFillInTheBlank.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
+		out.println("<li><a href=" + url + " class=\"btn btn-large\">Fill-In-The-Blank</a></li><br>");
+
+		url = "createPictureResponse.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=1";
+		out.println("<li><a href=" + url + " class=\"btn btn-large\">Picture Response</a></li><br>");
+
+		url = "createMultipleChoice.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";
+		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Choice</a></li><br>");
+		
+		url = "createMultiAnswer.jsp?num=" + num + "&quizID=" + quizID + "&numAnswers=2";
+		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Answer</a></li><br>");
+		
+		url = "createMultipleChoiceMultipleAnswer.jsp?num=" + num + "&quizID=" + quizID + "&choices=4";
+		out.println("<li><a href=" + url + " class=\"btn btn-large\">Multiple Choice Multiple Answer</a></li><br>");
+		
+		url = "createMathQuestion.jsp?num=" + num + "&quizID=" + quizID;
+		out.println("<li><a href=" + url + " class=\"btn btn-large\">Math Question</a></li><br>");
+		%>
+	</ul>
+</div><br>
+
+
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

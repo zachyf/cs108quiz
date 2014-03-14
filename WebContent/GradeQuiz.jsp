@@ -108,7 +108,10 @@ session.removeAttribute("answer");
 	for(int i = 0; i < quiz.getNumQuestions(); i++){
         Question question = quiz.getQuestion(i);
         out.println(question.displayQuestion(i + 1));
-        out.println("Your answer: " + a.getAnswerToQuestion(question));
+        if(a.getAnswerToQuestion(question).length() > 0)
+        	out.println("<p>Your answer: " + a.getAnswerToQuestion(question) + "</p><br>");
+        else out.println("<p>You skipped this question.</p> <br>");
+        
     }
 	%>
 	

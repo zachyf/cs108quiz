@@ -173,10 +173,6 @@ public class userWelcome extends HttpServlet {
 				out.println("<img src=\"Practice.jpg\" title=\"Practice Makes Perfect-- Awarded when user takes quiz in practice mode\">");
 				check+=1;
 			}
-			if(DB.gottenHighScore(username)==true){
-				out.println("<img src=\"HighScore.jpg\" title=\"I Am the Greatest-- Awarded when user gets high score in a quiz\">");
-				check+=1;
-			}
 			if(DB.numQuizesCreated(username)>=1){
 				out.println("<img src=\"1Quiz.jpg\" title=\"Amateur Author-- Awarded when user creates one quiz\">");
 				check+=1;
@@ -189,6 +185,10 @@ public class userWelcome extends HttpServlet {
 			}
 			if(DB.numQuizesTaken(username)>=10){
 				out.println("<img src=\"Took10.jpg\" title=\"Quiz Machine-- Awarded when user takes ten quizes\">");
+				check+=1;
+			}
+			if(DB.hasAchievement(username, "I am the Greatest")){
+				out.println("<img src=\"HighScore.jpg\" title=\"I am the Greatest-- Awarded when user achieves a high score on a quiz\">");
 				check+=1;
 			}
 		} catch (SQLException e) {
@@ -528,7 +528,26 @@ public class userWelcome extends HttpServlet {
 		}
 		out.println("</table>");
 		out.println("</div></div>"); // Column 1
+		
+		// Friends' recently achieved awards
+		out.println("<div class=\"col-md-6\">");
+		out.println("<div class=\"panel panel-default\">");
+		out.println("<div class=\"panel-heading\">Your Friends' Recently Achieved Awards</div>");
+		out.println("<table class=\"table\">");
+		out.println("<tr>");
+		ArrayList<achievement> recentlyAchieved = DB.getFriendsAchievements(username);
+		for(int i=0; i< recentlyAchieved.size();i++){
+			if (i == 5) break;
+			achievement a = recentlyAchieved.get(i);
+			int ip=i+1;
+			out.println("<tr>");
+			out.println("<td>"+ip+") <a href=\"userPage?ID="+a.getUser()+"\">"+ a.getUser() +"</a> acheived " + a.getAchievementName() + "</td>");
+			out.println("</tr>");
+			numPrinted++;
 		}
+		out.println("</table>");
+		out.println("</div></div>"); // Column 1
+		
 		
 
 		// Your highly rated quizzes table

@@ -1,21 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ page import="java.util.*" %>
     <%@ page import="quiz.*" %>
+    <%@ page import="java.text.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
+ <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Questions</title>
+    <title>Create Question-Response</title>
 
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
     
     <!-- Custom styles for this template -->
     <link href="css/jumbotron.css" rel="stylesheet">
-    <link href="css/justifiednav.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -56,14 +56,31 @@
 </div><br>
 
 <div class="container">
-<!-- Question type dropdown menu -->
-<br><br><br><div class="btn-group">
+<h2 class="createQuestion">Create a Scrambled Word Question</h2>
+
+<form action="CreateScrambledServlet" method="post">
+	
+	<div class="input-group input-group-lg">
+		<span class="input-group-addon">Word to scramble: </span>
+		<input type="text" name="question" class="form-control">
+	</div><br>
+
+	<input name="num" type="hidden" value="<%= request.getParameter("num") %>"/>
+	<input name="quizID" type="hidden" value="<%= request.getParameter("quizID") %>"/>
+	
+	<button type="submit" class="btn btn-default">Create</button>
+	
+</form>
+
+	<!-- Question type dropdown menu -->
+	<br><br>
+	<div class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	  Create Question #<%= String.valueOf(Integer.valueOf(request.getParameter("num")) + 1) %> <span class="caret"></span>
+	  Change Question Type <span class="caret"></span>
 	</button>
 	<ul class="dropdown-menu" role="menu">	
-		<%	
 		
+		<%			
 		String num = request.getParameter("num");
 		String quizID = request.getParameter("quizID");
 		
@@ -90,21 +107,9 @@
 		
 		url = "createScrambled.jsp?num=" + num + "&quizID=" + quizID;
 		out.println("<li><a href=" + url + " class=\"btn btn-large\">Scrambled Word</a></li><br>");
-
 		%>
 	</ul>
 </div><br>
-
-<br><br>
-<% if(!num.equals("0")){ 
-	out.println("<form action=\"viewQuizTest.jsp\">");
-	out.println("<input type=\"hidden\" name=\"quizID\" value=" + quizID + ">");
-	out.println("<input type=\"submit\" value=\"Finish Quiz and View\">");
-	out.println("</form>");
-}
-%>
-
-	
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
